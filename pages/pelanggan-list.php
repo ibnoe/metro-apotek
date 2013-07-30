@@ -2,7 +2,7 @@
 include_once '../models/masterdata.php';
 include_once '../inc/functions.php';
 ?>
-<table cellspacing="0" width="100%" class="table">
+<table cellspacing="0" width="100%" class="list-data">
 <thead>
 <tr class="italic">
     <th width="5%">No.</th>
@@ -42,7 +42,7 @@ include_once '../inc/functions.php';
                 .'#'.$data->alamat.'#'.$data->telp.'#'.$data->email.'#'.$data->diskon.'#'.$data->catatan
                 .'#'.$data->id_asuransi.'#'.$data->nopolish;
         ?>
-    <tr class="<?= ($key%2==0)?'italic':'dark bold' ?>">
+    <tr class="<?= ($key%2==0)?'even':'odd' ?>">
         <td align="center"><?= (++$key+$offset) ?></td>
         <td><?= $data->nama ?></td>
         <td><?= $data->jenis ?></td>

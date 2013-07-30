@@ -2,7 +2,7 @@
 include_once '../models/masterdata.php';
 include_once '../inc/functions.php';
 ?>
-<table cellspacing="0" width="50%" class="table">
+<table cellspacing="0" width="50%" class="list-data">
 <thead>
 <tr class="italic">
     <th width="5%">No.</th>
@@ -35,7 +35,7 @@ include_once '../inc/functions.php';
     foreach ($master_barang as $key => $data) { 
         $str = $data->id.'#'.$data->nama.'#'.$data->charge.'#'.$data->kode_akun;
         ?>
-    <tr class="<?= ($key%2==0)?'italic':'dark bold' ?>">
+    <tr class="<?= ($key%2==0)?'even':'odd' ?>">
         <td align="center"><?= ++$key ?></td>
         <td><?= $data->nama ?></td>
         <td><?= $data->charge ?></td>

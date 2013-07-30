@@ -122,6 +122,7 @@ var str = '<div id=form_add>'+
     $('#form_add').dialog({
         title: 'Tambah Barang',
         autoOpen: true,
+        modal: true,
         width: 480,
         height: 500,
         hide: 'clip',
@@ -156,7 +157,7 @@ var str = '<div id=form_add>'+
     
     $('#form_barang').submit(function() {
         if ($('#nama').val() === '') {
-            alert('Nama barang tidak boleh kosong !');
+            alert('Nama produk tidak boleh kosong !');
             $('#nama').focus(); return false;
         }
         if ($('#kekuatan').val() === '') {
@@ -251,7 +252,7 @@ $.plugin($afterSubPageShow,{ // <-- event is here
     }
 });
 </script>
-<h1 class="margin-t-0">Data Barang</h1>
+<h1 class="margin-t-0">Data Produk</h1>
 <hr>
 <button id="button">Tambah Data</button>
 <div id="result-barang">

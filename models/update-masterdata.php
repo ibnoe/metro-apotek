@@ -323,4 +323,62 @@ if ($method === 'save_asuransi') {
     }
     die(json_encode(array('status' => TRUE, 'id_asuransi' => $id_asu)));
 }
+
+if ($method === 'save_karyawan') {
+    $nama       = $_POST['nama'];
+    $kelamin    = $_POST['kelamin'];
+    $tempat     = $_POST['tmp_lahir'];
+    $tgllahir   = $_POST['tgl_lahir'];
+    $alamat     = $_POST['alamat'];
+    $kabupaten  = $_POST['kabupaten'];
+    $provinsi   = $_POST['provinsi'];
+    $telp       = $_POST['telp'];
+    $email      = $_POST['email'];
+    $jabatan    = $_POST['jabatan'];
+    $no_sipa    = $_POST['sipa'];
+    $id_karyawan= $_POST['id_karyawan'];
+    
+    if ($id_karyawan === '') {
+        $sql = "
+            insert into karyawan set
+                nama = '$nama',
+                kelamin = '$kelamin',
+                tempat_lahir = '$tempat',
+                tanggal_lahir = '".date2mysql($tgllahir)."',
+                alamat = '$alamat',
+                kabupaten = '$kabupaten',
+                propinsi = '$provinsi',
+                telp = '$telp',
+                email = '$email',
+                jabatan = '$jabatan',
+                no_sipa = '$no_sipa'
+        ";
+        mysql_query($sql);
+        $id_kyw = mysql_insert_id();
+    } else {
+        $sql = "
+            update karyawan set
+                nama = '$nama',
+                kelamin = '$kelamin',
+                tempat_lahir = '$tempat',
+                tanggal_lahir = '".date2mysql($tgllahir)."',
+                alamat = '$alamat',
+                kabupaten = '$kabupaten',
+                propinsi = '$provinsi',
+                telp = '$telp',
+                email = '$email',
+                jabatan = '$jabatan',
+                no_sipa = '$no_sipa'
+            where id = '$id_karyawan'
+        ";
+        mysql_query($sql);
+        $id_kyw = $id_karyawan;
+    }
+    die(json_encode(array('status' => TRUE, 'id_karyawan' => $id_kyw)));
+}
+
+if ($method === 'delete_karyawan') {
+    $id     = $_GET['id'];
+    mysql_query("delete from karyawan where id = '$id'");
+}
 ?>

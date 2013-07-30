@@ -2,7 +2,7 @@
 include_once '../models/masterdata.php';
 include_once '../inc/functions.php';
 ?>
-<table cellspacing="0" width="100%" class="table">
+<table cellspacing="0" width="100%" class="list-data">
 <thead>
 <tr class="italic">
     <th width="5%">No.</th>
@@ -10,7 +10,7 @@ include_once '../inc/functions.php';
     <th width="15%">Pabrik</th>
     <th width="10%">Kekuatan</th>
     <th width="10%">Satuan<br/> Kekuatan</th>
-    <th width="10%">Golongan</th>
+    <th width="10%">Gol.</th>
     <th width="10%">Sediaan</th>
     <th width="5%">Adm R</th>
     <th width="4%">#</th>
@@ -44,7 +44,7 @@ include_once '../inc/functions.php';
                 $data->indikasi.'#'.$data->dosis.'#'.$data->kandungan.'#'.$data->perhatian.'#'.$data->kontra_indikasi.'#'.
                 $data->efek_samping;
         ?>
-    <tr class="<?= ($key%2==0)?'italic':'dark bold' ?>">
+    <tr class="<?= ($key%2==0)?'even':'odd' ?>">
         <td align="center"><?= (++$key+$offset) ?></td>
         <td><?= $data->nama ?></td>
         <td><?= $data->pabrik ?></td>

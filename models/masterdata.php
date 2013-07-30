@@ -16,7 +16,7 @@ function load_data_barang($param) {
         left join supplier s on (b.id_supplier = s.id)
         left join golongan g on (b.id_golongan = g.id)
         left join satuan st on (b.satuan_kekuatan = st.id)
-        left join sediaan sd on (b.id_sediaan = sd.id) where b.id is not NULL $q
+        left join sediaan sd on (b.id_sediaan = sd.id) where b.id is not NULL $q order by b.nama
         ";
     //echo $sql.$limit;
     
@@ -97,6 +97,26 @@ function load_data_customer($param) {
     $sql = "select p.*, a.nama as asuransi from pelanggan p
         left join asuransi a on (p.id_asuransi = a.id) $q 
         order by p.nama";
+    
+    $query = mysql_query($sql.$limit);
+    $data = array();
+    while ($row = mysql_fetch_object($query)) {
+        $data[] = $row;
+    }
+    $total = mysql_num_rows(mysql_query($sql));
+    $result['data'] = $data;
+    $result['total']= $total;
+    return $result;
+}
+
+function load_data_karyawan($param) {
+    $q = null;
+    if ($param['id'] !== '') {
+        $q = "and id = '".$param['id']."'";
+    }
+    $limit = " limit ".$param['start'].", ".$param['limit']."";
+    $sql = "select * from karyawan where id is not NULL $q 
+        order by nama";
     
     $query = mysql_query($sql.$limit);
     $data = array();
