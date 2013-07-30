@@ -21,7 +21,7 @@ var str = '<div id=form_add>'+
             '<?= form_hidden('id_layanan', NULL, 'id=id_layanan') ?>'+
             '<table width=100% class=data-input>'+
                 '<tr><td width=40%>Nama layanan:</td><td><?= form_input('nama', NULL, 'id=nama size=40') ?></td></tr>'+
-                '<tr><td>Charge (%):</td><td><?= form_input('charge', NULL, 'id=charge size=40') ?></td></tr>'+
+                '<tr><td>Nominal (Rp.):</td><td><?= form_input('nominal', NULL, 'id=nominal onblur="FormNum(this);" onfocus="javascript:this.value=currencyToNumber(this.value);" size=40') ?></td></tr>'+
                 '<tr><td width=40%>Kode Akun:</td><td><select name=akun id=akun><option value="">Pilih ...</option><?php foreach ($akun as $data) { echo '<option value="'.$data->kode.'">'.$data->kode.' '.$data->kelompok.'</option>'; } ?></select></td></tr>'+
             '</table>'+
             '</form>'+
@@ -135,7 +135,7 @@ function edit_layanan(str) {
     $('#form_add').dialog({ title: 'Edit layanan' });
     $('#id_layanan').val(arr[0]);
     $('#nama').val(arr[1]);
-    $('#charge').val(arr[2]);
+    $('#nominal').val(arr[2]);
     $('#akun').val(arr[3]);
 }
 function delete_layanan(id, page) {

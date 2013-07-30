@@ -2,17 +2,23 @@
 include_once '../models/masterdata.php';
 include_once '../inc/functions.php';
 ?>
+<script type="text/javascript">
+$(function() {
+    $( document ).tooltip();
+});
+</script>
 <table cellspacing="0" width="100%" class="list-data">
 <thead>
 <tr class="italic">
     <th width="5%">No.</th>
     <th width="25%">Nama Barang</th>
-    <th width="15%">Pabrik</th>
+    <th width="10%">Pabrik</th>
     <th width="10%">Kekuatan</th>
     <th width="10%">Satuan<br/> Kekuatan</th>
     <th width="10%">Gol.</th>
     <th width="10%">Sediaan</th>
     <th width="5%">Adm R</th>
+    <th width="5%">Lokasi<br/>Rak</th>
     <th width="4%">#</th>
 </tr>
 </thead>
@@ -39,7 +45,7 @@ include_once '../inc/functions.php';
     foreach ($list_data as $key => $data) { 
         $str = $data->id.'#'.$data->nama.'#'.$data->kekuatan.'#'.$data->satuan_kekuatan.'#'.$data->id_sediaan.'#'. // 0 - 4
                 $data->id_golongan.'#'.$data->adm_r.'#'.$data->id_pabrik.'#'.$data->pabrik.'#'. // 5 - 8
-                $data->id_supplier.'#'.$data->supplier.'#'.$data->rak.'#'.
+                $data->rak.'#'.
                 
                 $data->indikasi.'#'.$data->dosis.'#'.$data->kandungan.'#'.$data->perhatian.'#'.$data->kontra_indikasi.'#'.
                 $data->efek_samping;
@@ -53,6 +59,7 @@ include_once '../inc/functions.php';
         <td><?= $data->golongan ?></td>
         <td><?= $data->sediaan ?></td>
         <td><?= $data->adm_r ?></td>
+        <td><?= $data->rak ?></td>
         <td class='aksi' align='center'>
             <a class='edition' onclick="edit_barang('<?= $str ?>');" title="Klik untuk edit barang">&nbsp;</a>
             <a class='deletion' onclick="delete_barang('<?= $data->id ?>','<?= $page ?>');" title="Klik untuk hapus barang">&nbsp;</a>

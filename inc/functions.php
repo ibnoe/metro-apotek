@@ -126,4 +126,13 @@ function datefmysql($tgl) {
         return $new;
     }
 }
+
+function rupiah($jml) {
+    $int = number_format($jml, 0, '', '.');
+    return $int;
+}
+
+function currencyToNumber($a) {
+    return str_ireplace(".", "", $a);
+}
 ?>

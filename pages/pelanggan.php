@@ -40,7 +40,7 @@ var str = '<div id=form_add>'+
         title: 'Tambah Customer',
         autoOpen: true,
         width: 480,
-        height: 370,
+        height: 390,
         modal: true,
         hide: 'clip',
         show: 'blind',

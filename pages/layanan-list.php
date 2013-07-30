@@ -6,8 +6,8 @@ include_once '../inc/functions.php';
 <thead>
 <tr class="italic">
     <th width="5%">No.</th>
-    <th width="20%">Nama layanan</th>
-    <th width="25%">Charge</th>
+    <th width="35%">Nama layanan</th>
+    <th width="20%">Nominal (Rp.)</th>
     <th width="10%">Kode Akun</th>
     <th width="4%">#</th>
 </tr>
@@ -33,12 +33,12 @@ include_once '../inc/functions.php';
     $master_barang = $list_data['data'];
     $total_data = $list_data['total'];
     foreach ($master_barang as $key => $data) { 
-        $str = $data->id.'#'.$data->nama.'#'.$data->charge.'#'.$data->kode_akun;
+        $str = $data->id.'#'.$data->nama.'#'.$data->nominal.'#'.$data->kode_akun;
         ?>
     <tr class="<?= ($key%2==0)?'even':'odd' ?>">
         <td align="center"><?= ++$key ?></td>
         <td><?= $data->nama ?></td>
-        <td><?= $data->charge ?></td>
+        <td align="right"><?= rupiah($data->nominal) ?></td>
         <td><?= $data->kode_akun ?></td>
         <td class='aksi' align='center'>
             <a class='edition' onclick="edit_layanan('<?= $str ?>');" title="Klik untuk edit layanan">&nbsp;</a>

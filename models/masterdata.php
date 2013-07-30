@@ -11,9 +11,9 @@ function load_data_barang($param) {
         $q.="and b.nama like ('%".$param['search']."%')";
     }
     $limit = " limit ".$param['start'].", ".$param['limit']."";
-    $sql = "select b.*, p.nama as pabrik, s.nama as supplier, g.nama as golongan, st.nama as satuan, sd.nama as sediaan from barang b 
+    $sql = "select b.*, p.nama as pabrik, g.nama as golongan, st.nama as satuan, sd.nama as sediaan 
+        from barang b 
         left join pabrik p on (b.id_pabrik = p.id)
-        left join supplier s on (b.id_supplier = s.id)
         left join golongan g on (b.id_golongan = g.id)
         left join satuan st on (b.satuan_kekuatan = st.id)
         left join sediaan sd on (b.id_sediaan = sd.id) where b.id is not NULL $q order by b.nama
@@ -116,6 +116,26 @@ function load_data_karyawan($param) {
     }
     $limit = " limit ".$param['start'].", ".$param['limit']."";
     $sql = "select * from karyawan where id is not NULL $q 
+        order by nama";
+    
+    $query = mysql_query($sql.$limit);
+    $data = array();
+    while ($row = mysql_fetch_object($query)) {
+        $data[] = $row;
+    }
+    $total = mysql_num_rows(mysql_query($sql));
+    $result['data'] = $data;
+    $result['total']= $total;
+    return $result;
+}
+
+function load_data_layanan($param) {
+    $q = null;
+    if ($param['id'] !== '') {
+        $q = "and id = '".$param['id']."'";
+    }
+    $limit = " limit ".$param['start'].", ".$param['limit']."";
+    $sql = "select * from tarif where id is not NULL $q 
         order by nama";
     
     $query = mysql_query($sql.$limit);
@@ -232,6 +252,10 @@ function load_data_dokter($param) {
     $result['data'] = $data;
     $result['total']= $total;
     return $result;
+}
+
+function perundangan_load_data() {
+    return array('Bebas','Bebas Terbatas','OWA','Keras','Psikotropika','Narkotika');
 }
 
 ?>

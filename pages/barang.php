@@ -1,7 +1,7 @@
 <?php
 $subNav = array(
 	"Utama ; barang.php ; #509601;",
-//	"Kemasan ; kemasan.php ; #509601;",
+	"Kemasan ; kemasan.php ; #509601;",
 );
 
 set_include_path("../");
@@ -14,6 +14,7 @@ $satuan_kekuatan = satuan_load_data('1');
 $kemasan  = satuan_load_data('0');
 $sediaan  = sediaan_load_data();
 $admr     = admr_load_data();
+$perundangan = perundangan_load_data();
 ?>
 
 <script type="text/javascript">
@@ -32,9 +33,10 @@ var str = '<div id=form_add>'+
                                 '<tr><td>Satuan Kekuatan:</td><td><select name=s_sediaan id=s_sediaan><option value="">Pilih ...</option><?php foreach ($satuan_kekuatan as $data) { echo '<option value="'.$data->id.'">'.$data->nama.'</option>'; } ?></select></td></tr>'+
                                 '<tr><td>Sediaan:</td><td><select name=sediaan id=sediaan><option value="">Pilih ...</option><?php foreach ($sediaan as $data) { echo '<option value="'.$data->id.'">'.$data->nama.'</option>'; } ?></select></td></tr>'+
                                 '<tr><td>Golongan:</td><td><select name=golongan id=golongan><option value="">Pilih ...</option><?php foreach ($golongan as $data) { echo '<option value="'.$data->id.'">'.$data->nama.'</option>'; } ?></select></td></tr>'+
+                                '<tr><td>Formularium:</td><td><?= form_radio('formularium', 'Ya', 'ya', 'Ya', FALSE) ?> <?= form_radio('formularium', 'Tidak', 'tidak', 'Tidak', TRUE) ?></td></tr>'+
                                 '<tr><td>R Administrasi:</td><td><select name=admr id=admr><option value="">Pilih ...</option><?php foreach ($admr as $data) { echo '<option value="'.$data.'">'.$data.'</option>'; } ?></select></td></tr>'+
                                 '<tr><td>Pabrik:</td><td><?= form_input('pabrik', NULL, 'id=pabrik size=32') ?><?= form_hidden('id_pabrik', NULL, 'id=id_pabrik') ?></td></tr>'+
-                                '<tr><td>Supplier:</td><td><?= form_input('supplier', NULL, 'id=supplier size=32') ?><?= form_hidden('id_supplier', NULL, 'id=id_supplier') ?></td></tr>'+
+                                '<tr><td>Perundangan:</td><td><select name="perundangan" id="perundangan"><?php foreach ($perundangan as $data) { echo '<option value="'.$data.'">'.$data.'</option>'; } ?></select></td></tr>'+
                                 '<tr><td>Rak:</td><td><?= form_input('rak', NULL, 'id=rak size=32') ?></td></tr>'+
                                 '<tr><td></td><td><?= form_radio('generik', '1', 'ya', 'Generik', TRUE) ?> <?= form_radio('generik', '0', 'tidak', 'Non Generik') ?></td></tr>'+
 
@@ -124,7 +126,7 @@ var str = '<div id=form_add>'+
         autoOpen: true,
         modal: true,
         width: 480,
-        height: 500,
+        height: 530,
         hide: 'clip',
         show: 'blind',
         buttons: {
@@ -224,18 +226,16 @@ function edit_barang(str) {
     $('#admr').val(arr[6]);
     $('#pabrik').val(arr[8]);
     $('#id_pabrik').val(arr[7]);
-    $('#supplier').val(arr[10]);
-    $('#id_supplier').val(arr[9]);
-    $('#rak').val(arr[11]);
-    if (arr[12] === '1') { $('#ya').attr('checked','checked'); }
-    if (arr[12] === '0') { $('#tidak').attr('checked','checked'); }
+    $('#rak').val(arr[9]);
+    if (arr[10] === '1') { $('#ya').attr('checked','checked'); }
+    if (arr[10] === '0') { $('#tidak').attr('checked','checked'); }
     
-    $('#indikasi').val(arr[13]);
-    $('#dosis').val(arr[14]);
-    $('#kandungan').val(arr[15]);
-    $('#perhatian').val(arr[16]);
-    $('#kontra_indikasi').val(arr[17]);
-    $('#efek_samping').val(arr[18]);
+    $('#indikasi').val(arr[11]);
+    $('#dosis').val(arr[12]);
+    $('#kandungan').val(arr[13]);
+    $('#perhatian').val(arr[14]);
+    $('#kontra_indikasi').val(arr[15]);
+    $('#efek_samping').val(arr[16]);
 }
 $mainNav.set("home");
 $('button').button({

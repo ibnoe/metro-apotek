@@ -6,8 +6,9 @@ $method = $_GET['method'];
 if ($method === 'save_barang') {
     $nama       = $_POST['nama'];
     $pabrik     = ($_POST['id_pabrik'] !== '')?$_POST['id_pabrik']:'NULL';
-    $supplier   = ($_POST['id_supplier'] !== '')?$_POST['id_supplier']:'NULL';
+    $perundangan= $_POST['perundangan'];
     $rak        = $_POST['rak'];
+    $formularium= $_POST['formularium'];
     $kekuatan   = $_POST['kekuatan'];
     $golongan   = ($_POST['golongan'] !== '')?$_POST['golongan']:'NULL';
     $s_kekuatan = $_POST['s_sediaan'];
@@ -23,7 +24,7 @@ if ($method === 'save_barang') {
     $sql = "insert into barang set
             nama = '$nama',
             id_pabrik = $pabrik,
-            id_supplier = $supplier,
+            perundangan = $perundangan,
             rak = '$rak',
             kekuatan = '$kekuatan',
             id_golongan = $golongan,
@@ -36,7 +37,8 @@ if ($method === 'save_barang') {
             kandungan = '$kandungan',
             perhatian = '$perhatian',
             kontra_indikasi = '$kontra_ind',
-            efek_samping = '$ef_samping'";
+            efek_samping = '$ef_samping',
+            formularium = '$formularium'";
     
     mysql_query($sql);
     
@@ -380,5 +382,40 @@ if ($method === 'save_karyawan') {
 if ($method === 'delete_karyawan') {
     $id     = $_GET['id'];
     mysql_query("delete from karyawan where id = '$id'");
+}
+
+if ($method === 'save_layanan') {
+    $nama       = $_POST['nama'];
+    $nominal    = $_POST['nominal'];
+    $akun       = $_POST['akun'];
+    $id_layanan = $_POST['id_layanan'];
+    
+    if ($id_layanan === '') {
+        $sql = "
+            insert into tarif set
+                nama = '$nama',
+                nominal = '".currencyToNumber($nominal)."',
+                kode_akun = ".(($akun !== '')?$akun:'NULL')."
+        ";
+        mysql_query($sql);
+        $id = mysql_insert_id();
+    } else {
+        $sql = "
+            update tarif set
+                nama = '$nama',
+                nominal = '".currencyToNumber($nominal)."',
+                kode_akun = ".(($akun !== '')?$akun:'NULL')."    
+            where id = '$id_layanan'
+        ";
+        
+        mysql_query($sql);
+        $id = $id_layanan;
+    }   
+    die(json_encode(array('status' => TRUE, 'id_layanan' => $id)));
+}
+
+if ($method === 'delete_layanan') {
+    $id     = $_GET['id'];
+    mysql_query("delete from tarif where id = '$id'");
 }
 ?>
