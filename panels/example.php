@@ -1,0 +1,1 @@
+Sorry, sidepanels only work in the full version of the template!
