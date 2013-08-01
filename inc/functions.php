@@ -20,6 +20,18 @@ function form_radio($name, $value, $id, $label = null, $checked = FALSE) {
     return '<input type=radio name="'.$name.'" value="'.$value.'" id="'.$id.'" '.$attr.' /><label for="'.$id.'">'.$label.'</label>';
 }
 
+function form_upload($name, $attr = NULL) {
+    return '<input type=file name="'.$name.'" '.$attr.' />';
+}
+
+function form_checkbox($name, $value, $id, $label = null, $checked = FALSE) {
+    $attr = "";
+    if ($checked == TRUE) {
+        $attr = "checked";
+    }
+    return '<input type=checkbox name="'.$name.'" value="'.$value.'" id="'.$id.'" '.$attr.' /><label for="'.$id.'">'.$label.'</label>';
+}
+
 function paging_ajax($jmldata, $dataPerPage, $klik, $tab = NULL, $search) {
     /*
      * Parameter '$search' dalam bentuk string , bisa json string atau yang lain

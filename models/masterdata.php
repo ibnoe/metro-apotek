@@ -50,6 +50,25 @@ function load_data_pabrik($param) {
     return $result;
 }
 
+function load_data_instansi($param) {
+    $q = null;
+    if ($param['id'] !== '') {
+        $q = " and id = '".$param['id']."'";
+    }
+    $limit = " limit ".$param['start'].", ".$param['limit']."";
+    $sql = "select * from instansi where id is not NULL $q order by nama";
+    
+    $query = mysql_query($sql.$limit);
+    $data = array();
+    while ($row = mysql_fetch_object($query)) {
+        $data[] = $row;
+    }
+    $total = mysql_num_rows(mysql_query($sql));
+    $result['data'] = $data;
+    $result['total']= $total;
+    return $result;
+}
+
 function load_data_supplier($param) {
     $q = null;
     if ($param['id'] !== '') {

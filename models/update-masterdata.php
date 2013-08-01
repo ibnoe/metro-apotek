@@ -157,6 +157,42 @@ if ($method === 'delete_pabrik') {
     mysql_query("delete from pabrik where id = '$id'");
 }
 
+if ($method === 'save_instansi') {
+    $nama       = $_POST['nama'];
+    $alamat     = $_POST['alamat'];
+    $email      = $_POST['email'];
+    $telp       = $_POST['telp'];
+    $id_instansi  = $_POST['id_instansi'];
+    
+    if ($id_instansi === '') {
+        $sql = "
+        insert into instansi set
+            nama = '$nama',
+            alamat = '$alamat',
+            email = '$email',
+            telp = '$telp'
+        ";
+        mysql_query($sql);
+        $id_sup = mysql_insert_id();
+    } else {
+        $sql = "
+        update instansi set
+            nama = '$nama',
+            alamat = '$alamat',
+            email = '$email',
+            telp = '$telp'
+        where id = '$id_instansi'";
+        mysql_query($sql);
+        $id_sup = $id_instansi;
+    }
+    die(json_encode(array('status' => TRUE, 'id_instansi' => $id_sup)));
+}
+
+if ($method === 'delete_instansi') {
+    $id     = $_GET['id'];
+    mysql_query("delete from instansi where id = '$id'");
+}
+
 if ($method === 'save_bank') {
     $nama       = $_POST['nama'];
     $charge     = $_POST['charge'];

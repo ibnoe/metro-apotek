@@ -2,6 +2,11 @@
 include_once '../models/masterdata.php';
 include_once '../inc/functions.php';
 ?>
+<script type="text/javascript">
+$(function() {
+    $( document ).tooltip();
+});
+</script>
 <table cellspacing="0" width="100%" class="list-data">
 <thead>
 <tr class="italic">
@@ -44,7 +49,7 @@ include_once '../inc/functions.php';
         ?>
     <tr class="<?= ($key%2==0)?'even':'odd' ?>">
         <td align="center"><?= (++$key+$offset) ?></td>
-        <td><?= $data->nama ?></td>
+        <td><span title="<img src='img/pabrik.jpg' />"><?= $data->nama ?></span></td>
         <td><?= $data->jenis ?></td>
         <td align="center"><?= $data->kelamin ?></td>
         <td><?= $data->alamat ?></td>
@@ -53,8 +58,8 @@ include_once '../inc/functions.php';
         <td align="center"><?= $data->diskon ?></td>
         <td><?= $data->asuransi ?></td>
         <td class='aksi' align='center'>
-            <a class='edition' onclick="edit_pelanggan('<?= $str ?>');" title="Klik untuk edit barang">&nbsp;</a>
-            <a class='deletion' onclick="delete_pelanggan('<?= $data->id ?>', '<?= $page ?>');" title="Klik untuk hapus barang">&nbsp;</a>
+            <a class='edition' onclick="edit_pelanggan('<?= $str ?>');" title="Klik untuk edit">&nbsp;</a>
+            <a class='deletion' onclick="delete_pelanggan('<?= $data->id ?>', '<?= $page ?>');" title="Klik untuk hapus">&nbsp;</a>
         </td>
     </tr>
     <?php } ?>

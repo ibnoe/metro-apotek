@@ -1,6 +1,6 @@
 <?php
 $subNav = array(
-	"Utama ; layanan.php ; #509601;"
+	"Utama ; instansi.php ; #509601;"
 );
 
 set_include_path("../");
@@ -8,31 +8,31 @@ include_once("inc/essentials.php");
 include_once("inc/functions.php");
 include_once("models/masterdata.php");
 include_once("pages/message.php");
-$akun = load_data_akun();
 ?>
 
 <script type="text/javascript">
 $(function() {
-    load_data_layanan();
+    load_data_instansi();
 });
 function form_add() {
 var str = '<div id=form_add>'+
             '<form action="" method=post id="save_barang">'+
-            '<?= form_hidden('id_layanan', NULL, 'id=id_layanan') ?>'+
+            '<?= form_hidden('id_instansi', NULL, 'id=id_instansi') ?>'+
             '<table width=100% class=data-input>'+
-                '<tr><td width=40%>Nama layanan:</td><td><?= form_input('nama', NULL, 'id=nama size=40 onBlur="javascript:this.value=this.value.toUpperCase();"') ?></td></tr>'+
-                '<tr><td>Nominal (Rp.):</td><td><?= form_input('nominal', NULL, 'id=nominal onblur="FormNum(this);" onfocus="javascript:this.value=currencyToNumber(this.value);" size=40') ?></td></tr>'+
-                '<tr><td width=40%>Kode Akun:</td><td><select name=akun id=akun><option value="">Pilih ...</option><?php foreach ($akun as $data) { echo '<option value="'.$data->kode.'">'.$data->kode.' '.$data->kelompok.'</option>'; } ?></select></td></tr>'+
+                '<tr><td width=40%>Nama instansi:</td><td><?= form_input('nama', NULL, 'id=nama size=40') ?></td></tr>'+
+                '<tr><td>Alamat:</td><td><?= form_input('alamat', NULL, 'id=alamat size=40') ?></td></tr>'+
+                '<tr><td width=40%>Email:</td><td><?= form_input('email', NULL, 'id=email size=40') ?></td></tr>'+
+                '<tr><td>No. Telp:</td><td><?= form_input('telp', NULL, 'id=telp size=40') ?></td></tr>'+
             '</table>'+
             '</form>'+
             '</div>';
     $('body').append(str);
     $('#form_add').dialog({
-        title: 'Tambah layanan',
+        title: 'Tambah instansi',
         autoOpen: true,
         width: 480,
-        height: 200,
-        modal: true,
+        height: 220,
+        modal: false,
         hide: 'clip',
         show: 'blind',
         buttons: {
@@ -45,9 +45,9 @@ var str = '<div id=form_add>'+
             $(this).dialog().remove();
         }
     });
-    var lebar = $('#pabrik').width();
-    $('#pabrik').dblclick(function() {
-        $('<div title="Data pabrik" id="pabrik-data"></div>').dialog({
+    var lebar = $('#instansi').width();
+    $('#instansi').dblclick(function() {
+        $('<div title="Data instansi" id="instansi-data"></div>').dialog({
             autoOpen: true,
             modal: true,
             width: 500,
@@ -61,16 +61,12 @@ var str = '<div id=form_add>'+
     
     $('#save_barang').submit(function() {
         if ($('#nama').val() === '') {
-            alert('Nama layanan tidak boleh kosong !');
+            alert('Nama barang tidak boleh kosong !');
             $('#nama').focus(); return false;
         }
-        if ($('#charge').val() === '') {
-            alert('Charge tidak boleh kosong !');
-            $('#kemasan').focus(); return false;
-        }
-        var cek_id = $('#id_layanan').val();
+        var cek_id = $('#id_instansi').val();
         $.ajax({
-            url: 'models/update-masterdata.php?method=save_layanan',
+            url: 'models/update-masterdata.php?method=save_instansi',
             type: 'POST',
             dataType: 'json',
             data: $(this).serialize(),
@@ -80,11 +76,11 @@ var str = '<div id=form_add>'+
                     if (cek_id === '') {
                         alert_tambah();
                         $('input').val('');
-                        load_data_layanan('1','',data.id_layanan);
+                        load_data_instansi('1','',data.id_instansi);
                     } else {
                         alert_edit();
                         $('#form_add').dialog().remove();
-                        load_data_layanan('1','',data.id_layanan);
+                        load_data_instansi('1','',data.id_instansi);
                     }
                     
                 }
@@ -94,7 +90,7 @@ var str = '<div id=form_add>'+
     });
 }
 $mainNav.set("home");
-$('#button').button({
+$('button').button({
     icons: {
         primary: 'ui-icon-newwin'
     }
@@ -102,51 +98,42 @@ $('#button').button({
 $('#button').click(function() {
     form_add();
 });
-$('#reset').button({
-    icons: {
-        primary: 'ui-icon-refresh'
-    }
-});
-$('#reset').click(function() {
-    load_data_layanan();
-});
 $.plugin($afterSubPageShow,{ // <-- event is here
     showAlert:function(){ // <-- random function name is here (choose whatever you want)
-    
     /* The code that will be executed */
-    
-    
     }
 });
-function load_data_layanan(page, search, id) {
+function load_data_instansi(page, search, id) {
     pg = page; src = search; id_barg = id;
     if (page === undefined) { var pg = ''; }
     if (search === undefined) { var src = ''; }
     if (id === undefined) { var id_barg = ''; }
     $.ajax({
-        url: 'pages/layanan-list.php',
+        url: 'pages/instansi-list.php',
         cache: false,
-        data: 'page='+pg+'&search='+src+'&id_layanan='+id_barg,
+        data: 'page='+pg+'&search='+src+'&id_instansi='+id_barg,
         success: function(data) {
-            $('#result-layanan').html(data);
+            $('#result-instansi').html(data);
         }
     });
 }
 
 function paging(page, tab, search) {
-    load_data_layanan(page, search);
+    load_data_instansi(page, search);
 }
 
-function edit_layanan(str) {
+function edit_instansi(str) {
     var arr = str.split('#');
     form_add();
-    $('#form_add').dialog({ title: 'Edit layanan' });
-    $('#id_layanan').val(arr[0]);
+    $('#form_add').dialog({ title: 'Edit instansi' });
+    $('#id_instansi').val(arr[0]);
     $('#nama').val(arr[1]);
-    $('#nominal').val(arr[2]);
-    $('#akun').val(arr[3]);
+    $('#alamat').val(arr[2]);
+    $('#email').val(arr[3]);
+    $('#telp').val(arr[4]);
 }
-function delete_layanan(id, page) {
+
+function delete_instansi(id, page) {
     $('<div id=alert>Anda yakin akan menghapus data ini?</div>').dialog({
         title: 'Konfirmasi Penghapusan',
         autoOpen: true,
@@ -155,10 +142,10 @@ function delete_layanan(id, page) {
             "OK": function() {
                 
                 $.ajax({
-                    url: 'models/update-masterdata.php?method=delete_layanan&id='+id,
+                    url: 'models/update-masterdata.php?method=delete_instansi&id='+id,
                     cache: false,
                     success: function() {
-                        load_data_layanan(page);
+                        load_data_instansi(page);
                         $('#alert').dialog().remove();
                     }
                 });
@@ -170,10 +157,9 @@ function delete_layanan(id, page) {
     });
 }
 </script>
-<h1 class="margin-t-0">Data layanan</h1>
+<h1 class="margin-t-0">Data instansi</h1>
 <hr>
 <button id="button">Tambah Data</button>
-<button id="reset">Reset</button>
-<div id="result-layanan">
+<div id="result-instansi">
     
 </div>

@@ -24,4 +24,5 @@ $pageTitles['jadwalpraktek.php'] = "Jadwal Praktek";
 $pageTitles['asuransi.php'] = "Asuransi";
 $pageTitles['karyawan.php'] = "Karyawan";
 $pageTitles['layanan.php'] = "Layanan";
+$pageTitles['instansi.php'] = "Instansi";
 ?>

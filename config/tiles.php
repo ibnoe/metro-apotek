@@ -47,11 +47,14 @@ $tile[] = array("type"=>"slidefx","group"=>1,"x"=>0,"y"=>0,'width'=>2,'height'=>
 	"text"=>"Click to see in full","img"=>"img/metro_slide_300x150.png","classes"=>"lightbox"
 );
 */
-$tile[] = array("type"=>"simple","group"=>1,"x"=>0,"y"=>0,'width'=>2,'height'=>1,"background"=>"#6950AB","url"=>"barang.php",
-	"title"=>"<span style='font-size:24px;'>Produk</span>",
-	"text"=>"Management data obat dan non obat, HNA etc ...",
-	"img"=>"img/icons/drug.png","imgSize"=>"50","imgToTop"=>"5","imgToLeft"=>"5",
-	"labelText"=>"Metro Apotek","labelColor"=>"#453B5E","labelPosition"=>"bottom");
+
+$tile[] = array("type"=>"img","group"=>1,"x"=>0,"y"=>0,'width'=>1,'height'=>1,"background"=>"#6950AB","url"=>"barang.php",
+	"img"=>"img/icons/drug.png","desc"=>"Produk","showDescAlways"=>true,"imgWidth"=>1,"imgHeight"=>1,
+	"labelText"=>"","labelColor"=>"#000","labelPosition"=>"","classes"=>"");
+
+$tile[] = array("type"=>"img","group"=>1,"x"=>3,"y"=>1,'width'=>1,'height'=>1,"background"=>"#6950AB","url"=>"instansi.php",
+	"img"=>"img/icons/instansi.png","desc"=>"Instansi","showDescAlways"=>true,"imgWidth"=>1,"imgHeight"=>1,
+	"labelText"=>"","labelColor"=>"#000","labelPosition"=>"","classes"=>"");
 
 $tile[] = array("type"=>"slide","group"=>1,"x"=>0,"y"=>1,'width'=>2,'height'=>1,"background"=>"#00BFFF","url"=>"pabrik.php",
 	"text"=>"<b>Data Pabrik <br/>Manajemen data pabrik</b>","img"=>"img/pabrik.jpg","imgSize"=>1,
@@ -66,8 +69,8 @@ $tile[] = array("type"=>"simple","group"=>1,"x"=>0,"y"=>2,'width'=>2,'height'=>1
 	"img"=>"img/icons/user.png","imgSize"=>"50","imgToTop"=>"5","imgToLeft"=>"5",
 	"labelText"=>"Metro Apotek","labelColor"=>"#453B5E","labelPosition"=>"bottom");
 
-$tile[] = array("type"=>"img","group"=>1,"x"=>2,"y"=>0,'width'=>1,'height'=>1,"background"=>"#009aff","url"=>"supplier.php",
-	"img"=>"img/icons/supplier.png","desc"=>"Data Supplier","showDescAlways"=>true,"imgWidth"=>1,"imgHeight"=>1,
+$tile[] = array("type"=>"img","group"=>1,"x"=>2,"y"=>0,'width'=>1,'height'=>1,"background"=>"#00709f","url"=>"supplier.php",
+	"img"=>"img/icons/supplier.png","desc"=>"Supplier","showDescAlways"=>true,"imgWidth"=>1,"imgHeight"=>1,
 	"labelText"=>"","labelColor"=>"#000","labelPosition"=>"","classes"=>"");
 
 $tile[] = array("type"=>"simple","group"=>1,"x"=>2,"y"=>1,'width'=>1,'height'=>1,"background"=>"#bd1e4a","url"=>"bank.php",
@@ -80,7 +83,8 @@ $tile[] = array("type"=>"simple","group"=>1,"x"=>2,"y"=>2,'width'=>1,'height'=>1
 $tile[] = array("type"=>"img","group"=>1,"x"=>3,"y"=>0,'width'=>1,'height'=>1,"background"=>"#0072bc","url"=>"asuransi.php",
 	"img"=>"img/icons/asuransi.png","desc"=>"Asuransi","showDescAlways"=>true,"imgWidth"=>1,"imgHeight"=>1,
 	"labelText"=>"","labelColor"=>"#000","labelPosition"=>"","classes"=>"");
-$tile[] = array("type"=>"img","group"=>1,"x"=>3,"y"=>1,'width'=>1,'height'=>1,"background"=>"#009aff","url"=>"karyawan.php",
+
+$tile[] = array("type"=>"img","group"=>1,"x"=>1,"y"=>0,'width'=>1,'height'=>1,"background"=>"#009aff","url"=>"karyawan.php",
 	"img"=>"img/icons/karyawan.png","desc"=>"Karyawan","showDescAlways"=>true,"imgWidth"=>1,"imgHeight"=>1,
 	"labelText"=>"","labelColor"=>"#000","labelPosition"=>"","classes"=>"");
 

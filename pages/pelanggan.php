@@ -16,7 +16,7 @@ load_data_pelanggan();
 function form_add() {
 var str = '<div id=form_add>'+
             '<form action="" method=post id="save_barang">'+
-            '<?= form_hidden('id_pelanggan', NULL, 'id=id_pelanggan') ?>'+
+            '<?= form_hidden('id_pelanggan', NULL, 'id=id_pelanggan enctype="multipart/form-data"') ?>'+
             '<table width=100% class=data-input>'+
                 '<tr><td width=30%>Nama:</td><td width=70%><?= form_input('nama', NULL, 'id=nama size=40 onBlur="javascript:this.value=this.value.toUpperCase();"') ?></td></tr>'+
                 '<tr><td>Jenis:</td><td><input type="radio" name=jenis value="Personal" checked id="p" /> <label for="p">Personal</label> <input type="radio" name=jenis value="Perusahaan" id="pr" /> <label for="pr">Perusahaan</label></td></tr>'+
@@ -29,6 +29,7 @@ var str = '<div id=form_add>'+
                 '<tr><td>Catatan:</td><td><?= form_input('catatan', '', 'id=catatan size=40') ?></td></tr>'+
                 '<tr><td>Asuransi:</td><td><select name="asuransi" id="asuransi"><option value="">Pilih asuransi ...</option><?php foreach ($asuransi as $data) { echo '<option value="'.$data->id.'">'.$data->nama.'</option>'; } ?></select></td></tr>'+
                 '<tr><td>No. Polish:</td><td><?= form_input('nopolish', '', 'id=nopolish size=40') ?></td></tr>'+
+                '<tr><td>Foto:</td><td><?= form_upload('image', '', 'id=image') ?></td></tr>'+
             '</table>'+
             '</form>'+
             '</div>';
