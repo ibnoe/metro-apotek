@@ -18,7 +18,7 @@ $(function() {
     <th width="10%">Perhatian</th>
     <th width="10%">Kontra Indikasi</th>
     <th width="10%">Efek Samping</th>
-    <th width="4%">#</th>
+    <!--<th width="4%">#</th>-->
 </tr>
 </thead>
 <tbody>
@@ -58,10 +58,10 @@ $(function() {
         <td><?= $data->perhatian ?></td>
         <td><?= $data->kontra_indikasi ?></td>
         <td><?= $data->efek_samping ?></td>
-        <td class='aksi' align='center'>
+<!--        <td class='aksi' align='center'>
             <a class='edition' onclick="edit_barang('<?= $str ?>');" title="Klik untuk edit barang">&nbsp;</a>
             <a class='deletion' onclick="delete_barang('<?= $data->id ?>','<?= $page ?>');" title="Klik untuk hapus barang">&nbsp;</a>
-        </td>
+        </td>-->
     </tr>
     <?php } ?>
 </tbody>
