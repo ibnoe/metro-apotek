@@ -215,7 +215,7 @@ function load_data_barang(page, search, id) {
     if (search === undefined) { var src = ''; }
     if (id === undefined) { var id_barg = ''; }
     $.ajax({
-        url: 'pages/barang-list.php',
+        url: 'pages/pelengkap-list.php',
         cache: false,
         data: 'page='+pg+'&search='+src+'&id_barang='+id_barg,
         success: function(data) {
@@ -252,19 +252,13 @@ function edit_barang(str) {
     $('#efek_samping').val(arr[16]);
 }
 $mainNav.set("home");
-$('#button').button({
+$('button').button({
     icons: {
         primary: 'ui-icon-newwin'
     }
-}).click(function() {
-    form_add();
 });
-$('#reset').button({
-    icons: {
-        primary: 'ui-icon-refresh'
-    }
-}).click(function() {
-    load_data_barang();
+$('#button').click(function() {
+    form_add();
 });
 $.plugin($afterSubPageShow,{ // <-- event is here
     showAlert:function(){ // <-- random function name is here (choose whatever you want)
@@ -272,10 +266,8 @@ $.plugin($afterSubPageShow,{ // <-- event is here
     }
 });
 </script>
-<h1 class="margin-t-0">Data Produk</h1>
+<h1 class="margin-t-0">Data Pelengkap</h1>
 <hr>
-<button id="button">Tambah Data</button>
-<button id="reset">Reset</button>
 <div id="result-barang">
     
 </div>

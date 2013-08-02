@@ -106,8 +106,7 @@ $('#reset').button({
     icons: {
         primary: 'ui-icon-refresh'
     }
-});
-$('#reset').click(function() {
+}).click(function() {
     load_data_layanan();
 });
 $.plugin($afterSubPageShow,{ // <-- event is here

@@ -11,18 +11,13 @@ $(function() {
 <thead>
 <tr class="italic">
     <th width="5%">No.</th>
-    <th width="25%">Nama Barang</th>
-    <th width="15%">Pabrik</th>
-    <th width="5%">Kekuatan</th>
-    <th width="5%">Satuan<br/> Kekuatan</th>
-    <th width="5%">Gol.</th>
-    <th width="5%">Sediaan</th>
-    <th width="5%">Generik</th>
-    <th width="5%">Adm R</th>
-    <th width="7%">Formularium</th>
-    <th width="7%">Perundangan</th>
-    <th width="5%">Lokasi<br/>Rak</th>
-    <th width="5%">Stok Min</th>
+    <th width="15%">Nama Barang</th>
+    <th width="10%">Indikasi</th>
+    <th width="10%">Dosis</th>
+    <th width="10%">Kandungan</th>
+    <th width="10%">Perhatian</th>
+    <th width="10%">Kontra Indikasi</th>
+    <th width="10%">Efek Samping</th>
     <th width="4%">#</th>
 </tr>
 </thead>
@@ -57,17 +52,12 @@ $(function() {
     <tr class="<?= ($key%2==0)?'even':'odd' ?>">
         <td align="center"><?= (++$key+$offset) ?></td>
         <td><?= $data->nama.' '.$data->kekuatan.' '.$data->satuan ?></td>
-        <td><?= $data->pabrik ?></td>
-        <td align="center"><?= $data->kekuatan ?></td>
-        <td align="center"><?= $data->satuan ?></td>
-        <td><?= $data->golongan ?></td>
-        <td><?= $data->sediaan ?></td>
-        <td align="center"><?= ($data->generik === '1')?'Ya':'Tidak' ?></td>
-        <td><?= $data->adm_r ?></td>
-        <td align="center"><?= $data->formularium ?></td>
-        <td><?= $data->perundangan ?></td>
-        <td><?= $data->rak ?></td>
-        <td align="center"><?= $data->stok_minimal ?></td>
+        <td><?= $data->indikasi ?></td>
+        <td><?= $data->dosis ?></td>
+        <td><?= $data->kandungan ?></td>
+        <td><?= $data->perhatian ?></td>
+        <td><?= $data->kontra_indikasi ?></td>
+        <td><?= $data->efek_samping ?></td>
         <td class='aksi' align='center'>
             <a class='edition' onclick="edit_barang('<?= $str ?>');" title="Klik untuk edit barang">&nbsp;</a>
             <a class='deletion' onclick="delete_barang('<?= $data->id ?>','<?= $page ?>');" title="Klik untuk hapus barang">&nbsp;</a>
