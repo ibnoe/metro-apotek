@@ -12,6 +12,7 @@ table.data-input input[type=text], table.data-input textarea { margin: 0.5px; ma
 .data-input select { margin-left: 0.5px; margin-top: 1px; margin-bottom: 1px; min-width: 155px; }
 .data-input input[type=radio] { margin-left: 0; margin-right: 2px; }
 .data-input input[type=checkbox], .data-input input[type=file] { margin-left: 0; }
+.data-input .space { width: 20px; display: inline-table; }
 .data-input textarea { max-width: 300px; height: 30px; text-transform: uppercase; }
 .edition { background: url(../../img/icons/edit.png) center no-repeat; width: 19px; height: 19px; text-align: center; display: inline-block; }
 .edition:hover { background: url(../../img/icons/edit.png) center no-repeat; width: 19px; height: 19px; cursor: pointer; }

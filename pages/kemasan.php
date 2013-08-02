@@ -1,6 +1,6 @@
 <?php
 $subNav = array(
-	"Basic Data ; barang.php ; #509601;",
+	"Basic Data ; kemasan.php ; #509601;",
         "Pelengkap ; pelengkap.php ; #509601;",
 	"Kemasan ; kemasan.php ; #509601;",
 );
@@ -20,27 +20,55 @@ $perundangan = perundangan_load_data();
 
 <script type="text/javascript">
 $(function() {
-    load_data_barang();
+    load_data_kemasan();
 });
+function add_setting_harga(i) {
+    var row = '<tr class="mother"><td></td><td>'+
+                '<table width=100% style="border-bottom: 1px dotted #ccc; margin-bottom: 5px; padding-bottom: 3px;">'+
+                    '<tr><td colspan=2>&nbsp;</td></tr>'+
+                    '<tr><td>Range Jual:</td><td><?= form_input('awal', NULL, 'id=awal size=5') ?> <div class="space"> s.d </div> <?= form_input('akhir', NULL, 'id=akhir size=5') ?></td></tr>'+
+                    '<tr><td>Margin:</td><td><?= form_input('m_persen', NULL, 'id=m_persen maxlength=3 size=5') ?> <div class="space"> (%) </div> <?= form_input('m_rupiah', NULL, 'id=m_rupiah size=10') ?></td></tr>'+
+                    '<tr><td>Diskon:</td><td><?= form_input('d_persen', NULL, 'id=d_persen maxlength=3 size=5') ?> <div class="space"> (%) </div> <?= form_input('d_rupiah', NULL, 'id=d_rupiah size=10') ?></td></tr>'+
+                    '<tr><td>Harga Jual (Rp.):</td><td id=harga_jual>-</td></tr>'+
+                '</table>'+
+            '</td></tr>';
+    $(row).insertAfter('#mother'+i);
+    
+}
+function kemasan_add(i) {
+    var str = '<tr class="mother"><td width=15%>Barcode:</td><td width=70%><?= form_input('barcode', NULL, 'id=barcode size=10') ?> '+
+                'Kemasan: <select name=kemasan[] style="min-width: 100px;"><option value="">Pilih ...</option><?php foreach ($kemasan as $data) { echo '<option value="'.$data->id.'">'.$data->nama.'</option>'; } ?></select> '+
+                'Isi: <?= form_input('isi[]', NULL, 'id=isi size=5') ?> '+
+                'Satuan: <select name=satuan[] style="min-width: 100px;"><option value="">Pilih ...</option><?php foreach ($kemasan as $data) { echo '<option value="'.$data->id.'">'.$data->nama.'</option>'; } ?></select>&nbsp;'+
+            '<img onclick=add_setting_harga('+i+'); title="Klik untuk setting harga" src="img/icons/add.png" class=add_kemasan align=right />'+
+            '<img onclick=delete_setting_harga('+i+'); title="Klik untuk delete" src="img/icons/delete-icon.png" class=delete_kemasan align=right /></td></tr>';
+    $('.data-input').append(str);
+}
 function form_add() {
-var kemasan = '<tr><td width=15%>Barcode:</td><td width=70%><?= form_input('barcode', NULL, 'id=barcode size=10') ?> '+
-                    'Kemasan: <select name=kemasan[] style="min-width: 100px;"><option value="">Pilih ...</option><?php foreach ($kemasan as $data) { echo '<option value="'.$data->id.'">'.$data->nama.'</option>'; } ?></select> '+
-                    'Isi: <?= form_input('isi[]', NULL, 'id=isi size=5') ?> '+
-                    'Satuan: <select name=satuan[] style="min-width: 100px;"><option value="">Pilih ...</option><?php foreach ($kemasan as $data) { echo '<option value="'.$data->id.'">'.$data->nama.'</option>'; } ?></select>'+
-                '</td></tr>';
-$('.data-input').append(kemasan);
+/*$('.mother:eq('+jml+')').attr('id', 'mother'+jml);
+$('.mother:eq('+jml+')').children('td:eq(1)').children('.add_kemasan').attr('id', jml);
+$('.mother:eq('+jml+')').children('td:eq(1)').children('.delete_kemasan').attr('id', jml);*/
 var str = '<div id=form_add>'+
-            '<form id="form_barang">'+
-                    '<?= form_hidden('id_barang', NULL, 'id=id_barang') ?>'+
-                        '<div><table width=100% class=data-input>'+
-                            '<tr><td width=15%>Nama Barang:</td><td width=70%><?= form_input('nama', NULL, 'id=nama size=25 style="float: left"') ?>&nbsp;<img title="Klik untuk tambah kemasan" src="img/icons/add.png" align=left /></td></tr>'+
-                            '<tr><td colspan=2>&nbsp;</td></tr>'+
-                            
-                        '</table>'+
+            '<form id="form_kemasan">'+
+                '<?= form_hidden('id_kemasan', NULL, 'id=id_kemasan') ?>'+
+                    '<div><table width=100% class=data-input>'+
+                        '<tr><td width=15%>Nama Barang:</td><td width=70%><?= form_input('nama', NULL, 'id=nama size=25 style="float: left"') ?>&nbsp;<img title="Klik untuk tambah kemasan" src="img/icons/add.png" id=add_kemasan align=left /></td></tr>'+
+                        '<tr><td colspan=2>&nbsp;</td></tr>'+
+
+                    '</table>'+
             '</div></form>'+
           '</div>';
     $('body').append(str);
     $("#accordion").accordion({ header: "h3" });
+    $('#add_kemasan').click(function() {
+        var jml = $('.mother').length;
+        kemasan_add(jml);
+        $('.mother:eq('+jml+')').attr('id', 'mother'+jml);
+    }); 
+    $('.add_kemasan').click(function() {
+        //var id = $(this).attr('id');
+        alert('asd');
+    });
     
     var lebar = $('#pabrik').width();
     $('#nama').autocomplete("models/autocomplete.php?method=barang",
@@ -56,7 +84,7 @@ var str = '<div id=form_add>'+
             return parsed;
         },
         formatItem: function(data,i,max){
-            var str = '<div class=result>'+data.nama_barang+'</div>';
+            var str = '<div class=result>'+data.nama_kemasan+'</div>';
             return str;
         },
         width: lebar, // panjang tampilan pencarian autocomplete yang akan muncul di bawah textbox pencarian
@@ -64,13 +92,8 @@ var str = '<div id=form_add>'+
         cacheLength: 0
     }).result(
     function(event,data,formated){
-        $(this).val(data.nama_barang);
+        $(this).val(data.nama_kemasan);
         $('#id_pabrik').val(data.id);
-    });
-    $('#add_kemasan').button({
-        icons: {
-            primary: 'ui-icon-refresh'
-        }
     });
     var wWidth = $(window).width();
     var dWidth = wWidth * 0.6;
@@ -81,13 +104,13 @@ var str = '<div id=form_add>'+
         title: 'Tambah Kemasan & Setting Harga',
         autoOpen: true,
         modal: true,
-        width: 700,
+        width: 710,
         height: dHeight,
         hide: 'clip',
         show: 'blind',
         buttons: {
             "Simpan": function() {
-                $('#form_barang').submit();
+                $('#form_kemasan').submit();
             }, 
             "Cancel": function() {    
                 $(this).dialog().remove();
@@ -113,22 +136,22 @@ var str = '<div id=form_add>'+
     });
     
     
-    $('#form_barang').submit(function() {
+    $('#form_kemasan').submit(function() {
         if ($('#nama').val() === '') {
             alert('Nama produk tidak boleh kosong !');
             $('#nama').focus(); return false;
         }
         if ($('#kekuatan').val() === '') {
-            alert('Kekuatan barang tidak boleh kosong !');
+            alert('Kekuatan kemasan tidak boleh kosong !');
             $('#kekuatan').focus(); return false;
         }
         if ($('#h_pokok').val() === '') {
             alert('Harga pokok tidak boleh kosong !');
             $('#h_pokok').focus(); return false;
         }
-        var cek_id = $('#id_barang').val();
+        var cek_id = $('#id_kemasan').val();
         $.ajax({
-            url: 'models/update-masterdata.php?method=save_barang',
+            url: 'models/update-masterdata.php?method=save_kemasan',
             type: 'POST',
             dataType: 'json',
             data: $(this).serialize(),
@@ -137,12 +160,12 @@ var str = '<div id=form_add>'+
                 if (data.status === true) {
                     if (cek_id === '') {
                         alert_tambah();
-                        $('#form_barang input[type=text], #form_barang textarea').val('');
-                        load_data_barang('1','',data.id_barang);
+                        $('#form_kemasan input[type=text], #form_kemasan textarea').val('');
+                        load_data_kemasan('1','',data.id_kemasan);
                     } else {
                         alert_edit();
-                        $('#form_barang').dialog().remove();
-                        load_data_barang('1','',cek_id);
+                        $('#form_kemasan').dialog().remove();
+                        load_data_kemasan('1','',cek_id);
                     }
                     
                 }
@@ -151,29 +174,29 @@ var str = '<div id=form_add>'+
         return false;
     });
 }
-function load_data_barang(page, search, id) {
+function load_data_kemasan(page, search, id) {
     pg = page; src = search; id_barg = id;
     if (page === undefined) { var pg = ''; }
     if (search === undefined) { var src = ''; }
     if (id === undefined) { var id_barg = ''; }
     $.ajax({
-        url: 'pages/barang-list.php',
+        url: 'pages/kemasan-list.php',
         cache: false,
-        data: 'page='+pg+'&search='+src+'&id_barang='+id_barg,
+        data: 'page='+pg+'&search='+src+'&id_kemasan='+id_barg,
         success: function(data) {
-            $('#result-barang').html(data);
+            $('#result-kemasan').html(data);
         }
     });
 }
 
 function paging(page, tab, search) {
-    load_data_barang(page, search);
+    load_data_kemasan(page, search);
 }
 
-function edit_barang(str) {
+function edit_kemasan(str) {
     var arr = str.split('#');
     form_add();
-    $('#id_barang').val(arr[0]);
+    $('#id_kemasan').val(arr[0]);
     $('#nama').val(arr[1]);
     $('#kekuatan').val(arr[2]);
     $('#s_sediaan').val(arr[3]);
@@ -206,7 +229,7 @@ $('#reset').button({
         primary: 'ui-icon-refresh'
     }
 }).click(function() {
-    load_data_barang();
+    load_data_kemasan();
 });
 
 $.plugin($afterSubPageShow,{ // <-- event is here
@@ -219,6 +242,6 @@ $.plugin($afterSubPageShow,{ // <-- event is here
 <hr>
 <button id="button">Tambah Data</button>
 <button id="reset">Reset</button>
-<div id="result-barang">
+<div id="result-kemasan">
     
 </div>
