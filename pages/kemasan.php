@@ -1,6 +1,6 @@
 <?php
 $subNav = array(
-	"Basic Data ; kemasan.php ; #509601;",
+	"Basic Data ; barang.php ; #509601;",
         "Pelengkap ; pelengkap.php ; #509601;",
 	"Kemasan ; kemasan.php ; #509601;",
 );
@@ -20,21 +20,10 @@ $perundangan = perundangan_load_data();
 
 <script type="text/javascript">
 $(function() {
+    $(document).tooltip();
     load_data_kemasan();
 });
-function add_setting_harga(i) {
-    var row = '<tr class="mother"><td></td><td>'+
-                '<table width=100% style="border-bottom: 1px dotted #ccc; margin-bottom: 5px; padding-bottom: 3px;">'+
-                    '<tr><td colspan=2>&nbsp;</td></tr>'+
-                    '<tr><td>Range Jual:</td><td><?= form_input('awal', NULL, 'id=awal size=5') ?> <div class="space"> s.d </div> <?= form_input('akhir', NULL, 'id=akhir size=5') ?></td></tr>'+
-                    '<tr><td>Margin:</td><td><?= form_input('m_persen', NULL, 'id=m_persen maxlength=3 size=5') ?> <div class="space"> (%) </div> <?= form_input('m_rupiah', NULL, 'id=m_rupiah size=10') ?></td></tr>'+
-                    '<tr><td>Diskon:</td><td><?= form_input('d_persen', NULL, 'id=d_persen maxlength=3 size=5') ?> <div class="space"> (%) </div> <?= form_input('d_rupiah', NULL, 'id=d_rupiah size=10') ?></td></tr>'+
-                    '<tr><td>Harga Jual (Rp.):</td><td id=harga_jual>-</td></tr>'+
-                '</table>'+
-            '</td></tr>';
-    $(row).insertAfter('#mother'+i);
-    
-}
+
 function kemasan_add(i) {
     var str = '<tr class="mother"><td width=15%>Barcode:</td><td width=70%><?= form_input('barcode', NULL, 'id=barcode size=10') ?> '+
                 'Kemasan: <select name=kemasan[] style="min-width: 100px;"><option value="">Pilih ...</option><?php foreach ($kemasan as $data) { echo '<option value="'.$data->id.'">'.$data->nama.'</option>'; } ?></select> '+
@@ -44,6 +33,28 @@ function kemasan_add(i) {
             '<img onclick=delete_setting_harga('+i+'); title="Klik untuk delete" src="img/icons/delete-icon.png" class=delete_kemasan align=right /></td></tr>';
     $('.data-input').append(str);
 }
+
+function add_setting_harga(i) {
+    var j   = $('.child'+i).length;
+    var row = '<tr class="child'+i+'" id="child'+i+''+j+'"><td></td><td>'+
+                '<table width=100% style="border-bottom: 1px dotted #ccc; margin-bottom: 5px; padding-bottom: 3px;">'+
+                    '<tr><td colspan=2>&nbsp;</td></tr>'+
+                    '<tr><td>Range Jual:</td><td><input type=text name=awal'+j+'[] id=awal'+i+''+j+' size=5 /> <div class="space"> s.d </div> <input type=text name=akhir'+j+'[] id=akhir'+i+''+j+' size=5 /></td></tr>'+
+                    '<tr><td>Margin Non Resep:</td><td><input type=text name=margin_nr'+j+'[] id=margin_nr'+i+''+j+' size=5 /> <div class="space"> (%) </div> <input type=text id=margin_nr_rp'+i+''+j+' size=5 /></td></tr>'+
+                    '<tr><td>Margin Resep:</td><td><input type=text name=margin_r'+j+'[] id=margin_r'+i+''+j+' size=5 /> <div class="space"> (%) </div> <input type=text id=margin_r_rp'+i+''+j+' size=5 /></td></tr>'+
+                    '<tr><td>Diskon:</td><td><input type=text name=d_persen'+j+'[] id=d_persen'+i+''+j+' size=5 /> <div class="space"> (%) </div> <input type=text name=d_rupiah'+j+'[] id=d_rupiah'+i+''+j+' size=5 /><img src="img/icons/delete-icon.png" onclick="removeMe(this)" align=right /></td></tr>'+
+                    '<tr><td>Harga Jual Resep (Rp.):</td><td id=harga_jual>-</td></tr>'+
+                '</table>'+
+            '</td></tr>';
+    $(row).insertAfter('#mother'+i);
+    
+}
+
+function removeMe(el) {
+    var parent = el.parentNode.parentNode.parentNode.parentNode;
+    parent.parentNode.removeChild(parent);
+}
+
 function form_add() {
 /*$('.mother:eq('+jml+')').attr('id', 'mother'+jml);
 $('.mother:eq('+jml+')').children('td:eq(1)').children('.add_kemasan').attr('id', jml);
@@ -53,6 +64,7 @@ var str = '<div id=form_add>'+
                 '<?= form_hidden('id_kemasan', NULL, 'id=id_kemasan') ?>'+
                     '<div><table width=100% class=data-input>'+
                         '<tr><td width=15%>Nama Barang:</td><td width=70%><?= form_input('nama', NULL, 'id=nama size=25 style="float: left"') ?>&nbsp;<img title="Klik untuk tambah kemasan" src="img/icons/add.png" id=add_kemasan align=left /></td></tr>'+
+                        '<tr><td>HNA (Rp.)</td><td><?= form_input('hna', NULL, 'id=hna size=10') ?></td></tr>'+
                         '<tr><td colspan=2>&nbsp;</td></tr>'+
 
                     '</table>'+
@@ -64,10 +76,6 @@ var str = '<div id=form_add>'+
         var jml = $('.mother').length;
         kemasan_add(jml);
         $('.mother:eq('+jml+')').attr('id', 'mother'+jml);
-    }); 
-    $('.add_kemasan').click(function() {
-        //var id = $(this).attr('id');
-        alert('asd');
     });
     
     var lebar = $('#pabrik').width();
@@ -84,7 +92,7 @@ var str = '<div id=form_add>'+
             return parsed;
         },
         formatItem: function(data,i,max){
-            var str = '<div class=result>'+data.nama_kemasan+'</div>';
+            var str = '<div class=result>'+data.nama_barang+'</div>';
             return str;
         },
         width: lebar, // panjang tampilan pencarian autocomplete yang akan muncul di bawah textbox pencarian
@@ -92,19 +100,20 @@ var str = '<div id=form_add>'+
         cacheLength: 0
     }).result(
     function(event,data,formated){
-        $(this).val(data.nama_kemasan);
-        $('#id_pabrik').val(data.id);
+        $(this).val(data.nama_barang);
+        $('#hna').val(numberToCurrency(data.hna));
+        $('#id_barang').val(data.id);
     });
     var wWidth = $(window).width();
     var dWidth = wWidth * 0.6;
     
     var wHeight= $(window).height();
-    var dHeight= wHeight * 0.8;
+    var dHeight= wHeight * 1;
     $('#form_add').dialog({
         title: 'Tambah Kemasan & Setting Harga',
         autoOpen: true,
         modal: true,
-        width: 710,
+        width: 740,
         height: dHeight,
         hide: 'clip',
         show: 'blind',

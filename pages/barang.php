@@ -26,58 +26,36 @@ function form_add() {
 var str = '<div id=form_add>'+
             '<form id="form_barang"><div id="accordion">'+
                     '<?= form_hidden('id_barang', NULL, 'id=id_barang') ?>'+
-                    '<div>'+
-                            '<h3><a href="#">Data Primer</a></h3>'+
                             '<div><table width="100%"><tr valign=top><td width="60%"><table width=100% class=data-input>'+
-                                '<tr><td width=40%>Nama Barang:</td><td><?= form_input('nama', NULL, 'id=nama size=32 onBlur="javascript:this.value=this.value.toUpperCase();"') ?></td></tr>'+
-                                '<tr><td>Kekuatan:</td><td><?= form_input('kekuatan', NULL, 'id=kekuatan size=32') ?></td></tr>'+
+                                '<tr><td width=48%>Nama Barang:</td><td><?= form_input('nama', NULL, 'id=nama size=50 onBlur="javascript:this.value=this.value.toUpperCase();"') ?></td></tr>'+
+                                '<tr><td>Kekuatan:</td><td><?= form_input('kekuatan', NULL, 'id=kekuatan size=50') ?></td></tr>'+
                                 '<tr><td>Satuan Kekuatan:</td><td><select name=s_sediaan id=s_sediaan><option value="">Pilih ...</option><?php foreach ($satuan_kekuatan as $data) { echo '<option value="'.$data->id.'">'.$data->nama.'</option>'; } ?></select></td></tr>'+
                                 '<tr><td>Sediaan:</td><td><select name=sediaan id=sediaan><option value="">Pilih ...</option><?php foreach ($sediaan as $data) { echo '<option value="'.$data->id.'">'.$data->nama.'</option>'; } ?></select></td></tr>'+
                                 '<tr><td>Golongan:</td><td><select name=golongan id=golongan><option value="">Pilih ...</option><?php foreach ($golongan as $data) { echo '<option value="'.$data->id.'">'.$data->nama.'</option>'; } ?></select></td></tr>'+
-                                '<tr><td>Formularium:</td><td><?= form_radio('formularium', 'Ya', 'ya', 'Ya', FALSE) ?> <?= form_radio('formularium', 'Tidak', 'tidak', 'Tidak', TRUE) ?></td></tr>'+
+                                '<tr><td>Formularium:</td><td><?= form_radio('formularium', 'Ya', 'yes', 'Ya', FALSE) ?> <?= form_radio('formularium', 'Tidak', 'no', 'Tidak', TRUE) ?></td></tr>'+
                                 '<tr><td>R Administrasi:</td><td><select name=admr id=admr><option value="">Pilih ...</option><?php foreach ($admr as $data) { echo '<option value="'.$data.'">'.$data.'</option>'; } ?></select></td></tr>'+
-                                '<tr><td>Pabrik:</td><td><?= form_input('pabrik', NULL, 'id=pabrik size=32') ?><?= form_hidden('id_pabrik', NULL, 'id=id_pabrik') ?></td></tr>'+
+                                '<tr><td>Pabrik:</td><td><?= form_input('pabrik', NULL, 'id=pabrik size=50') ?><?= form_hidden('id_pabrik', NULL, 'id=id_pabrik') ?></td></tr>'+
                                 '<tr><td>Perundangan:</td><td><select name="perundangan" id="perundangan"><?php foreach ($perundangan as $data) { echo '<option value="'.$data.'">'.$data.'</option>'; } ?></select></td></tr>'+
-                                '<tr><td>Rak:</td><td><?= form_input('rak', NULL, 'id=rak size=32') ?></td></tr>'+
+                                '<tr><td>Rak:</td><td><?= form_input('rak', NULL, 'id=rak size=50') ?></td></tr>'+
                                 '<tr><td></td><td><?= form_radio('generik', '1', 'ya', 'Generik', TRUE) ?> <?= form_radio('generik', '0', 'tidak', 'Non Generik') ?></td></tr>'+
+                                '<tr><td valign=top>Indikasi:</td><td><?= form_textarea('indikasi', NULL, 'cols=48 id=indikasi') ?></td></tr>'+
+                                '<tr><td valign=top>Dosis:</td><td><?= form_textarea('dosis', NULL, 'cols=48 id=dosis') ?></td></tr>'+
+                                '<tr><td valign=top>Kandungan:</td><td><?= form_textarea('kandungan', NULL, 'cols=48 id=kandungan') ?></td></tr>'+
+                                '<tr><td valign=top>Perhatian:</td><td><?= form_textarea('perhatian', NULL, 'cols=48 id=perhatian') ?></td></tr>'+
+                                '<tr><td valign=top>Kontra Indikasi:</td><td><?= form_textarea('kontra_indikasi', NULL, 'cols=48 id=kontra_indikasi') ?></td></tr>'+
+                                '<tr><td valign=top>Efek Samping:</td><td><?= form_textarea('efek_samping', NULL, 'cols=48 id=efek_samping') ?></td></tr>'+
 
                             '</table></td><td width=2%>&nbsp;</td><td width=38%>'+
                                 '<table width=100% class=data-input>'+
-                                    '<tr><td width=50%>Stok Minimal:</td><td><?= form_input('stok_min', NULL, 'id=stok_min size=1') ?></td></tr>'+
-                                    '<tr><td>Margin Non Resep:</td><td><?= form_input('margin_nr', NULL, 'id=margin_nr size=1') ?> % <?= form_input('margin_nr_rp', NULL, 'id=margin_nr_rp size=7') ?></td></tr>'+
-                                    '<tr><td>Margin Resep:</td><td><?= form_input('margin_r', NULL, 'id=margin_r size=1') ?> % <?= form_input('margin_r_rp', NULL, 'id=margin_r_rp size=7') ?></td></tr>'+
+                                    '<tr><td width=50%>Stok Minimal:</td><td><?= form_input('stok_min', NULL, 'id=stok_min size=5') ?></td></tr>'+
+                                    '<tr><td>Margin Non Resep:</td><td><?= form_input('margin_nr', NULL, 'id=margin_nr size=5') ?> % <?= form_input('margin_nr_rp', NULL, 'id=margin_nr_rp size=7') ?></td></tr>'+
+                                    '<tr><td>Margin Resep:</td><td><?= form_input('margin_r', NULL, 'id=margin_r size=5') ?> % <?= form_input('margin_r_rp', NULL, 'id=margin_r_rp size=7') ?></td></tr>'+
+                                    '<tr><td>HNA:</td><td><?= form_input('hna', NULL, 'id=hna onblur="FormNum(this)" style="width: 128px;"') ?></td></tr>'+
                                     '<tr><td></td><td>&nbsp;</td></tr>'+
                                     '<tr><td colspan=2><?= form_checkbox('ppn', '10', 'ppn', 'PPN (10%)') ?><?= form_checkbox('aktifasi', '10', 'aktifasi', 'Aktifasi') ?></td></tr>'+
+                                    
                                 '</table>'+
                             '</td></tr></table></div>'+
-                    '</div>'+
-                    '<div>'+
-                            '<h3><a href="#">Data Pelengkap</a></h3>'+
-                            '<div><table width=100% class=data-input>'+
-                                '<tr><td width=24% valign=top>Indikasi:</td><td><?= form_textarea('indikasi', NULL, 'cols=30 id=indikasi') ?></td></tr>'+
-                                '<tr><td valign=top>Dosis:</td><td><?= form_textarea('dosis', NULL, 'cols=30 id=dosis') ?></td></tr>'+
-                                '<tr><td valign=top>Kandungan:</td><td><?= form_textarea('kandungan', NULL, 'cols=30 id=kandungan') ?></td></tr>'+
-                                '<tr><td valign=top>Perhatian:</td><td><?= form_textarea('perhatian', NULL, 'cols=30 id=perhatian') ?></td></tr>'+
-                                '<tr><td valign=top>Kontra Indikasi:</td><td><?= form_textarea('kontra_indikasi', NULL, 'cols=30 id=kontra_indikasi') ?></td></tr>'+
-                                '<tr><td valign=top>Efek Samping:</td><td><?= form_textarea('efek_samping', NULL, 'cols=30 id=efek_samping') ?></td></tr>'+
-                            '</table></div>'+
-                    '</div>'+
-                    '<div>'+
-                            '<h3><a href="#">Data Kemasan</a></h3>'+
-                            '<div><table width=100% class=data-input>'+
-                                '<tr><td width=24%>Barcode:</td><td width=70%><?= form_input('barcode1', NULL, 'id=barcode1 size=32') ?></td></tr>'+
-                                '<tr><td>Kemasan Terbesar:</td><td><select name=s_besar><option value="">Pilih ...</option><?php foreach ($kemasan as $data) { echo '<option value="'.$data->id.'">'.$data->nama.'</option>'; } ?></select></td></tr>'+
-                                
-                                '<tr><td colspan=2>&nbsp;</td></tr>'+
-                                '<tr><td>Barcode:</td><td width=70%><?= form_input('barcode2', NULL, 'id=barcode2 size=32') ?></td></tr>'+
-                                '<tr><td>Isi:</td><td><?= form_input('isi1', NULL, 'size=5 class=small-input') ?><select name=s_sedang><option value="">Pilih ...</option><?php foreach ($kemasan as $data) { echo '<option value="'.$data->id.'">'.$data->nama.'</option>'; } ?></select></td></tr>'+
-                                
-                                '<tr><td colspan=2>&nbsp;</td></tr>'+
-                                '<tr><td>Barcode:</td><td width=70%><?= form_input('barcode3', NULL, 'id=barcode3 size=32') ?></td></tr>'+
-                                '<tr><td>Isi:</td><td><?= form_input('isi2', NULL, 'size=5 class=small-input') ?><select name=s_kecil><option value="">Pilih ...</option><?php foreach ($kemasan as $data) { echo '<option value="'.$data->id.'">'.$data->nama.'</option>'; } ?></select></td></tr>'+
-                                
-                            '</table></div>'+
-                    '</div>'+
             '</div></form>'+
           '</div>';
     $('body').append(str);
@@ -134,13 +112,13 @@ var str = '<div id=form_add>'+
     var dWidth = wWidth * 0.8;
     
     var wHeight= $(window).height();
-    var dHeight= wHeight * 0.8;
+    var dHeight= wHeight * 1;
     $('#form_add').dialog({
         title: 'Tambah Barang',
         autoOpen: true,
         modal: true,
-        width: 850,
-        height: dHeight,
+        width: 800,
+        height: 574,
         hide: 'clip',
         show: 'blind',
         buttons: {
@@ -195,11 +173,11 @@ var str = '<div id=form_add>'+
                 if (data.status === true) {
                     if (cek_id === '') {
                         alert_tambah();
-                        $('#form_barang input[type=text], #form_barang textarea').val('');
+                        $('input[type=text], textarea, select').val('');
                         load_data_barang('1','',data.id_barang);
                     } else {
                         alert_edit();
-                        $('#form_barang').dialog().remove();
+                        $('#form_add').dialog().remove();
                         load_data_barang('1','',cek_id);
                     }
                     
@@ -244,12 +222,21 @@ function edit_barang(str) {
     if (arr[10] === '1') { $('#ya').attr('checked','checked'); }
     if (arr[10] === '0') { $('#tidak').attr('checked','checked'); }
     
-    $('#indikasi').val(arr[11]);
-    $('#dosis').val(arr[12]);
-    $('#kandungan').val(arr[13]);
-    $('#perhatian').val(arr[14]);
-    $('#kontra_indikasi').val(arr[15]);
-    $('#efek_samping').val(arr[16]);
+    if (arr[11] === '1') { $('#yes').attr('checked','checked'); }
+    if (arr[11] === '0') { $('#no').attr('checked','checked'); }
+    
+    $('#indikasi').val(arr[12]);
+    $('#dosis').val(arr[13]);
+    $('#kandungan').val(arr[14]);
+    $('#perhatian').val(arr[15]);
+    $('#kontra_indikasi').val(arr[16]);
+    $('#efek_samping').val(arr[17]);
+    $('#stok_min').val(arr[18]);
+    $('#margin_nr').val(arr[19]);
+    $('#margin_r').val(arr[20]);
+    if (arr[21] === '0') { $('#ppn').removeAttr('checked'); } else { $('#ppn').attr('checked','checked'); }
+    $('#hna').val(arr[22]);
+    if (arr[23] === '0') { $('#aktifasi').removeAttr('checked'); } else { $('#aktifasi').attr('checked','checked'); }
 }
 $mainNav.set("home");
 $('#button').button({

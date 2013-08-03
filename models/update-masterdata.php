@@ -4,6 +4,7 @@ include_once '../inc/functions.php';
 $method = $_GET['method'];
 
 if ($method === 'save_barang') {
+    
     $nama       = $_POST['nama'];
     $pabrik     = ($_POST['id_pabrik'] !== '')?$_POST['id_pabrik']:'NULL';
     $perundangan= $_POST['perundangan'];
@@ -15,74 +16,79 @@ if ($method === 'save_barang') {
     $sediaan    = ($_POST['sediaan'] !== '')?$_POST['sediaan']:'NULL';
     $admr       = $_POST['admr'];
     $generik    = $_POST['generik'];
+    
     $indikasi   = strip_tags($_POST['indikasi']);
     $dosis      = strip_tags($_POST['dosis']);
     $kandungan  = strip_tags($_POST['kandungan']);
     $perhatian  = strip_tags($_POST['perhatian']);
     $kontra_ind = strip_tags($_POST['kontra_indikasi']);
     $ef_samping = strip_tags($_POST['efek_samping']);
-    $sql = "insert into barang set
-            nama = '$nama',
-            id_pabrik = $pabrik,
-            perundangan = $perundangan,
-            rak = '$rak',
-            kekuatan = '$kekuatan',
-            id_golongan = $golongan,
-            satuan_kekuatan = $s_kekuatan,
-            id_sediaan = $sediaan,
-            adm_r = '$admr',
-            generik = '$generik',
-            indikasi = '$indikasi',
-            dosis = '$dosis',
-            kandungan = '$kandungan',
-            perhatian = '$perhatian',
-            kontra_indikasi = '$kontra_ind',
-            efek_samping = '$ef_samping',
-            formularium = '$formularium'";
     
-    mysql_query($sql);
-    
-    $id_barang  = mysql_insert_id();
-    $barcode1   = $_POST['barcode1'];
-    $barcode2   = $_POST['barcode2'];
-    $barcode3   = $_POST['barcode3'];
-    
-    $kemasan1   = $_POST['s_besar'];
-    $kemasan2   = $_POST['s_sedang'];
-    $kemasan3   = $_POST['s_kecil'];
-    
-    $isi1       = $_POST['isi1'];
-    $isi2       = $_POST['isi2'];
-    $isi3       = 1;
-    
-    if ($kemasan1 !== '') {
-        $sql = "insert into kemasan set
-                id_barang = '$id_barang',
-                barcode = '$barcode1',
-                id_kemasan = '$kemasan1',
-                isi = '$isi1',
-                id_satuan = '$kemasan2'";
+    $stok_min   = $_POST['stok_min'];
+    $margin_nr  = $_POST['margin_nr'];
+    $margin_r   = $_POST['margin_r'];
+    $hna        = currencyToNumber($_POST['hna']);
+    $plus_ppn   = isset($_POST['ppn'])?$_POST['ppn']:'0';
+    $aktif      = isset($_POST['aktifasi'])?$_POST['aktifasi']:'0';
+    $id_barang  = $_POST['id_barang'];
+    if ($id_barang === '') {
+        $sql = "insert into barang set
+                nama = '$nama',
+                id_pabrik = $pabrik,
+                perundangan = '$perundangan',
+                rak = '$rak',
+                kekuatan = '$kekuatan',
+                id_golongan = $golongan,
+                satuan_kekuatan = $s_kekuatan,
+                id_sediaan = $sediaan,
+                adm_r = '$admr',
+                generik = '$generik',
+                indikasi = '$indikasi',
+                dosis = '$dosis',
+                kandungan = '$kandungan',
+                perhatian = '$perhatian',
+                kontra_indikasi = '$kontra_ind',
+                efek_samping = '$ef_samping',
+                formularium = '$formularium',
+                stok_minimal = '$stok_min',
+                margin_non_resep = '$margin_nr',
+                margin_resep = '$margin_r',
+                plus_ppn = '$plus_ppn',
+                hna = '$hna',
+                aktif = '$aktif'";
         mysql_query($sql);
-    }
-    if ($kemasan2 !== '') {
-        $sql = "insert into kemasan set
-                id_barang = '$id_barang',
-                barcode = '$barcode2',
-                id_kemasan = '$kemasan2',
-                isi = '$isi2',
-                id_satuan = '$kemasan3'";
+        $id = mysql_insert_id();
+    } else {
+        $sql = "update barang set
+                nama = '$nama',
+                id_pabrik = $pabrik,
+                perundangan = '$perundangan',
+                rak = '$rak',
+                kekuatan = '$kekuatan',
+                id_golongan = $golongan,
+                satuan_kekuatan = $s_kekuatan,
+                id_sediaan = $sediaan,
+                adm_r = '$admr',
+                generik = '$generik',
+                indikasi = '$indikasi',
+                dosis = '$dosis',
+                kandungan = '$kandungan',
+                perhatian = '$perhatian',
+                kontra_indikasi = '$kontra_ind',
+                efek_samping = '$ef_samping',
+                formularium = '$formularium',
+                stok_minimal = '$stok_min',
+                margin_non_resep = '$margin_nr',
+                margin_resep = '$margin_r',
+                plus_ppn = '$plus_ppn',
+                hna = '$hna',
+                aktif = '$aktif'
+            where id = '$id_barang'";
         mysql_query($sql);
+        $id = $id_barang;
     }
-    if ($kemasan3 !== '') {
-        $sql = "insert into kemasan set
-                id_barang = '$id_barang',
-                barcode = '$barcode3',
-                id_kemasan = '$kemasan3',
-                isi = '$isi3',
-                id_satuan = '$kemasan3'";
-        mysql_query($sql);
-    }
-    die(json_encode(array('status' => TRUE, 'id_barang' => $id_barang)));
+    
+    die(json_encode(array('status' => TRUE, 'id_barang' => $id)));
 }
 
 if ($method === 'save_supplier') {
