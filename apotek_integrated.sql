@@ -3,18 +3,12 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 02, 2013 at 04:46 PM
+-- Generation Time: Aug 03, 2013 at 05:52 AM
 -- Server version: 5.5.27
 -- PHP Version: 5.4.7
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
 
 --
 -- Database: `apotek_integrated`
@@ -104,36 +98,40 @@ CREATE TABLE IF NOT EXISTS `barang` (
   `formularium` enum('Ya','Tidak') NOT NULL,
   `perundangan` enum('Bebas','Bebas Terbatas','OWA','Keras','Psikotropika','Narkotika') NOT NULL,
   `stok_minimal` double NOT NULL,
-  `plus_ppn` tinyint(1) NOT NULL DEFAULT '0',
+  `margin_non_resep` double NOT NULL,
+  `margin_resep` double NOT NULL,
+  `plus_ppn` double NOT NULL,
+  `hna` double NOT NULL,
   `aktif` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_pabrik` (`id_pabrik`),
   KEY `satuan_kekuatan` (`satuan_kekuatan`),
   KEY `id_golongan` (`id_golongan`),
   KEY `id_sediaan` (`id_sediaan`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=20 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=21 ;
 
 --
 -- Dumping data for table `barang`
 --
 
-INSERT INTO `barang` (`id`, `nama`, `id_pabrik`, `rak`, `kekuatan`, `id_golongan`, `satuan_kekuatan`, `id_sediaan`, `adm_r`, `generik`, `indikasi`, `dosis`, `kandungan`, `perhatian`, `kontra_indikasi`, `efek_samping`, `formularium`, `perundangan`, `stok_minimal`, `plus_ppn`, `aktif`) VALUES
-(1, 'Amoxicilin', NULL, 'B.12', 500, 1, 3, 7, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', 0, 0, 0),
-(2, 'Paracetamol', 2, 'B.12', 500, 1, 3, 7, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', 0, 0, 0),
-(3, 'Panadol Extra', NULL, 'B.12', 500, 1, 3, 7, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', 0, 0, 0),
-(4, 'Sanmol Tablet', 2, 'B.12', 500, 1, 3, 7, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', 0, 0, 0),
-(5, 'Konidin', NULL, 'B.12', 500, 1, 3, 7, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', 0, 0, 0),
-(6, 'Konimak', 2, 'B.12', 500, 1, 3, 7, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', 0, 0, 0),
-(7, 'Insana', NULL, 'B.12', 500, 1, 3, 7, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', 0, 0, 0),
-(8, 'Oskadon', 2, 'B.12', 500, 1, 3, 7, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', 0, 0, 0),
-(9, 'Hufagrip', NULL, 'B.12', 500, 1, 3, 7, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', 0, 0, 0),
-(10, 'Siladek MX', 2, 'B.12', 500, 1, 3, 7, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', 0, 0, 0),
-(14, 'ASKES GOLD', NULL, '', 500, 1, 3, 2, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', 0, 0, 0),
-(15, 'ASKES GOLD', NULL, '', 500, 1, 3, 2, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', 0, 0, 0),
-(16, 'METALLICA', NULL, '', 500, 1, 41, 2, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', 0, 0, 0),
-(17, 'MAGASIDA', NULL, 'R.10', 500, 1, 3, 2, 'Oral', 1, 'Indikasi', '-', '-', '--', '-', '-', 'Ya', 'Bebas', 0, 0, 0),
-(18, 'HUFAGRIP MERAH', NULL, '', 100, 1, 3, 7, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', 0, 0, 0),
-(19, 'AMOXICILIN', NULL, 'B.12', 100, 1, 3, 7, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', 0, 0, 0);
+INSERT INTO `barang` (`id`, `nama`, `id_pabrik`, `rak`, `kekuatan`, `id_golongan`, `satuan_kekuatan`, `id_sediaan`, `adm_r`, `generik`, `indikasi`, `dosis`, `kandungan`, `perhatian`, `kontra_indikasi`, `efek_samping`, `formularium`, `perundangan`, `stok_minimal`, `margin_non_resep`, `margin_resep`, `plus_ppn`, `hna`, `aktif`) VALUES
+(1, 'Amoxicilin', NULL, 'B.12', 500, 1, 3, 7, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', 0, 0, 0, 0, 1250, 0),
+(2, 'Paracetamol', 2, 'B.12', 500, 1, 3, 7, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', 0, 0, 0, 0, 0, 0),
+(3, 'Panadol Extra', NULL, 'B.12', 500, 1, 3, 7, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', 0, 0, 0, 0, 0, 0),
+(4, 'Sanmol Tablet', 2, 'B.12', 500, 1, 3, 7, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', 0, 0, 0, 0, 0, 0),
+(5, 'Konidin', NULL, 'B.12', 500, 1, 3, 7, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', 0, 0, 0, 0, 0, 0),
+(6, 'Konimak', 2, 'B.12', 500, 1, 3, 7, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', 0, 0, 0, 0, 0, 0),
+(7, 'Insana', NULL, 'B.12', 500, 1, 3, 7, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', 0, 0, 0, 0, 0, 0),
+(8, 'Oskadon', 2, 'B.12', 500, 1, 3, 7, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', 0, 0, 0, 0, 0, 0),
+(9, 'Hufagrip', NULL, 'B.12', 500, 1, 3, 7, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', 0, 0, 0, 0, 0, 0),
+(10, 'Siladek MX', 2, 'B.12', 500, 1, 3, 7, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', 0, 0, 0, 0, 0, 0),
+(14, 'ASKES GOLD', NULL, '', 500, 1, 3, 2, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', 0, 0, 0, 0, 0, 0),
+(15, 'ASKES GOLD', NULL, '', 500, 1, 3, 2, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', 0, 0, 0, 0, 0, 0),
+(16, 'METALLICA', NULL, '', 500, 1, 41, 2, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', 0, 0, 0, 0, 0, 0),
+(17, 'MAGASIDA', 5, 'R.10', 500, 1, 3, 2, 'Oral', 1, 'Indikasi', '-', '-', '--', '-', '-', 'Ya', 'Bebas', 0, 0, 0, 0, 2500, 10),
+(18, 'HUFAGRIP MERAH', NULL, '', 100, 1, 3, 7, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', 0, 0, 0, 0, 0, 0),
+(19, 'AMOXICILIN', NULL, 'B.12', 100, 1, 3, 7, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', 0, 0, 0, 0, 0, 0),
+(20, 'HEMAVITON JRENG', NULL, '', 100, 1, 41, 22, '', 0, '', '', '', '', '', '', 'Tidak', 'Bebas', 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -250,11 +248,11 @@ CREATE TABLE IF NOT EXISTS `dinamic_harga_jual` (
   `id_kemasan` int(11) NOT NULL,
   `jual_min` double NOT NULL,
   `jual_max` double NOT NULL,
-  `margin_persen` double NOT NULL,
-  `margin_rupiah` double NOT NULL,
+  `margin_non_resep` double NOT NULL,
+  `margin_resep` double NOT NULL,
   `diskon_persen` double NOT NULL,
-  `diskon_rupiah` double NOT NULL,
-  `harga_jual` double NOT NULL,
+  `hj_non_resep` double NOT NULL,
+  `hj_resep` double NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_barang` (`id_kemasan`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
@@ -1036,7 +1034,3 @@ ALTER TABLE `pelanggan`
 --
 ALTER TABLE `tarif`
   ADD CONSTRAINT `tarif_ibfk_1` FOREIGN KEY (`kode_akun`) REFERENCES `akun` (`kode`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
