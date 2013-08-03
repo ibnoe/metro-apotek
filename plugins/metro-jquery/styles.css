@@ -7,7 +7,7 @@
 */
 .aksi { white-space: nowrap; }
 table.data-input input[type=text], table.data-input textarea { margin: 0.5px; max-width: 300px; text-transform: uppercase; }
-.data-input { border: 1px solid #289ad9; background: #f5e6f2; padding: 10px 5px; font-size: 11px; }
+.data-input { border: 1px solid #289ad9; padding: 10px 5px; font-size: 11px; }
 .data-input .small-input { min-width: 92px; }
 .data-input label { margin-left: 0; margin-right: 10px; }
 .data-input select { margin-left: 0.5px; margin-top: 1px; margin-bottom: 1px; min-width: 155px; }
