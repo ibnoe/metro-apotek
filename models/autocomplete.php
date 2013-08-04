@@ -2,7 +2,7 @@
 
 include_once '../config/database.php';
 $method = isset($_GET['method'])?$_GET['method']:NULL;
-$q      = $_GET['q'];
+$q      = isset($_GET['q'])?$_GET['q']:NULL;
 if ($method === 'pabrik') {
     $rows = array();
     $sql = mysql_query("select * from pabrik where nama like ('%$q%') order by locate('$q',nama)");
@@ -36,4 +36,20 @@ if ($method === 'barang') {
     die(json_encode($rows));
 }
 
+if ($method === 'farmakoterapi') {
+    $rows = array();
+    $id   = $_GET['id'];
+    $sql = mysql_query("select * from kelas_terapi where id_farmako_terapi = '$id'");
+    while ($data = mysql_fetch_object($sql)) {
+        $rows[] = $data;
+    }
+    die(json_encode($rows));
+}
+
+if ($method === 'golongan_load_data') {
+    $id   = $_GET['id'];
+    $sql = mysql_query("select * from golongan where id = '$id'");
+    $data = mysql_fetch_object($sql);
+    die(json_encode($data));
+}
 ?>

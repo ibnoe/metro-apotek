@@ -11,11 +11,13 @@ function load_data_barang($param) {
         $q.="and b.nama like ('%".$param['search']."%')";
     }
     $limit = " limit ".$param['start'].", ".$param['limit']."";
-    $sql = "select b.*, p.nama as pabrik, g.nama as golongan, st.nama as satuan, sd.nama as sediaan 
+    $sql = "select b.*, p.nama as pabrik, g.nama as golongan, f.id as id_farmakoterapi, st.nama as satuan, sd.nama as sediaan 
         from barang b 
         left join pabrik p on (b.id_pabrik = p.id)
         left join golongan g on (b.id_golongan = g.id)
         left join satuan st on (b.satuan_kekuatan = st.id)
+        left join kelas_terapi k on (k.id = b.id_kelas_terapi)
+        left join farmako_terapi f on (f.id = k.id_farmako_terapi)
         left join sediaan sd on (b.id_sediaan = sd.id) where b.id is not NULL $q order by b.nama
         ";
     //echo $sql.$limit;
@@ -275,6 +277,20 @@ function load_data_dokter($param) {
 
 function perundangan_load_data() {
     return array('Bebas','Bebas Terbatas','OWA','Keras','Psikotropika','Narkotika');
+}
+
+function farmakoterapi_load_data() {
+    $sql = "select * from farmako_terapi ORDER by nama";
+    $query = mysql_query($sql);
+    $data = array();
+    while ($row = mysql_fetch_object($query)) {
+        $data[] = $row;
+    }
+    return $data;
+}
+
+function fda_load_data() {
+    return array('A','B','C','D','X');
 }
 
 ?>

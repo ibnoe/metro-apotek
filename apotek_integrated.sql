@@ -3,12 +3,18 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 03, 2013 at 05:52 AM
+-- Generation Time: Aug 04, 2013 at 08:36 AM
 -- Server version: 5.5.27
 -- PHP Version: 5.4.7
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
 
 --
 -- Database: `apotek_integrated`
@@ -97,6 +103,10 @@ CREATE TABLE IF NOT EXISTS `barang` (
   `efek_samping` text NOT NULL,
   `formularium` enum('Ya','Tidak') NOT NULL,
   `perundangan` enum('Bebas','Bebas Terbatas','OWA','Keras','Psikotropika','Narkotika') NOT NULL,
+  `aturan_pakai` text NOT NULL,
+  `id_kelas_terapi` int(11) DEFAULT NULL,
+  `fda_pregnancy` enum('A','B','C','D','X') DEFAULT NULL,
+  `fda_lactacy` enum('A','B','C','D','X') DEFAULT NULL,
   `stok_minimal` double NOT NULL,
   `margin_non_resep` double NOT NULL,
   `margin_resep` double NOT NULL,
@@ -107,31 +117,30 @@ CREATE TABLE IF NOT EXISTS `barang` (
   KEY `id_pabrik` (`id_pabrik`),
   KEY `satuan_kekuatan` (`satuan_kekuatan`),
   KEY `id_golongan` (`id_golongan`),
-  KEY `id_sediaan` (`id_sediaan`)
+  KEY `id_sediaan` (`id_sediaan`),
+  KEY `id_kelas_terapi` (`id_kelas_terapi`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=21 ;
 
 --
 -- Dumping data for table `barang`
 --
 
-INSERT INTO `barang` (`id`, `nama`, `id_pabrik`, `rak`, `kekuatan`, `id_golongan`, `satuan_kekuatan`, `id_sediaan`, `adm_r`, `generik`, `indikasi`, `dosis`, `kandungan`, `perhatian`, `kontra_indikasi`, `efek_samping`, `formularium`, `perundangan`, `stok_minimal`, `margin_non_resep`, `margin_resep`, `plus_ppn`, `hna`, `aktif`) VALUES
-(1, 'Amoxicilin', NULL, 'B.12', 500, 1, 3, 7, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', 0, 0, 0, 0, 1250, 0),
-(2, 'Paracetamol', 2, 'B.12', 500, 1, 3, 7, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', 0, 0, 0, 0, 0, 0),
-(3, 'Panadol Extra', NULL, 'B.12', 500, 1, 3, 7, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', 0, 0, 0, 0, 0, 0),
-(4, 'Sanmol Tablet', 2, 'B.12', 500, 1, 3, 7, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', 0, 0, 0, 0, 0, 0),
-(5, 'Konidin', NULL, 'B.12', 500, 1, 3, 7, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', 0, 0, 0, 0, 0, 0),
-(6, 'Konimak', 2, 'B.12', 500, 1, 3, 7, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', 0, 0, 0, 0, 0, 0),
-(7, 'Insana', NULL, 'B.12', 500, 1, 3, 7, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', 0, 0, 0, 0, 0, 0),
-(8, 'Oskadon', 2, 'B.12', 500, 1, 3, 7, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', 0, 0, 0, 0, 0, 0),
-(9, 'Hufagrip', NULL, 'B.12', 500, 1, 3, 7, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', 0, 0, 0, 0, 0, 0),
-(10, 'Siladek MX', 2, 'B.12', 500, 1, 3, 7, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', 0, 0, 0, 0, 0, 0),
-(14, 'ASKES GOLD', NULL, '', 500, 1, 3, 2, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', 0, 0, 0, 0, 0, 0),
-(15, 'ASKES GOLD', NULL, '', 500, 1, 3, 2, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', 0, 0, 0, 0, 0, 0),
-(16, 'METALLICA', NULL, '', 500, 1, 41, 2, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', 0, 0, 0, 0, 0, 0),
-(17, 'MAGASIDA', 5, 'R.10', 500, 1, 3, 2, 'Oral', 1, 'Indikasi', '-', '-', '--', '-', '-', 'Ya', 'Bebas', 0, 0, 0, 0, 2500, 10),
-(18, 'HUFAGRIP MERAH', NULL, '', 100, 1, 3, 7, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', 0, 0, 0, 0, 0, 0),
-(19, 'AMOXICILIN', NULL, 'B.12', 100, 1, 3, 7, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', 0, 0, 0, 0, 0, 0),
-(20, 'HEMAVITON JRENG', NULL, '', 100, 1, 41, 22, '', 0, '', '', '', '', '', '', 'Tidak', 'Bebas', 0, 0, 0, 0, 0, 0);
+INSERT INTO `barang` (`id`, `nama`, `id_pabrik`, `rak`, `kekuatan`, `id_golongan`, `satuan_kekuatan`, `id_sediaan`, `adm_r`, `generik`, `indikasi`, `dosis`, `kandungan`, `perhatian`, `kontra_indikasi`, `efek_samping`, `formularium`, `perundangan`, `aturan_pakai`, `id_kelas_terapi`, `fda_pregnancy`, `fda_lactacy`, `stok_minimal`, `margin_non_resep`, `margin_resep`, `plus_ppn`, `hna`, `aktif`) VALUES
+(1, 'AMOXICILIN', 5, 'B.12', 500, 1, 3, 7, 'Oral', 1, '-', '-', 'Kandungan', '-', '-', '-', 'Ya', 'Bebas', '-', 3, 'D', 'X', 5, 10, 15, 0, 1250, 10),
+(2, 'Paracetamol', 2, 'B.12', 500, 1, 3, 7, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', '', NULL, NULL, NULL, 0, 0, 0, 0, 0, 0),
+(3, 'Panadol Extra', NULL, 'B.12', 500, 1, 3, 7, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', '', NULL, NULL, NULL, 0, 0, 0, 0, 0, 0),
+(4, 'Sanmol Tablet', 2, 'B.12', 500, 1, 3, 7, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', '', NULL, NULL, NULL, 0, 0, 0, 0, 0, 0),
+(5, 'Konidin', NULL, 'B.12', 500, 1, 3, 7, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', '', NULL, NULL, NULL, 0, 0, 0, 0, 0, 0),
+(6, 'Konimak', 2, 'B.12', 500, 1, 3, 7, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', '', NULL, NULL, NULL, 0, 0, 0, 0, 0, 0),
+(7, 'Insana', NULL, 'B.12', 500, 1, 3, 7, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', '', NULL, NULL, NULL, 0, 0, 0, 0, 0, 0),
+(8, 'Oskadon', 2, 'B.12', 500, 1, 3, 7, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', '', NULL, NULL, NULL, 0, 0, 0, 0, 0, 0),
+(9, 'Hufagrip', NULL, 'B.12', 500, 1, 3, 7, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', '', NULL, NULL, NULL, 0, 0, 0, 0, 0, 0),
+(10, 'Siladek MX', 2, 'B.12', 500, 1, 3, 7, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', '', NULL, NULL, NULL, 0, 0, 0, 0, 0, 0),
+(16, 'METALLICA', 5, '109.11', 500, 2, 41, 2, 'Oral', 1, 'heavy', 'full album', '100Mg metal', 'metal', '-', 'rock in your life', 'Ya', 'Psikotropika', '10 x 1 dewasa', 4, 'X', 'X', 5, 20, 35, 0, 2500, 10),
+(17, 'MAGASIDA', 5, 'R.10', 500, 1, 3, 2, 'Oral', 1, 'Indikasi', '-', '-', '--', '-', '-', 'Ya', 'Bebas', '', NULL, NULL, NULL, 0, 0, 0, 0, 2500, 10),
+(18, 'HUFAGRIP MERAH', NULL, '', 100, 1, 3, 7, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', '', NULL, NULL, NULL, 0, 0, 0, 0, 0, 0),
+(19, 'AMOXICILIN', NULL, 'B.12', 100, 1, 3, 7, 'Oral', 1, '', '', '', '', '', '', 'Ya', 'Bebas', '', NULL, NULL, NULL, 0, 0, 0, 0, 0, 0),
+(20, 'HEMAVITON JRENG', NULL, '', 100, 1, 41, 22, '', 0, '', '', '', '', '', '', 'Tidak', 'Bebas', '', NULL, NULL, NULL, 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -345,7 +354,7 @@ CREATE TABLE IF NOT EXISTS `golongan` (
 
 INSERT INTO `golongan` (`id`, `nama`, `margin_non_resep`, `margin_resep`, `diskon`) VALUES
 (1, 'HV', 20, 25, 0),
-(2, 'Obat Resep', 20, 25, 0);
+(2, 'Obat Resep', 20, 35, 0);
 
 -- --------------------------------------------------------
 
@@ -973,7 +982,8 @@ ALTER TABLE `barang`
   ADD CONSTRAINT `barang_ibfk_1` FOREIGN KEY (`id_pabrik`) REFERENCES `pabrik` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `barang_ibfk_3` FOREIGN KEY (`id_golongan`) REFERENCES `golongan` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `barang_ibfk_4` FOREIGN KEY (`id_sediaan`) REFERENCES `sediaan` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `barang_ibfk_5` FOREIGN KEY (`satuan_kekuatan`) REFERENCES `satuan` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+  ADD CONSTRAINT `barang_ibfk_5` FOREIGN KEY (`satuan_kekuatan`) REFERENCES `satuan` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `barang_ibfk_6` FOREIGN KEY (`id_kelas_terapi`) REFERENCES `kelas_terapi` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `detail_pemesanan`
@@ -1034,3 +1044,7 @@ ALTER TABLE `pelanggan`
 --
 ALTER TABLE `tarif`
   ADD CONSTRAINT `tarif_ibfk_1` FOREIGN KEY (`kode_akun`) REFERENCES `akun` (`kode`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

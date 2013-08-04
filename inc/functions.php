@@ -9,7 +9,7 @@ function form_hidden($name, $value = NULL, $attr = NULL) {
 }
 
 function form_textarea($name, $value = NULL, $attr = NULL) {
-    return '<textarea name="'.$name.'" value="'.$value.'" '.$attr.'></textarea>';
+    return '<textarea name="'.$name.'" '.$attr.'>'.$value.'</textarea>';
 }
 
 function form_radio($name, $value, $id, $label = null, $checked = FALSE) {
