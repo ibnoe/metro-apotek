@@ -147,4 +147,14 @@ function rupiah($jml) {
 function currencyToNumber($a) {
     return str_ireplace(".", "", $a);
 }
+
+function get_last_pemesanan() {
+    $sql = mysql_query("select id from pemesanan order by id desc limit 1");
+    $row = mysql_fetch_object($sql);
+    if (!isset($row->id)) {
+        return "000001";
+    } else {
+        return str_pad((string)($row->id+1), 6, "0", STR_PAD_LEFT);
+    }
+}
 ?>

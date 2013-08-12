@@ -21,7 +21,7 @@ nav img{
 	height:32px;
 }
 .navActive{
-	background-color:#509601 !important;
+	background-color:#0697ce !important;
 }
 .navActive:hover{
 	background-color:#F60;
@@ -314,6 +314,11 @@ hr.light{border-color:#AAA;}
 .list-data .even { background: #fff; cursor: pointer; }
 .list-data .odd { background: #f4f4f4; cursor: pointer; }
 .list-data .even:hover, .list-data .odd:hover {background: #d0e7fe; }
+
+.list-data-input { text-transform: uppercase; border-top: 1px solid #6eb7ff; border-left: 1px solid #6eb7ff; margin: 10px 0; background: #fff; color: #000; font-size: 11px; }
+.list-data-input th { border-right: 1px solid #6eb7ff; height: 20px; border-bottom: 1px solid #ccc; background: #3399ff; border-bottom: #dfdfdf; height: 40px; color: #fff; cursor: pointer; }
+.list-data-input td { border-right: 1px solid #ccc; height: 20px; border-bottom: 1px solid #ccc; height: 18px; padding: 0; }
+.list-data-input td input, .list-data-input td select { margin: 0; border: none; width: 100%; padding: 0; }
 /*TABLE*/
 .table table,tr,td,th{
 	margin:0;

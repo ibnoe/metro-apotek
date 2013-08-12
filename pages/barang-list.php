@@ -15,7 +15,7 @@ $(function() {
     <th width="15%">Pabrik</th>
     <th width="5%">Kekuatan</th>
     <th width="5%">Satuan<br/> Kekuatan</th>
-    <th width="5%">Gol.</th>
+    <th width="7%">Gol.</th>
     <th width="5%">Sediaan</th>
     <th width="5%">Generik</th>
     <th width="5%">Adm R</th>
@@ -63,7 +63,7 @@ $(function() {
         <td><?= $data->pabrik ?></td>
         <td align="center"><?= $data->kekuatan ?></td>
         <td align="center"><?= $data->satuan ?></td>
-        <td><?= $data->golongan ?></td>
+        <td align="center"><?= $data->golongan ?></td>
         <td><?= $data->sediaan ?></td>
         <td align="center"><?= ($data->generik === '1')?'Ya':'Tidak' ?></td>
         <td><?= $data->adm_r ?></td>

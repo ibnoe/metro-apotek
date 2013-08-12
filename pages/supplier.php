@@ -1,6 +1,10 @@
 <?php
 $subNav = array(
-	"Utama ; supplier.php ; #509601;"
+        "Pabrik ; pabrik.php ; #509601;",
+	"Instansi ; instansi.php ; #509601;",
+        "Supplier ; supplier.php ; #509601;",
+        "Asuransi ; asuransi.php ; #509601;",
+        "Bank ; bank.php ; #509601;",
 );
 
 set_include_path("../");

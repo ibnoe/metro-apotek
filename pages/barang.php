@@ -23,14 +23,62 @@ $fda      = fda_load_data();
 $(function() {
     load_data_barang();
 });
+
+function create_new_packing(i) {
+    var kemasan = $('#kemasan'+i).val();
+    var satuan  = $('#satuan'+i).val();
+    var jumlah  = $('.mother').length-1;
+    
+    
+    if (kemasan !== satuan) {
+        kemasan_add(jumlah+1);
+        $('#kemasan'+(i+1)).val(satuan);
+        $('#satuan'+(i+1)).val(satuan);
+        $('.mother:eq('+(i+1)+')').attr('id', 'mother'+(i+1));
+    }
+}
+
 function kemasan_add(i) {
-    var str = '<tr class="mother"><td width=15%>Barcode:</td><td width=70%><?= form_input('barcode[]', NULL, 'id=barcode size=10') ?> '+
-                'Kemasan: <select name=kemasan[] style="min-width: 100px;"><option value="">Pilih ...</option><?php foreach ($kemasan as $data) { echo '<option value="'.$data->id.'">'.$data->nama.'</option>'; } ?></select> '+
-                'Isi: <?= form_input('isi[]', NULL, 'id=isi size=5') ?> '+
-                'Satuan: <select name=satuan[] style="min-width: 100px;"><option value="">Pilih ...</option><?php foreach ($kemasan as $data) { echo '<option value="'.$data->id.'">'.$data->nama.'</option>'; } ?></select>&nbsp;'+
+    var str = '<tr class="mother" id="mother'+i+'"><td width=15%>Barcode:</td><td width=70%><input type=hidden name=id_kemasan'+i+' id=id_kemasan'+i+' /><input type=text name=barcode'+i+' id=barcode'+i+' class=barcode size=10 />'+
+                '&nbsp;Kemasan: <select name=kemasan'+i+' id="kemasan'+i+'" onchange="isi_satuan_terkecil('+i+')" style="min-width: 100px;"><option value="">Pilih ...</option><?php foreach ($kemasan as $data) { echo '<option value="'.$data->id.'">'.$data->nama.'</option>'; } ?></select> '+
+                'Isi: <input type=text name=isi'+i+' id=isi'+i+' onblur="isi_satuan_terkecil('+i+')" size=5 />&nbsp;'+
+                'Satuan: <select name=satuan'+i+' id="satuan'+i+'" onchange="config_auto_suggest('+i+')" style="min-width: 100px;"><option value="">Pilih ...</option><?php foreach ($kemasan as $data) { echo '<option value="'.$data->id.'">'.$data->nama.'</option>'; } ?></select>&nbsp;'+
+                '&nbsp;<input type=checkbox name=is_bertingkat'+i+' id=checkbox'+i+' value="1" /> <input type=hidden name=isi_kecil'+i+' id=isi_kecil'+i+' value="1" size=5 />'+
             '<img onclick=add_setting_harga('+i+'); title="Klik untuk setting harga" src="img/icons/add.png" class=add_kemasan align=right />'+
-            '<img onclick=delete_setting_harga('+i+'); title="Klik untuk delete" src="img/icons/delete.png" class=delete_kemasan align=right style="margin: 0 5px;" /></td></tr>';
+            '<img onclick=delete_setting_harga('+i+'); title="Klik untuk delete" src="img/icons/delete.png" class=delete_kemasan align=right style="margin: 0 5px;" />'+
+            '<input type=hidden name=jumlah value="'+i+'" /></td></tr>';
     $('.packing').append(str);
+    config_auto_suggest(i);
+    $('#checkbox'+i).mouseover(function() {
+        if ($(this).is(':checked') === false) {
+            $('#checkbox'+i).attr('title', 'Check, jika menggunakan harga bertingkat');
+        } else {
+            $('#checkbox'+i).attr('title', 'Uncheck jika TIDAK menggunakan harga bertingkat');
+        }
+    });
+}
+
+function isi_satuan_terkecil(i) {
+    var jml_baris = $('.barcode').length-1;
+    for (j = 0; j <= jml_baris; j++) {
+        /*var kemasan = $('#kemasan'+i).val();
+        var isi     = $('#isi'+i).val();
+        var satuan  = $('#satuan'+i).val();*/
+        if ($('#kemasan'+i).val() === $('#satuan'+j).val()) {
+            $('#isi_kecil'+j).val($('#isi'+i).val());
+        }
+    }
+}
+
+function config_auto_suggest(i) {
+    
+    var jml_baris = $('.barcode').length-1;
+    if (i === jml_baris) {
+        create_new_packing(i);
+    } else {
+        $('#kemasan'+(i+1)).val($('#satuan'+i).val());
+        $('#satuan'+(i+1)).val($('#satuan'+i).val());
+    }
 }
 
 function add_setting_harga(i) {
@@ -38,20 +86,86 @@ function add_setting_harga(i) {
     var row = '<tr class="child'+i+'" id="child'+i+''+j+'"><td></td><td>'+
                 '<table width=100% style="border-bottom: 1px dotted #ccc; margin-bottom: 5px; padding-bottom: 3px;">'+
                     '<tr><td colspan=2>&nbsp;</td></tr>'+
-                    '<tr><td>Range Jual:</td><td><input type=text name=awal'+j+'[] id=awal'+i+''+j+' size=5 /> <div class="space"> s.d </div> <input type=text name=akhir'+j+'[] id=akhir'+i+''+j+' size=5 /></td><td>Diskon:</td><td><input type=text name=d_persen'+j+'[] id=d_persen'+i+''+j+' size=5 /> <div class="space"> (%) </div> <input type=text name=d_rupiah'+j+'[] id=d_rupiah'+i+''+j+' size=5 disabled /></td></tr>'+
-                    '<tr><td>Margin Non Resep:</td><td><input type=text name=margin_nr'+j+'[] id=margin_nr'+i+''+j+' size=5 /> <div class="space"> (%) </div> <input type=text id=margin_nr_rp'+i+''+j+' size=5 disabled /></td><td>Harga Jual Non Resep (Rp.):</td><td id=hj_nonresep>-</td></tr>'+
-                    '<tr><td>Margin Resep:</td><td><input type=text name=margin_r'+j+'[] id=margin_r'+i+''+j+' size=5 /> <div class="space"> (%) </div> <input type=text id=margin_r_rp'+i+''+j+' size=5 disabled /></td><td>Harga Jual Resep (Rp.):</td><td><span id="hj_resep">-</span><img src="img/icons/delete.png" onclick="removeMe(this)" align=right /></td></tr>'+
+                    '<tr><td>Range Jual:</td><td><input type=text name=awal'+i+'[] id=awal'+i+''+j+' size=5 /> <div class="space"> s.d </div> <input type=text name=akhir'+i+'[] id=akhir'+i+''+j+' size=5 /></td><td>Diskon:</td><td><input type=text name=d_persen'+i+'[] id=d_persen'+i+''+j+' value="0" size=5 /> <div class="space"> (%) </div> <input type=text name=d_rupiah'+i+'[] value="0" id=d_rupiah'+i+''+j+' onblur="FormNum(this);" onfocus="javascript:this.value=currencyToNumber(this.value);" size=5 /></td></tr>'+
+                    '<tr><td>Margin Non Resep:</td><td><input type=text name=margin_nr'+i+'[] id=margin_nr'+i+''+j+' size=5 /> <div class="space"> (%) </div> <input type=text id=margin_nr_rp'+i+''+j+' size=5 disabled /></td><td>Harga Jual Non Resep (Rp.):</td><td><span id="hj_nonresep'+i+''+j+'">-</span><input type=hidden name="hj_nonresep'+i+'[]" id="hj_nonresep_f'+i+''+j+'" /></td></tr>'+
+                    '<tr><td>Margin Resep:</td><td><input type=text name=margin_r'+i+'[] id=margin_r'+i+''+j+' size=5 /> <div class="space"> (%) </div> <input type=text id=margin_r_rp'+i+''+j+' size=5 disabled /></td><td>Harga Jual Resep (Rp.):</td><td><span id="hj_resep'+i+''+j+'">-</span><input type=hidden name="hj_resep'+i+'[]" id="hj_resep_f'+i+''+j+'" /><img src="img/icons/delete.png" onclick="removeMe(this)" align=right /></td></tr>'+
                 '</table>'+
             '</td></tr>';
     $(row).insertAfter('#mother'+i);
+    detail_hitung_dinamic(i,j);
+}
+
+function detail_hitung_dinamic(i,j,status) {
+    var isi = ($('#isi'+i).val()*$('#isi_kecil'+i).val());
     var mar_nr  = $('#margin_nr').val();
-    var rp_nr   = $('#margin_nr_rp').val();
-    $('#margin_nr'+i+''+j).val(mar_nr);
-    $('#margin_nr_rp'+i+''+j).val(rp_nr);
+    var rp_nr   = parseInt(currencyToNumber($('#margin_nr_rp').val()))*isi;
+    if (status !== 'edit') {
+        $('#margin_nr'+i+''+j).val(mar_nr);
+        $('#margin_nr_rp'+i+''+j).val(numberToCurrency(parseInt(rp_nr)));
+    } else {
+        var margin_nr_pr = ($('#margin_nr'+i+''+j).val()/100);
+        var margin_nr_rp = rp_nr+(rp_nr*margin_nr_pr);
+        $('#margin_nr_rp'+i+''+j).val(numberToCurrency(parseInt(margin_nr_rp)));
+    }
     var mar_r   = $('#margin_r').val();
-    var rp_r    = $('#margin_r_rp').val();
-    $('#margin_r'+i+''+j).val(mar_r);
-    $('#margin_r_rp'+i+''+j).val(rp_r);
+    var rp_r    = parseInt(currencyToNumber($('#margin_r_rp').val()))*isi;
+    if (status !== 'edit') {
+        $('#margin_r'+i+''+j).val(mar_r);
+        $('#margin_r_rp'+i+''+j).val(numberToCurrency(parseInt(rp_r)));
+    } else {
+        var margin_r_pr = ($('#margin_r'+i+''+j).val()/100);
+        var margin_r_rp = rp_nr+(rp_nr*margin_r_pr);
+        $('#margin_r_rp'+i+''+j).val(numberToCurrency(parseInt(margin_r_rp)));
+    }
+    $('#d_persen'+i+''+j).keyup(function() {
+        if ($(this).val() > 0) {
+            $('#d_rupiah'+i+''+j).val('0');
+        }
+        hitung_dinamic_hja(i,j);
+    });
+    $('#awal'+i+''+j+', #akhir'+i+''+j).keyup(function() {
+        hitung_dinamic_hja(i,j);
+    });
+    $('#d_rupiah'+i+''+j).keyup(function() {
+        if ($(this).val() > 0) {
+            $('#d_persen'+i+''+j).val('0');
+        }
+        hitung_dinamic_hja(i,j);
+    });
+    $('#margin_nr'+i+''+j).keyup(function() {
+        var margin_nr_pr= ($(this).val()/100);
+        var margin_nr_rp= rp_nr+(rp_nr*margin_nr_pr);
+        $('#margin_nr_rp'+i+''+j).val(numberToCurrency(parseInt(margin_nr_rp)));
+        hitung_dinamic_hja(i,j);
+    });
+    $('#margin_r'+i+''+j).keyup(function() {
+        var margin_r_pr= ($(this).val()/100);
+        var margin_r_rp= rp_nr+(rp_nr*margin_r_pr);
+        $('#margin_r_rp'+i+''+j).val(numberToCurrency(parseInt(margin_r_rp)));
+        hitung_dinamic_hja(i,j);
+    });
+}
+
+function hitung_dinamic_hja(i,j) {
+    var diskon_pr  = $('#d_persen'+i+''+j).val()/100;
+    var diskon_rp  = parseInt(currencyToNumber($('#d_rupiah'+i+''+j).val()));
+    
+    var margin_nr_rp  = parseInt(currencyToNumber($('#margin_nr_rp'+i+''+j).val()));
+    var margin_r_rp   = parseInt(currencyToNumber($('#margin_r_rp'+i+''+j).val()));
+    
+    if (diskon_pr !== 0) {
+        hja_nr  = margin_nr_rp-(diskon_pr*margin_nr_rp);
+        hja_r   = margin_r_rp-(diskon_pr*margin_r_rp);
+    } else {
+        hja_nr  = margin_nr_rp-diskon_rp;
+        hja_r   = margin_r_rp-diskon_rp;
+    }
+    $('#hj_nonresep'+i+''+j).html(numberToCurrency(parseInt(hja_nr)));
+    $('#hj_nonresep_f'+i+''+j).val(parseInt(hja_nr));
+    
+    $('#hj_resep'+i+''+j).html(numberToCurrency(parseInt(hja_r)));
+    $('#hj_resep_f'+i+''+j).val(parseInt(hja_r));
+    //var hja_nr        = 
 }
 
 function delete_setting_harga(i) {
@@ -73,8 +187,21 @@ function delete_setting_harga(i) {
 }
 
 function removeMe(el) {
-    var parent = el.parentNode.parentNode.parentNode.parentNode;
-    parent.parentNode.removeChild(parent);
+    $('<div>Anda yakin akan menghapus baris ini?</div>').dialog({
+        autoOpen: true,
+        modal: true,
+        title: 'Information Alert',
+        buttons: {
+            "OK": function() {
+                $(this).dialog().remove();
+                var parent = el.parentNode.parentNode.parentNode.parentNode;
+                parent.parentNode.removeChild(parent);
+            }, "Cancel": function() {
+                $(this).dialog().remove();
+            }
+        }
+    });
+    
 }
 
 function hitung_hja() {
@@ -93,7 +220,8 @@ var str = '<div id=form_add>'+
                 '<div id="tabs">'+
                     '<ul>'+
                         '<li><a href="#tabs-1">Data Utama</a></li>'+
-                        '<li><a href="#tabs-2">Kemasan Produk</a></li>'+
+                        '<li><a href="#tabs-2">Pelengkap</a></li>'+
+                        '<li><a href="#tabs-3">Kemasan Produk</a></li>'+
                     '</ul>'+
                     '<div id="tabs-1"><?= form_hidden('id_barang', NULL, 'id=id_barang') ?>'+
                             '<table width="100%"><tr valign=top><td width="60%"><table width=100% class=data-input>'+
@@ -107,32 +235,33 @@ var str = '<div id=form_add>'+
                                 '<tr><td>R Administrasi:</td><td><select name=admr id=admr><option value="">Pilih ...</option><?php foreach ($admr as $data) { echo '<option value="'.$data.'">'.$data.'</option>'; } ?></select></td></tr>'+
                                 '<tr><td></td><td><?= form_radio('generik', '1', 'ya', 'Generik', TRUE) ?> <?= form_radio('generik', '0', 'tidak', 'Non Generik') ?></td></tr>'+
                                 '<tr><td>Perundangan:</td><td><select name="perundangan" id="perundangan"><?php foreach ($perundangan as $data) { echo '<option value="'.$data.'">'.$data.'</option>'; } ?></select></td></tr>'+
-                                '<tr><td>Kandungan:</td><td><?= form_textarea('kandungan', NULL, 'cols=48 id=kandungan') ?></td></tr>'+
                                 '<tr><td>Farmakoterapi:</td><td><select style="max-width: 147px;" name=farmakoterapi id=farmakoterapi><option value="">Pilih ...</option><?php foreach ($farmakoterapi as $data) { echo '<option value="'.$data->id.'">'.$data->nama.'</option>'; } ?></select></td></tr>'+
-                                '<tr><td>Kelas Terapi:</td><td><select name=kls_terapi id=kls_terapi style="max-width: 147px;"><option value="">Pilih ...</option></select></td></tr>'+
-                                '<tr><td>Indikasi:</td><td><?= form_textarea('indikasi', NULL, 'cols=48 id=indikasi') ?></td></tr>'+
-                                '<tr><td>Perhatian:</td><td><?= form_textarea('perhatian', NULL, 'cols=48 id=perhatian') ?></td></tr>'+
-                                '<tr><td>Kontra Indikasi:</td><td><?= form_textarea('kontra_indikasi', NULL, 'cols=48 id=kontra_indikasi') ?></td></tr>'+
-                                '<tr><td>Efek Samping:</td><td><?= form_textarea('efek_samping', NULL, 'cols=48 id=efek_samping') ?></td></tr>'+
-                                '<tr><td>Dosis:</td><td><?= form_textarea('dosis', NULL, 'cols=48 id=dosis') ?></td></tr>'+
-                                '<tr><td>Aturan Pakai:</td><td><?= form_textarea('aturan_pakai', NULL, 'cols=48 id=aturan_pakai') ?></td></tr>'+
-                                
-
-                            '</table></td><td width=2%>&nbsp;</td><td width=38%>'+
+                                '<tr><td>Kelas Terapi:</td><td><select name=kls_terapi id=kls_terapi style="max-width: 147px;"><option value="">Pilih ...</option></select></td></tr></table></div>'+
+                                '</td><td width=2%>&nbsp;</td><td width=38%>'+
                                 '<table width=100% class=data-input>'+
-                                    '<tr><td>FDA Pregnancy:</td><td><select name=fda_pregnan id=fda_pregnan><option value="">Pilih ...</option><?php foreach ($fda as $data) { echo '<option value="'.$data.'">'.$data.'</option>'; } ?></select></td></tr>'+
-                                    '<tr><td>FDA Lactacy:</td><td><select name=fda_lactacy id=fda_lactacy><option value="">Pilih ...</option><?php foreach ($fda as $data) { echo '<option value="'.$data.'">'.$data.'</option>'; } ?></select></td></tr>'+
                                     '<tr><td>Rak:</td><td><?= form_input('rak', NULL, 'id=rak style="min-width: 147px;"') ?></td></tr>'+
                                     '<tr><td width=50%>Stok Minimal:</td><td><?= form_input('stok_min', NULL, 'id=stok_min style="width: 60px;"') ?></td></tr>'+
                                     '<tr><td>Margin Non Resep:</td><td><?= form_input('margin_nr', NULL, 'id=margin_nr style="width: 60px;" onkeyup=hitung_hja()') ?> % <?= form_input('margin_nr_rp', NULL, 'id=margin_nr_rp style="width: 63px;" disabled') ?></td></tr>'+
                                     '<tr><td>Margin Resep:</td><td><?= form_input('margin_r', NULL, 'id=margin_r style="width: 60px;" onkeyup=hitung_hja()') ?> % <?= form_input('margin_r_rp', NULL, 'id=margin_r_rp disabled style="width: 63px;"') ?></td></tr>'+
                                     '<tr><td>HNA:</td><td><?= form_input('hna', NULL, 'id=hna onblur="FormNum(this)" onkeyup=hitung_hja() style="width: 147px;"') ?></td></tr>'+
                                     '<tr><td></td><td>&nbsp;</td></tr>'+
-                                    '<tr><td></td><td><?= form_checkbox('ppn', '10', 'ppn', 'PPN (10%)') ?><?= form_checkbox('aktifasi', '10', 'aktifasi', 'Aktifasi') ?></td></tr>'+
-                                    
+                                    '<tr><td></td><td><?= form_checkbox('aktifasi', '1', 'aktifasi', 'Aktifasi') ?></td></tr>'+
                                 '</table>'+
                             '</td></tr></table>'+
-                    '</div><div id="tabs-2"><?= form_hidden('id_kemasan', NULL, 'id=id_kemasan') ?>'+
+                    '</div>'+
+                    '<div id="tabs-2"><table width=100% class=data-input>'+
+                                '<tr><td width=17% valign=top>Kandungan:</td><td><?= form_textarea('kandungan', NULL, 'cols=48 id=kandungan') ?></td></tr>'+
+                                '<tr><td valign=top>Indikasi:</td><td><?= form_textarea('indikasi', NULL, 'cols=48 id=indikasi') ?></td></tr>'+
+                                '<tr><td valign=top>Perhatian:</td><td><?= form_textarea('perhatian', NULL, 'cols=48 id=perhatian') ?></td></tr>'+
+                                '<tr><td valign=top>Kontra Indikasi:</td><td><?= form_textarea('kontra_indikasi', NULL, 'cols=48 id=kontra_indikasi') ?></td></tr>'+
+                                '<tr><td valign=top>Efek Samping:</td><td><?= form_textarea('efek_samping', NULL, 'cols=48 id=efek_samping') ?></td></tr>'+
+                                '<tr><td valign=top>Dosis:</td><td><?= form_textarea('dosis', NULL, 'cols=48 id=dosis') ?></td></tr>'+
+                                '<tr><td valign=top>Aturan Pakai:</td><td><?= form_textarea('aturan_pakai', NULL, 'cols=48 id=aturan_pakai') ?></td></tr>'+
+                                '<tr><td>FDA Pregnancy:</td><td><select name=fda_pregnan id=fda_pregnan><option value="">Pilih ...</option><?php foreach ($fda as $data) { echo '<option value="'.$data.'">'.$data.'</option>'; } ?></select></td></tr>'+
+                                '<tr><td>FDA Lactacy:</td><td><select name=fda_lactacy id=fda_lactacy><option value="">Pilih ...</option><?php foreach ($fda as $data) { echo '<option value="'.$data.'">'.$data.'</option>'; } ?></select></td></tr>'+
+
+                            '</table></div>'+
+                    '<div id="tabs-3"><?= form_hidden('id_kemasan', NULL, 'id=id_kemasan') ?>'+
                         '<img src="img/icons/add-kemasan.png" id=add_kemasan align=left style="margin-bottom: 3px;" />'+
                             '<table width=100% class="data-input packing">'+
                                 
@@ -252,7 +381,7 @@ var str = '<div id=form_add>'+
         autoOpen: true,
         modal: true,
         width: 800,
-        height: dHeight,
+        height: 480,
         hide: 'clip',
         show: 'blind',
         buttons: {
@@ -315,7 +444,8 @@ var str = '<div id=form_add>'+
                     } else {
                         alert_edit();
                         $('#form_add').dialog().remove();
-                        load_data_barang('1','',cek_id);
+                        var page = $('.noblock').html();
+                        load_data_barang(page,'');
                     }
                     
                 }
@@ -382,6 +512,14 @@ function edit_barang(str) {
             $('#kls_terapi').append("<option value='"+value.id+"'>"+value.nama+"</option>");
         });
         $('#kls_terapi').val(arr[26]);
+    });
+    $.ajax({
+        url: 'pages/kemasan-edit.php',
+        data: 'id='+arr[0],
+        cache: false,
+        success: function(data) {
+            $('.packing').html(data);
+        }
     });
     $('#fda_pregnan').val(arr[27]);
     $('#fda_lactacy').val(arr[28]);

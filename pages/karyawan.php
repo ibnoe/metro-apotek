@@ -1,6 +1,8 @@
 <?php
 $subNav = array(
-	"Utama ; karyawan.php ; #509601;"
+	"Karyawan ; karyawan.php ; #509601;",
+        "Dokter ; dokter.php ; #509601;",
+        "Jadwal Praktek Dokter ; jadwalpraktek.php ; #509601;",
 );
 
 set_include_path("../");
@@ -103,13 +105,19 @@ var str = '<div id=form_add>'+
     });
 }
 $mainNav.set("home");
-$('button').button({
+$('#button').button({
     icons: {
         primary: 'ui-icon-newwin'
     }
-});
-$('#button').click(function() {
+}).click(function() {
     form_add();
+});
+$('#reset').button({
+    icons: {
+        primary: 'ui-icon-refresh'
+    }
+}).click(function() {
+    load_data_karyawan();
 });
 $.plugin($afterSubPageShow,{ // <-- event is here
     showAlert:function(){ // <-- random function name is here (choose whatever you want)
@@ -185,6 +193,7 @@ function delete_karyawan(id, page) {
 <h1 class="margin-t-0">Data karyawan</h1>
 <hr>
 <button id="button">Tambah Data</button>
+<button id="reset">Reset</button>
 <div id="result-karyawan">
     
 </div>

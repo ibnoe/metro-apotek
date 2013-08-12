@@ -293,4 +293,110 @@ function fda_load_data() {
     return array('A','B','C','D','X');
 }
 
+function kemasan_load_data($id) {
+    $sql = "select * from kemasan where id_barang = '$id'";
+    $query = mysql_query($sql);
+    $data = array();
+    while ($row = mysql_fetch_object($query)) {
+        $data[] = $row;
+    }
+    return $data;
+}
+
+function dinamic_load_data($id_kemasan) {
+    $sql = mysql_query("select * from dinamic_harga_jual where id_kemasan = '$id_kemasan'");
+    $data = array();
+    while ($row = mysql_fetch_object($sql)) {
+        $data[] = $row;
+    }
+    return $data;
+}
+
+function load_data_golongan($param) {
+    $q = null;
+    if ($param['id'] !== '') {
+        $q = " and id = '".$param['id']."'";
+    }
+    $limit = " limit ".$param['start'].", ".$param['limit']."";
+    $sql = "select * from golongan where id is not NULL $q order by nama";
+    
+    $query = mysql_query($sql.$limit);
+    $data = array();
+    while ($row = mysql_fetch_object($query)) {
+        $data[] = $row;
+    }
+    $total = mysql_num_rows(mysql_query($sql));
+    $result['data'] = $data;
+    $result['total']= $total;
+    return $result;
+}
+
+function load_data_farmakoterapi($param) {
+    $q = null;
+    if ($param['id'] !== '') {
+        $q = " and id = '".$param['id']."'";
+    }
+    $limit = " limit ".$param['start'].", ".$param['limit']."";
+    $sql = "select * from farmako_terapi where id is not NULL $q order by nama";
+    
+    $query = mysql_query($sql.$limit);
+    $data = array();
+    while ($row = mysql_fetch_object($query)) {
+        $data[] = $row;
+    }
+    $total = mysql_num_rows(mysql_query($sql));
+    $result['data'] = $data;
+    $result['total']= $total;
+    return $result;
+}
+
+function load_data_kelasterapi($param) {
+    $q = null;
+    if ($param['id'] !== '') {
+        $q = " and k.id = '".$param['id']."'";
+    }
+    $limit = " limit ".$param['start'].", ".$param['limit']."";
+    $sql = "select k.*, f.nama as farmakoterapi from kelas_terapi k 
+        join farmako_terapi f on (k.id_farmako_terapi = f.id) 
+        where k.id is not NULL $q order by k.nama";
+    
+    $query = mysql_query($sql.$limit);
+    $data = array();
+    while ($row = mysql_fetch_object($query)) {
+        $data[] = $row;
+    }
+    $total = mysql_num_rows(mysql_query($sql));
+    $result['data'] = $data;
+    $result['total']= $total;
+    return $result;
+}
+
+function penyakit_load_data($param) {
+    $q = null;
+    if ($param['id'] !== '') {
+        $q = " and id = '".$param['id']."'";
+    }
+    $limit = " limit ".$param['start'].", ".$param['limit']."";
+    $sql = "select * from penyakit where id is not NULL $q order by topik";
+    
+    $query = mysql_query($sql.$limit);
+    $data = array();
+    while ($row = mysql_fetch_object($query)) {
+        $data[] = $row;
+    }
+    $total = mysql_num_rows(mysql_query($sql));
+    $result['data'] = $data;
+    $result['total']= $total;
+    return $result;
+}
+
+function tarif_load_data() {
+    $sql = mysql_query("select * from tarif order by nama");
+    $data = array();
+    while ($row = mysql_fetch_object($sql)) {
+        $data[] = $row;
+    }
+    return $data;
+}
+
 ?>

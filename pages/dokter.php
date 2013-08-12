@@ -1,7 +1,8 @@
 <?php
 $subNav = array(
-	"Utama ; dokter.php ; #509601;",
-	"Jadwal Praktek ; jadwalpraktek.php ; #509601;",
+	"Karyawan ; karyawan.php ; #509601;",
+        "Dokter ; dokter.php ; #509601;",
+        "Jadwal Praktek Dokter ; jadwalpraktek.php ; #509601;",
 );
 
 set_include_path("../");

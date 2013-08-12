@@ -42,6 +42,19 @@ function alert_resets() {
         }
     });
 }
+
+function alert_empty(variable, focus) {
+    $( "<div title='Alert: Warning'>Data "+variable+" tidak boleh kosong !</div>" ).dialog({
+        autoOpen: true,
+        modal: true,
+        buttons: {
+          Ok: function() {
+            $( this ).dialog( "close" );
+            $(focus).focus();
+          }
+        }
+    });
+}
 </script>
 <div id="tambah" style="display: none" title="Information Alert">
     <p>

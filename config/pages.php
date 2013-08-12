@@ -9,7 +9,7 @@ Just copy paste this and fill in :
 $pageTitles[''] = "";
 
 /* PAGE OPTIONS */
-
+/* master data*/
 $pageTitles['welcome.php'] = "Welcome";
 $pageTitles['typography.php'] = "Typography";
 $pageTitles['accordions.php'] = "Accordions";
@@ -27,4 +27,16 @@ $pageTitles['layanan.php'] = "Layanan";
 $pageTitles['instansi.php'] = "Instansi";
 $pageTitles['pelengkap.php'] = "Produk Pelengkap";
 $pageTitles['kemasan.php'] = "Kemasan";
+$pageTitles['golongan.php'] = "Golongan";
+$pageTitles['farmakoterapi.php'] = "Farmakoterapi";
+$pageTitles['kelas-terapi.php'] = "Kelas Terapi";
+$pageTitles['penyakit.php'] = "Penyakit";
+
+/*Transaksi*/
+$pageTitles['pemesanan.php'] = "Pemesanan";
+$pageTitles['penjualan.php'] = "Penjualan Resep";
+$pageTitles['penjualan-nr.php'] = "Penjualan Non Resep";
+$pageTitles['penerimaan.php'] = "Penerimaan";
+$pageTitles['stok-opname.php'] = "Stok Opname";
+$pageTitles['resep.php'] = "Resep";
 ?>

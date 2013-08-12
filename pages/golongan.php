@@ -1,12 +1,4 @@
 <?php
-$subNav = array(
-        "Pabrik ; pabrik.php ; #509601;",
-	"Instansi ; instansi.php ; #509601;",
-        "Supplier ; supplier.php ; #509601;",
-        "Asuransi ; asuransi.php ; #509601;",
-        "Bank ; bank.php ; #509601;",
-);
-
 set_include_path("../");
 include_once("inc/essentials.php");
 include_once("inc/functions.php");
@@ -16,23 +8,23 @@ include_once("pages/message.php");
 
 <script type="text/javascript">
 $(function() {
-    load_data_instansi();
+    load_data_golongan();
 });
 function form_add() {
 var str = '<div id=form_add>'+
             '<form action="" method=post id="save_barang">'+
-            '<?= form_hidden('id_instansi', NULL, 'id=id_instansi') ?>'+
+            '<?= form_hidden('id_golongan', NULL, 'id=id_golongan') ?>'+
             '<table width=100% class=data-input>'+
-                '<tr><td width=40%>Nama instansi:</td><td><?= form_input('nama', NULL, 'id=nama size=40') ?></td></tr>'+
-                '<tr><td>Alamat:</td><td><?= form_input('alamat', NULL, 'id=alamat size=40') ?></td></tr>'+
-                '<tr><td width=40%>Email:</td><td><?= form_input('email', NULL, 'id=email size=40') ?></td></tr>'+
-                '<tr><td>No. Telp:</td><td><?= form_input('telp', NULL, 'id=telp size=40') ?></td></tr>'+
+                '<tr><td width=40%>Nama:</td><td><?= form_input('nama', NULL, 'id=nama size=40') ?></td></tr>'+
+                '<tr><td>Margin Non Resep:</td><td><?= form_input('margin_nr', NULL, 'id=margin_nr size=5 maxlength=4') ?> %</td></tr>'+
+                '<tr><td width=40%>Margin Resep:</td><td><?= form_input('margin_r', NULL, 'id=margin_r size=5 maxlength=4') ?> %</td></tr>'+
+                '<tr><td>Diskon:</td><td><?= form_input('diskon', NULL, 'id=diskon size=5 maxlength=4') ?> %</td></tr>'+
             '</table>'+
             '</form>'+
             '</div>';
     $('body').append(str);
     $('#form_add').dialog({
-        title: 'Tambah instansi',
+        title: 'Tambah golongan',
         autoOpen: true,
         width: 480,
         height: 220,
@@ -49,9 +41,9 @@ var str = '<div id=form_add>'+
             $(this).dialog().remove();
         }
     });
-    var lebar = $('#instansi').width();
-    $('#instansi').dblclick(function() {
-        $('<div title="Data instansi" id="instansi-data"></div>').dialog({
+    var lebar = $('#golongan').width();
+    $('#golongan').dblclick(function() {
+        $('<div title="Data golongan" id="golongan-data"></div>').dialog({
             autoOpen: true,
             modal: true,
             width: 500,
@@ -68,9 +60,9 @@ var str = '<div id=form_add>'+
             alert('Nama barang tidak boleh kosong !');
             $('#nama').focus(); return false;
         }
-        var cek_id = $('#id_instansi').val();
+        var cek_id = $('#id_golongan').val();
         $.ajax({
-            url: 'models/update-masterdata.php?method=save_instansi',
+            url: 'models/update-masterdata.php?method=save_golongan',
             type: 'POST',
             dataType: 'json',
             data: $(this).serialize(),
@@ -80,11 +72,11 @@ var str = '<div id=form_add>'+
                     if (cek_id === '') {
                         alert_tambah();
                         $('input').val('');
-                        load_data_instansi('1','',data.id_instansi);
+                        load_data_golongan('1','',data.id_golongan);
                     } else {
                         alert_edit();
                         $('#form_add').dialog().remove();
-                        load_data_instansi('1','',data.id_instansi);
+                        load_data_golongan('1','',data.id_golongan);
                     }
                     
                 }
@@ -94,10 +86,17 @@ var str = '<div id=form_add>'+
     });
 }
 $mainNav.set("home");
-$('button').button({
+$('#button').button({
     icons: {
         primary: 'ui-icon-newwin'
     }
+});
+$('#reset').button({
+    icons: {
+        primary: 'ui-icon-refresh'
+    }
+}).click(function() {
+    load_data_golongan();
 });
 $('#button').click(function() {
     form_add();
@@ -107,37 +106,37 @@ $.plugin($afterSubPageShow,{ // <-- event is here
     /* The code that will be executed */
     }
 });
-function load_data_instansi(page, search, id) {
+function load_data_golongan(page, search, id) {
     pg = page; src = search; id_barg = id;
     if (page === undefined) { var pg = ''; }
     if (search === undefined) { var src = ''; }
     if (id === undefined) { var id_barg = ''; }
     $.ajax({
-        url: 'pages/instansi-list.php',
+        url: 'pages/golongan-list.php',
         cache: false,
-        data: 'page='+pg+'&search='+src+'&id_instansi='+id_barg,
+        data: 'page='+pg+'&search='+src+'&id_golongan='+id_barg,
         success: function(data) {
-            $('#result-instansi').html(data);
+            $('#result-golongan').html(data);
         }
     });
 }
 
 function paging(page, tab, search) {
-    load_data_instansi(page, search);
+    load_data_golongan(page, search);
 }
 
-function edit_instansi(str) {
+function edit_golongan(str) {
     var arr = str.split('#');
     form_add();
-    $('#form_add').dialog({ title: 'Edit instansi' });
-    $('#id_instansi').val(arr[0]);
+    $('#form_add').dialog({ title: 'Edit golongan' });
+    $('#id_golongan').val(arr[0]);
     $('#nama').val(arr[1]);
-    $('#alamat').val(arr[2]);
-    $('#email').val(arr[3]);
-    $('#telp').val(arr[4]);
+    $('#margin_nr').val(arr[2]);
+    $('#margin_r').val(arr[3]);
+    $('#diskon').val(arr[4]);
 }
 
-function delete_instansi(id, page) {
+function delete_golongan(id, page) {
     $('<div id=alert>Anda yakin akan menghapus data ini?</div>').dialog({
         title: 'Konfirmasi Penghapusan',
         autoOpen: true,
@@ -146,10 +145,10 @@ function delete_instansi(id, page) {
             "OK": function() {
                 
                 $.ajax({
-                    url: 'models/update-masterdata.php?method=delete_instansi&id='+id,
+                    url: 'models/update-masterdata.php?method=delete_golongan&id='+id,
                     cache: false,
                     success: function() {
-                        load_data_instansi(page);
+                        load_data_golongan(page);
                         $('#alert').dialog().remove();
                     }
                 });
@@ -161,9 +160,10 @@ function delete_instansi(id, page) {
     });
 }
 </script>
-<h1 class="margin-t-0">Data instansi</h1>
+<h1 class="margin-t-0">Data golongan</h1>
 <hr>
 <button id="button">Tambah Data</button>
-<div id="result-instansi">
+<button id="reset">Reset</button>
+<div id="result-golongan">
     
 </div>

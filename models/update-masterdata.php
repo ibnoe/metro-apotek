@@ -31,7 +31,7 @@ if ($method === 'save_barang') {
     $plus_ppn   = isset($_POST['ppn'])?$_POST['ppn']:'0';
     $aktif      = isset($_POST['aktifasi'])?$_POST['aktifasi']:'0';
     $aturan_pki = $_POST['aturan_pakai'];
-    $kls_terapi = $_POST['kls_terapi'];
+    $kls_terapi = isset($_POST['kls_terapi'])?$_POST['kls_terapi']:'NULL';
     $fda_pregnan= $_POST['fda_pregnan'];
     $fda_lactacy= $_POST['fda_lactacy'];
     $id_barang  = $_POST['id_barang'];
@@ -55,7 +55,7 @@ if ($method === 'save_barang') {
                 efek_samping = '$ef_samping',
                 formularium = '$formularium',
                 aturan_pakai = '$aturan_pki',
-                id_kelas_terapi = '$kls_terapi',
+                id_kelas_terapi = $kls_terapi,
                 fda_pregnancy = '$fda_pregnan',
                 fda_lactacy = '$fda_lactacy',
                 stok_minimal = '$stok_min',
@@ -67,20 +67,24 @@ if ($method === 'save_barang') {
         mysql_query($sql);
         $id = mysql_insert_id();
         
-//        $barcode    = $_POST['barcode'];
-//        $kemasan    = $_POST['kemasan'];
-//        $isi        = $_POST['isi'];
-//        $satuan     = $_POST['satuan'];
-//        foreach ($barcode as $key => $code) {
-//            $query="insert into kemasan set 
-//                    id_barang = '$id',
-//                    barcode = '$code',
-//                    id_kemasan = '$kemasan[$key]',
-//                    isi = '$isi[$key]',
-//                    id_satuan = '$satuan[$key]'";
-//            mysql_query($query);
-//            $id_kemasan = mysql_insert_id();
-//            
+        $barcode    = $_POST['barcode'];
+        $kemasan    = $_POST['kemasan'];
+        $isi        = $_POST['isi'];
+        $satuan     = $_POST['satuan'];
+        $isi_satuan = $_POST['isi_kecil'];
+        $bertingkat = $_POST['is_bertingkat'];
+        foreach ($barcode as $key => $code) {
+            $query="insert into kemasan set 
+                    id_barang = '$id',
+                    barcode = '$code',
+                    id_kemasan = '$kemasan[$key]',
+                    isi = '$isi[$key]',
+                    id_satuan = '$satuan[$key]',
+                    isi_satuan = '$isi_satuan[$key]',
+                    is_harga_bertingkat = '".(isset($bertingkat[$key])?$bertingkat[$key]:'0')."'";
+            mysql_query($query);
+            $id_kemasan = mysql_insert_id();
+            
 //            $awal       = $_POST['awal'.$key];
 //            $akhir      = $_POST['akhir'.$key];
 //            $margin_nr  = $_POST['margin_nr'.$key];
@@ -97,7 +101,7 @@ if ($method === 'save_barang') {
 //                    diskon_persen = '$diskon[$no]'";
 //                mysql_query($query1);
 //            }
-//        }
+        }
     } else {
         $sql = "update barang set
                 nama = '$nama',
@@ -118,7 +122,7 @@ if ($method === 'save_barang') {
                 efek_samping = '$ef_samping',
                 formularium = '$formularium',
                 aturan_pakai = '$aturan_pki',
-                id_kelas_terapi = '$kls_terapi',
+                id_kelas_terapi = $kls_terapi,
                 fda_pregnancy = '$fda_pregnan',
                 fda_lactacy = '$fda_lactacy',
                 stok_minimal = '$stok_min',
@@ -131,37 +135,71 @@ if ($method === 'save_barang') {
         mysql_query($sql);
         $id = $id_barang;
         
-        /*$barcode    = $_POST['barcode'];
-        $kemasan    = $_POST['kemasan'];
-        $isi        = $_POST['isi'];
-        $satuan     = $_POST['satuan'];
-        foreach ($barcode as $key => $code) {
-            $query="update kemasan set 
-                    id_barang = '$id',
-                    barcode = '$code',
-                    id_kemasan = '$kemasan[$key]',
-                    isi = '$isi[$key]',
-                    id_satuan = '$satuan[$key]'";
-            mysql_query($query);
-            $id_kemasan = mysql_insert_id();
-            mysql_query("delete from dinamic_harga_jual where id_kemasan = '$id_kemasan'");
-            $awal       = $_POST['awal'.$key];
-            $akhir      = $_POST['akhir'.$key];
-            $margin_nr  = $_POST['margin_nr'.$key];
-            $margin_r   = $_POST['margin_r'.$key];
-            $diskon     = $_POST['d_persen'.$key];
-            
-            foreach ($awal as $no => $data) {
-                $query1 = "insert into dinamic_harga_jual set
-                    kemasan = '$id_kemasan',
-                    jual_min = '$data',
-                    jual_max = '$akhir[$no]',
-                    margin_non_resep = '$margin_nr[$no]',
-                    margin_resep = '$margin_r[$no]',
-                    diskon_persen = '$diskon[$no]'";
-                mysql_query($query1);
+        if (isset($_POST['jumlah'])) {
+            $jumlah     = $_POST['jumlah'];
+            for ($i = 0; $i <= $jumlah; $i++) {
+                $id_kemasan = $_POST['id_kemasan'.$i];
+                $barcode    = $_POST['barcode'.$i];
+                $kemasan    = $_POST['kemasan'.$i]; // kemasan terbesar
+                $isi        = $_POST['isi'.$i];
+                $satuan     = $_POST['satuan'.$i]; // kemasan terkecil
+                $isi_satuan = $_POST['isi_kecil'.$i];
+                $bertingkat = isset($_POST['is_bertingkat'.$i])?$_POST['is_bertingkat'.$i]:'0';
+                if ($id_kemasan !== '') {
+                $query="update kemasan set 
+                        id_barang = '$id',
+                        barcode = '$barcode',
+                        id_kemasan = '$kemasan',
+                        isi = '$isi',
+                        id_satuan = '$satuan',
+                        isi_satuan = '$isi_satuan',
+                        is_harga_bertingkat = '$bertingkat'
+                        where id = '$id_kemasan'";
+                    mysql_query($query);
+                    //echo $query;
+                    $id_packing = $id_kemasan;
+                } else {
+                    $query="insert into kemasan set
+                        id_barang = '$id',
+                        barcode = '$barcode',
+                        id_kemasan = '$kemasan',
+                        isi = '$isi',
+                        id_satuan = '$satuan',
+                        isi_satuan = '$isi_satuan',
+                        is_harga_bertingkat = '$bertingkat'";
+                    mysql_query($query);
+                    $id_packing = mysql_insert_id();
+                }
+                //echo $query."<br/>";
+
+
+                mysql_query("delete from dinamic_harga_jual where id_kemasan = '$id_packing'");
+                if (isset($_POST['awal'.$i])) {
+                    $awal       = $_POST['awal'.$i];
+                    $akhir      = $_POST['akhir'.$i];
+                    $margin_nr  = $_POST['margin_nr'.$i];
+                    $margin_r   = $_POST['margin_r'.$i];
+                    $diskon     = $_POST['d_persen'.$i];
+                    $diskon_rp  = $_POST['d_rupiah'.$i];
+                    $hj_nonresep= $_POST['hj_nonresep'.$i];
+                    $hj_resep   = $_POST['hj_resep'.$i];
+                    foreach ($awal as $no => $rows) {
+                        $query1 = "insert into dinamic_harga_jual set
+                            id_kemasan = '$id_packing',
+                            jual_min = '$rows',
+                            jual_max = '$akhir[$no]',
+                            margin_non_resep = '$margin_nr[$no]',
+                            margin_resep = '$margin_r[$no]',
+                            diskon_persen = '$diskon[$no]',
+                            diskon_rupiah = '".currencyToNumber($diskon_rp[$no])."',
+                            hj_non_resep = '$hj_nonresep[$no]',
+                            hj_resep = '$hj_resep[$no]'";
+                        //echo $query1;
+                        mysql_query($query1);
+                    }
+                }
             }
-        }*/
+        }
     }
     
     die(json_encode(array('status' => TRUE, 'id_barang' => $id)));
@@ -540,5 +578,117 @@ if ($method === 'save_layanan') {
 if ($method === 'delete_layanan') {
     $id     = $_GET['id'];
     mysql_query("delete from tarif where id = '$id'");
+}
+
+if ($method === 'save_golongan') {
+    $nama       = $_POST['nama'];
+    $margin_nr  = $_POST['margin_nr'];
+    $margin_r   = $_POST['margin_r'];
+    $diskon     = $_POST['diskon'];
+    $id_golongan= $_POST['id_golongan'];
+    
+    if ($id_golongan === '') {
+        $sql = "insert into golongan set
+            nama = '$nama',
+            margin_non_resep = '$margin_nr',
+            margin_resep = '$margin_r',
+            diskon = '$diskon'";
+        mysql_query($sql);
+        $id = mysql_insert_id();
+    } else {
+        $sql = "update golongan set
+            nama = '$nama',
+            margin_non_resep = '$margin_nr',
+            margin_resep = '$margin_r',
+            diskon = '$diskon'
+            where id = '$id_golongan'";
+        mysql_query($sql);
+        $id = $id_golongan;
+    }
+    die(json_encode(array('status' => TRUE, 'id_golongan' => $id)));
+}
+
+if ($method === 'delete_golongan') {
+    $id     = $_GET['id'];
+    mysql_query("delete from golongan where id = '$id'");
+}
+
+if ($method === 'save_farmakoterapi') {
+    $nama   = $_POST['nama'];
+    $id     = $_POST['id_farmakoterapi'];
+    
+    if ($id === '') {
+        $sql = "insert into farmako_terapi set
+            nama = '$nama'";
+        mysql_query($sql);
+        $id_farmakoterapi = mysql_insert_id();
+    } else {
+        $sql = "update farmako_terapi set
+            nama = '$nama'
+            where id = '$id'";
+        mysql_query($sql);
+        $id_farmakoterapi = $id;
+    }
+    die(json_encode(array('status' => TRUE, 'id_farmakoterapi' => $id_farmakoterapi)));
+}
+
+if ($method === 'delete_farmakoterapi') {
+    $id = $_GET['id'];
+    mysql_query("delete from farmako_terapi where id = '$id'");
+}
+
+if ($method === 'save_kelasterapi') {
+    $nama           = $_POST['nama'];
+    $farmakoterapi  = $_POST['farmakoterapi'];
+    $id             = $_POST['id_kelasterapi'];
+    
+    if ($id === '') {
+        $sql = "insert into kelas_terapi set
+            id_farmako_terapi = '$farmakoterapi',
+            nama = '$nama'";
+        mysql_query($sql);
+        $id_kelas_terapi = mysql_insert_id();
+    } else {
+        $sql = "update kelas_terapi set
+            id_farmako_terapi = '$farmakoterapi',
+            nama = '$nama'
+            where id = '$id'";
+        mysql_query($sql);
+        $id_kelas_terapi = $id;
+    }
+    die(json_encode(array('status' => TRUE, 'id_kelasterapi' => $id_kelas_terapi)));
+}
+
+if ($method === 'delete_kelasterapi') {
+    $id = $_GET['id'];
+    mysql_query("delete from kelas_terapi where id = '$id'");
+}
+
+if ($method === 'save_penyakit') {
+    $topik      = $_POST['penyakit'];
+    $subkode    = $_POST['subkode'];
+    $id         = $_POST['id_penyakit'];
+    
+    if ($id === '') {
+        $sql = "insert into penyakit set
+            topik = '$topik',
+            sub_kode = '$subkode'";
+        mysql_query($sql);
+        $id_penyakit = mysql_insert_id();
+    } else {
+        $sql = "update penyakit set
+            topik = '$topik',
+            sub_kode = '$subkode'
+            where id = '$id'";
+        mysql_query($sql);
+        $id_penyakit = $id;
+    }
+    die(json_encode(array('status' => TRUE, 'id_penyakit' => $id_penyakit)));
+    
+}
+
+if ($method === 'delete_penyakit') {
+    $id = $_GET['id'];
+    mysql_query("delete from penyakit where id = '$id'");
 }
 ?>
