@@ -187,4 +187,54 @@ if ($method === 'delete_stokopname') {
     $id = $_GET['id'];
     mysql_query("delete from stok where id = '$id'");
 }
+
+if ($method === 'save_penjualannr') {
+    $tanggal    = date2mysql($_POST['tanggal']).' '.date("H:i:s");
+    $customer   = ($_POST['id_customer'] !== '')?$_POST['id_customer']:"NULL";
+    $diskon_pr  = $_POST['diskon_pr'];
+    $diskon_rp  = currencyToNumber($_POST['diskon_pr']);
+    $ppn        = $_POST['ppn'];
+    $total      = $_POST['total_penjualan'];
+    $tuslah     = currencyToNumber($_POST['tuslah']);
+    $sql = "insert into penjualan set
+        waktu = '$tanggal',
+        id_pelanggan = $customer,
+        diskon_persen = '$diskon_pr',
+        diskon_rupiah = '$diskon_rp',
+        ppn = '$ppn',
+        total = '$total',
+        tuslah = '$tuslah'";
+    
+    mysql_query($sql);
+    $id_penjualan = mysql_insert_id();
+    
+    $id_barang  = $_POST['id_barang'];
+    $kemasan    = $_POST['kemasan'];
+    $jumlah     = $_POST['jumlah'];
+    $harga_jual = $_POST['harga_jual'];
+        foreach ($id_barang as $key => $data) {
+            $query = mysql_query("select * from kemasan where id = '$kemasan[$key]'");
+            $rows  = mysql_fetch_object($query);
+            $isi   = $rows->isi*$rows->isi_satuan;
+            $sql = "insert into detail_penjualan set
+                id_penjualan = '$id_penjualan',
+                id_kemasan = '$kemasan[$key]',
+                qty = '".($jumlah[$key]*$isi)."',
+                harga_jual = '$harga_jual[$key]'
+                ";
+            mysql_query($sql);
+            
+            $last = mysql_fetch_object(mysql_query("select * from stok where id_barang = '$data' order by id desc limit 1"));
+            
+            $stok = "insert into stok set
+                waktu = '$tanggal',
+                id_transaksi = '$id_penjualan',
+                transaksi = 'Penjualan',
+                id_barang = '$data',
+                keluar = '".($jumlah[$key]*$isi)."'";
+            //echo $stok;
+            mysql_query($stok);
+        }
+    die(json_encode(array('status' => TRUE)));
+}
 ?>

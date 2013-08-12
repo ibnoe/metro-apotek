@@ -96,4 +96,23 @@ function load_data_resep($param) {
     return $result;
 }
 
+function penjualan_nr_load_data($param) {
+    $q = NULL;
+    if ($param['id'] !== '') {
+        $q.="and r.id = '".$param['id']."' ";
+    }
+    $limit = " limit ".$param['start'].", ".$param['limit']."";
+    $sql = "select p.*, date(p.waktu) as tanggal, pl.nama as customer, a.nama as asuransi from penjualan p
+        left join pelanggan pl on (p.id_pelanggan = pl.id)
+        left join asuransi a on (pl.id_asuransi = a.id)";
+    $query = mysql_query($sql.$limit);
+    $data = array();
+    while ($row = mysql_fetch_object($query)) {
+        $data[] = $row;
+    }
+    $total = mysql_num_rows(mysql_query($sql));
+    $result['data'] = $data;
+    $result['total']= $total;
+    return $result;
+}
 ?>

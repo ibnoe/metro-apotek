@@ -28,8 +28,9 @@ function hitung_detail_total(jml, jum, diskon_rupiah, diskon_persen, harga_jual)
         dr = diskon_rupiah;
     }
     $('#hargajual'+jml).html(numberToCurrency(harga_jual));
-    $('#diskon_rupiah'+jml).val(numberToCurrency(parseInt(dr)));
-    $('#diskon_persen'+jml).val(dp);
+    $('#harga_jual'+jml).val(parseInt(harga_jual));
+    //$('#diskon_rupiah'+jml).val(numberToCurrency(parseInt(dr)));
+    //$('#diskon_persen'+jml).val(dp);
     var subtotal = (jum*harga_jual);
     $('#subtotal'+jml).html(numberToCurrency(parseInt(subtotal)));
     hitung_total_penjualan();
@@ -55,6 +56,7 @@ function hitung_total_penjualan() {
     var total_tambah_tuslah = total_tambah_ppn+tuslah;
     
     $('#total-penjualan').html(numberToCurrency(parseInt(total_tambah_tuslah)));
+    $('#total_penjualan').val(parseInt(total_tambah_tuslah));
 }
 
 function add_new_rows(id_brg, nama_brg, jumlah) {
@@ -64,10 +66,10 @@ function add_new_rows(id_brg, nama_brg, jumlah) {
                 '<td align=center>'+jml+'</td>'+
                 '<td>&nbsp;'+nama_brg+' <input type=hidden name=id_barang[] value="'+id_brg+'" class=id_barang id=id_barang'+jml+' /></td>'+
                 '<td><input type=text name=jumlah[] id=jumlah'+jml+' value="'+jumlah+'" style="text-align: center;" /></td>'+
-                '<td><select name=kemasan[] id=kemasan'+jml+'><option value="">Pilih ...</option></select></td>'+
+                '<td><input type=hidden name=harga_jual[] id=harga_jual'+jml+' /> <select name=kemasan[] id=kemasan'+jml+'><option value="">Pilih ...</option></select></td>'+
                 '<td align=right id=hargajual'+jml+'></td>'+
-                '<td><input type=text name=diskon_rupiah[] style="text-align: right;" id=diskon_rupiah'+jml+' value="0" /></td>'+
-                '<td><input type=text name=diskon_persen[] style="text-align: center;" id=diskon_persen'+jml+' value="0" /></td>'+
+                '<td><input type=text name=diskon_rupiah[] style="text-align: right;" id=diskon_rupiah'+jml+' value="0" readonly /></td>'+
+                '<td><input type=text name=diskon_persen[] style="text-align: center;" id=diskon_persen'+jml+' value="0" readonly /></td>'+
                 '<td align=right id=subtotal'+jml+'></td>'+
                 '<td align=center><img onclick=removeMe('+jml+'); title="Klik untuk hapus" src="img/icons/delete.png" class=add_kemasan align=left /></td>'+
               '</tr>';
@@ -130,7 +132,7 @@ function form_add() {
                 '<tr><td width=20%>Nama Barang:</td><td><?= form_input('barang', NULL, 'id=barang size=40') ?><?= form_hidden('id_barang', NULL, 'id=id_barang') ?></td></tr>'+
                 '<tr><td>Jumlah:</td><td><input type=text value="1" size=5 id=pilih /></td></tr>'+
                 '<tr><td>TOTAL:</td><td style="font-size: 40px;" id=total-penjualan>0</td></tr>'+
-            '</table></td></tr></table>'+
+            '</table><input type=hidden name=total_penjualan id=total_penjualan /></td></tr></table>'+
             '<table width=100% cellspacing="0" class="list-data-input" id="pesanan-list"><thead>'+
                 '<tr><th width=5%>No.</th>'+
                     '<th width=33%>Nama Barang</th>'+
@@ -251,22 +253,7 @@ function form_add() {
         }
         if (jumlah > 0) {
             for (i = 1; i <= jumlah; i++) {
-                if ($('#id_barang'+i).val() === '') {
-                    alert_empty('Barang','#barang'+i);
-                    return false;
-                }
-                if ($('#nobatch'+i).val() === '') {
-                    alert_empty('No. batch','#nobatch'+i);
-                    return false;
-                }
-                if ($('#ed'+i).val() === '') {
-                    alert_empty('expired date','#nobatch'+i);
-                    return false;
-                }
-                if ($('#masuk'+i).val() === '' || $('#keluar'+i).val() === '') {
-                    alert_empty('masuk & keluar','#masuk'+i);
-                    return false;
-                }
+                // alert here
             }
         }
         $.ajax({
@@ -279,6 +266,8 @@ function form_add() {
                     alert_tambah();
                     load_data_penjualannr();
                     $('#pesanan-list tbody').html('');
+                    $('#total_penjualan').val('');
+                    $('#total-penjualan').html('0');
                 }
             }
             
