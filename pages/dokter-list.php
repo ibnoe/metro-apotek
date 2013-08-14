@@ -13,6 +13,7 @@ include_once '../inc/functions.php';
     <th width="10%">Email</th>
     <th width="10%">No. STR</th>
     <th width="5%">Spesialis</th>
+    <th width="5%">Fee %</th>
     <th width="4%">#</th>
 </tr>
 </thead>
@@ -38,7 +39,7 @@ include_once '../inc/functions.php';
     $total_data = $list_data['total'];
     foreach ($master_dokter as $key => $data) { 
         $str = $data->id.'#'.$data->nama.'#'.$data->kelamin.'#'.$data->alamat.'#'.
-                $data->telp.'#'.$data->email.'#'.$data->no_str.'#'.$data->spesialis.'#'.datefmysql($data->tgl_mulai_praktek);
+                $data->telp.'#'.$data->email.'#'.$data->no_str.'#'.$data->spesialis.'#'.datefmysql($data->tgl_mulai_praktek).'#'.$data->fee;
         ?>
     <tr class="<?= ($key%2==0)?'even':'odd' ?>">
         <td align="center"><?= (++$key+$offset) ?></td>
@@ -49,6 +50,7 @@ include_once '../inc/functions.php';
         <td><?= $data->email ?></td>
         <td><?= $data->no_str ?></td>
         <td><?= $data->spesialis ?></td>
+        <td align="center"><?= rupiah($data->fee) ?></td>
         <td class='aksi' align='center'>
             <a class='edition' onclick="edit_dokter('<?= $str ?>');" title="Klik untuk edit dokter">&nbsp;</a>
             <a class='deletion' onclick="delete_dokter('<?= $data->id ?>', '<?= $page ?>');" title="Klik untuk hapus dokter">&nbsp;</a>

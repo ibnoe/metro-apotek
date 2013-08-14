@@ -55,7 +55,8 @@ $(function() {
             $data->indikasi.'#'.$data->dosis.'#'.$data->kandungan.'#'.$data->perhatian.'#'.$data->kontra_indikasi.'#'.
             $data->efek_samping.'#'.
             $data->stok_minimal.'#'.$data->margin_non_resep.'#'.$data->margin_resep.'#'.$data->plus_ppn.'#'.$data->hna.'#'.$data->aktif.'#'.
-            $data->aturan_pakai.'#'.$data->id_farmakoterapi.'#'.$data->id_kelas_terapi.'#'.$data->fda_pregnancy.'#'.$data->fda_lactacy.'#'.$data->perundangan;
+            $data->aturan_pakai.'#'.$data->id_farmakoterapi.'#'.$data->id_kelas_terapi.'#'.$data->fda_pregnancy.'#'.$data->fda_lactacy.'#'.$data->perundangan.'#'.
+            $data->barcode;
         ?>
     <tr class="<?= ($key%2==0)?'even':'odd' ?>">
         <td align="center"><?= (++$key+$offset) ?></td>

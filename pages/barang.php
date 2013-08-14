@@ -1,7 +1,8 @@
 <?php
 $subNav = array(
 	"Basic Data ; barang.php ; #509601;",
-        "Pelengkap ; pelengkap.php ; #509601;"
+        "Pelengkap ; pelengkap.php ; #509601;",
+        "Item Kit ; item-kit.php ; #509601;"
 );
 
 set_include_path("../");
@@ -48,6 +49,7 @@ function kemasan_add(i) {
             '<img onclick=delete_setting_harga('+i+'); title="Klik untuk delete" src="img/icons/delete.png" class=delete_kemasan align=right style="margin: 0 5px;" />'+
             '<input type=hidden name=jumlah value="'+i+'" /></td></tr>';
     $('.packing').append(str);
+    $('#barcode'+i).val($('#barcode').val());
     config_auto_suggest(i);
     $('#checkbox'+i).mouseover(function() {
         if ($(this).is(':checked') === false) {
@@ -98,13 +100,16 @@ function add_setting_harga(i) {
 function detail_hitung_dinamic(i,j,status) {
     var isi = ($('#isi'+i).val()*$('#isi_kecil'+i).val());
     var mar_nr  = $('#margin_nr').val();
+    var hna     = parseInt(currencyToNumber($('#hna').val()))*isi;
     var rp_nr   = parseInt(currencyToNumber($('#margin_nr_rp').val()))*isi;
+    var rp_r    = parseInt(currencyToNumber($('#margin_r_rp').val()))*isi;
     if (status !== 'edit') {
         $('#margin_nr'+i+''+j).val(mar_nr);
         $('#margin_nr_rp'+i+''+j).val(numberToCurrency(parseInt(rp_nr)));
     } else {
         var margin_nr_pr = ($('#margin_nr'+i+''+j).val()/100);
-        var margin_nr_rp = rp_nr+(rp_nr*margin_nr_pr);
+        var margin_nr_rp = hna+(hna*margin_nr_pr);
+        //alert(rp_nr+' '+rp_nr+' '+margin_nr_pr);
         $('#margin_nr_rp'+i+''+j).val(numberToCurrency(parseInt(margin_nr_rp)));
     }
     var mar_r   = $('#margin_r').val();
@@ -114,7 +119,8 @@ function detail_hitung_dinamic(i,j,status) {
         $('#margin_r_rp'+i+''+j).val(numberToCurrency(parseInt(rp_r)));
     } else {
         var margin_r_pr = ($('#margin_r'+i+''+j).val()/100);
-        var margin_r_rp = rp_nr+(rp_nr*margin_r_pr);
+        var margin_r_rp = hna+(hna*margin_r_pr);
+        //alert(rp_r+' '+rp_r+' '+margin_r_pr);
         $('#margin_r_rp'+i+''+j).val(numberToCurrency(parseInt(margin_r_rp)));
     }
     $('#d_persen'+i+''+j).keyup(function() {
@@ -134,13 +140,13 @@ function detail_hitung_dinamic(i,j,status) {
     });
     $('#margin_nr'+i+''+j).keyup(function() {
         var margin_nr_pr= ($(this).val()/100);
-        var margin_nr_rp= rp_nr+(rp_nr*margin_nr_pr);
+        var margin_nr_rp= hna+(hna*margin_nr_pr);
         $('#margin_nr_rp'+i+''+j).val(numberToCurrency(parseInt(margin_nr_rp)));
         hitung_dinamic_hja(i,j);
     });
     $('#margin_r'+i+''+j).keyup(function() {
         var margin_r_pr= ($(this).val()/100);
-        var margin_r_rp= rp_nr+(rp_nr*margin_r_pr);
+        var margin_r_rp= hna+(hna*margin_r_pr);
         $('#margin_r_rp'+i+''+j).val(numberToCurrency(parseInt(margin_r_rp)));
         hitung_dinamic_hja(i,j);
     });
@@ -224,8 +230,9 @@ var str = '<div id=form_add>'+
                         '<li><a href="#tabs-3">Kemasan Produk</a></li>'+
                     '</ul>'+
                     '<div id="tabs-1"><?= form_hidden('id_barang', NULL, 'id=id_barang') ?>'+
-                            '<table width="100%"><tr valign=top><td width="60%"><table width=100% class=data-input>'+
-                                '<tr><td width=48%>Nama Barang:</td><td><?= form_input('nama', NULL, 'id=nama size=50 onBlur="javascript:this.value=this.value.toUpperCase();"') ?></td></tr>'+
+                            '<table width="100%"><tr valign=top><td width="55%"><table width=100% class=data-input>'+
+                                '<tr><td>Barcode:</td><td><?= form_input('barcode', NULL, 'id=barcode style="min-width: 147px;"') ?></td></tr>'+
+                                '<tr><td width=30%>Nama Barang:</td><td><?= form_input('nama', NULL, 'id=nama size=50 onBlur="javascript:this.value=this.value.toUpperCase();"') ?></td></tr>'+
                                 '<tr><td>Pabrik:</td><td><?= form_input('pabrik', NULL, 'id=pabrik size=50') ?><?= form_hidden('id_pabrik', NULL, 'id=id_pabrik') ?></td></tr>'+
                                 '<tr><td>Kekuatan:</td><td><?= form_input('kekuatan', NULL, 'id=kekuatan style="min-width: 147px;"') ?></td></tr>'+
                                 '<tr><td>Satuan Kekuatan:</td><td><select name=s_sediaan id=s_sediaan><option value="">Pilih ...</option><?php foreach ($satuan_kekuatan as $data) { echo '<option value="'.$data->id.'">'.$data->nama.'</option>'; } ?></select></td></tr>'+
@@ -237,13 +244,13 @@ var str = '<div id=form_add>'+
                                 '<tr><td>Perundangan:</td><td><select name="perundangan" id="perundangan"><?php foreach ($perundangan as $data) { echo '<option value="'.$data.'">'.$data.'</option>'; } ?></select></td></tr>'+
                                 '<tr><td>Farmakoterapi:</td><td><select style="max-width: 147px;" name=farmakoterapi id=farmakoterapi><option value="">Pilih ...</option><?php foreach ($farmakoterapi as $data) { echo '<option value="'.$data->id.'">'.$data->nama.'</option>'; } ?></select></td></tr>'+
                                 '<tr><td>Kelas Terapi:</td><td><select name=kls_terapi id=kls_terapi style="max-width: 147px;"><option value="">Pilih ...</option></select></td></tr></table></div>'+
-                                '</td><td width=2%>&nbsp;</td><td width=38%>'+
+                                '</td><td width=1%>&nbsp;</td><td width=40%>'+
                                 '<table width=100% class=data-input>'+
-                                    '<tr><td>Rak:</td><td><?= form_input('rak', NULL, 'id=rak style="min-width: 147px;"') ?></td></tr>'+
-                                    '<tr><td width=50%>Stok Minimal:</td><td><?= form_input('stok_min', NULL, 'id=stok_min style="width: 60px;"') ?></td></tr>'+
-                                    '<tr><td>Margin Non Resep:</td><td><?= form_input('margin_nr', NULL, 'id=margin_nr style="width: 60px;" onkeyup=hitung_hja()') ?> % <?= form_input('margin_nr_rp', NULL, 'id=margin_nr_rp style="width: 63px;" disabled') ?></td></tr>'+
-                                    '<tr><td>Margin Resep:</td><td><?= form_input('margin_r', NULL, 'id=margin_r style="width: 60px;" onkeyup=hitung_hja()') ?> % <?= form_input('margin_r_rp', NULL, 'id=margin_r_rp disabled style="width: 63px;"') ?></td></tr>'+
-                                    '<tr><td>HNA:</td><td><?= form_input('hna', NULL, 'id=hna onblur="FormNum(this)" onkeyup=hitung_hja() style="width: 147px;"') ?></td></tr>'+
+                                    '<tr><td>Rak:</td><td><?= form_input('rak', NULL, 'id=rak style="width: 70px;"') ?></td></tr>'+
+                                    '<tr><td width=40%>Stok Minimal:</td><td><?= form_input('stok_min', NULL, 'id=stok_min style="width: 70px;"') ?></td></tr>'+
+                                    '<tr><td>HNA:</td><td><?= form_input('hna', NULL, 'id=hna onblur="FormNum(this)" onkeyup=hitung_hja() style="width: 70px;"') ?></td></tr>'+
+                                    '<tr><td>Margin Non Resep:</td><td><?= form_input('margin_nr', NULL, 'id=margin_nr style="width: 70px;" onkeyup=hitung_hja()') ?> %, H. Jual <?= form_input('margin_nr_rp', NULL, 'id=margin_nr_rp style="width: 63px;"') ?></td></tr>'+
+                                    '<tr><td>Margin Resep:</td><td><?= form_input('margin_r', NULL, 'id=margin_r style="width: 70px;" onkeyup=hitung_hja()') ?> %, H. Jual <?= form_input('margin_r_rp', NULL, 'id=margin_r_rp style="width: 63px;" onblur=FormNum(this)') ?></td></tr>'+
                                     '<tr><td></td><td>&nbsp;</td></tr>'+
                                     '<tr><td></td><td><?= form_checkbox('aktifasi', '1', 'aktifasi', 'Aktifasi') ?></td></tr>'+
                                 '</table>'+
@@ -271,6 +278,21 @@ var str = '<div id=form_add>'+
               '</div>';
     $('body').append(str);
     $('#tabs').tabs();
+    $('textarea').focus(function() {
+        $(this).select();
+    });
+    $('#margin_nr_rp').keyup(function() {
+        var hna     = parseInt(currencyToNumber($('#hna').val()));
+        var hja     = parseInt(currencyToNumber($(this).val()));
+        var mar_nr  = ((hja-hna)/hna)*100;
+        $('#margin_nr').val(isNaN(mar_nr)?'':Math.ceil(mar_nr));
+    });
+    $('#margin_r_rp').keyup(function() {
+        var hna     = parseInt(currencyToNumber($('#hna').val()));
+        var hja     = parseInt(currencyToNumber($(this).val()));
+        var mar_r   = ((hja-hna)/hna)*100;
+        $('#margin_r').val(isNaN(mar_r)?'':Math.ceil(mar_r));
+    });
     $('add_kemasan').button();
     $('#farmakoterapi').change(function() {
         var id = $(this).val();
@@ -380,7 +402,7 @@ var str = '<div id=form_add>'+
         title: 'Tambah Barang',
         autoOpen: true,
         modal: true,
-        width: 800,
+        width: 950,
         height: 480,
         hide: 'clip',
         show: 'blind',
@@ -397,7 +419,7 @@ var str = '<div id=form_add>'+
             var jml = $('.mother').length;
             kemasan_add(jml);
             $('.mother:eq('+jml+')').attr('id', 'mother'+jml);
-            $('#nama').focus();
+            $('#barcode').focus();
         }
     });
     
@@ -438,7 +460,7 @@ var str = '<div id=form_add>'+
             success: function(data) {
                 if (data.status === true) {
                     if (cek_id === '') {
-                        alert_tambah();
+                        alert_tambah('#barcode');
                         $('input[type=text], textarea, select').val('');
                         load_data_barang('1','',data.id_barang);
                     } else {
@@ -476,6 +498,7 @@ function paging(page, tab, search) {
 function edit_barang(str) {
     var arr = str.split('#');
     form_add();
+    $('#barcode').val(arr[30]);
     $('#id_barang').val(arr[0]);
     $('#nama').val(arr[1]);
     $('#kekuatan').val(arr[2]);

@@ -1,10 +1,13 @@
 <script type="text/javascript">
-function alert_tambah() {
+function alert_tambah(param) {
     $( "#tambah" ).dialog({
         modal: true,
         buttons: {
           Ok: function() {
             $( this ).dialog( "close" );
+            if (param !== undefined) {
+                $(param).focus();
+            }
           }
         }
     });

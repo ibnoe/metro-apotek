@@ -27,6 +27,7 @@ var str = '<div id=form_add>'+
                 '<tr><td>No. STR:</td><td><?= form_input('nostr', '', 'id=nostr size=40') ?></td></tr>'+
                 '<tr><td>Spesialis:</td><td><?= form_input('spesialis', '', 'id=spesialis size=40') ?></td></tr>'+
                 '<tr><td>Tgl Mulai Praktek:</td><td><?= form_input('tglmulai', '', 'id=tglmulai size=40') ?></td></tr>'+
+                '<tr><td>Fee:</td><td><?= form_input('fee', '', 'id=fee size=10') ?> %</td></tr>'+
             '</table>'+
             '</form>'+
             '</div>';
@@ -38,7 +39,7 @@ var str = '<div id=form_add>'+
         title: 'Tambah Customer',
         autoOpen: true,
         width: 480,
-        height: 320,
+        height: 350,
         modal: true,
         hide: 'clip',
         show: 'blind',
@@ -101,13 +102,21 @@ var str = '<div id=form_add>'+
     });
 }
 $mainNav.set("home");
-$('button').button({
+$('#button').button({
     icons: {
         primary: 'ui-icon-newwin'
     }
 });
 $('#button').click(function() {
     form_add();
+});
+$('#reset').button({
+    icons: {
+        primary: 'ui-icon-refresh'
+    }
+});
+$('#reset').click(function() {
+    load_data_dokter();
 });
 $.plugin($afterSubPageShow,{ // <-- event is here
     showAlert:function(){ // <-- random function name is here (choose whatever you want)
@@ -148,7 +157,7 @@ function edit_dokter(str) {
     $('#nostr').val(arr[6]);
     $('#spesialis').val(arr[7]);
     $('#tglmulai').val(arr[8]);
-    
+    $('#fee').val(numberToCurrency(arr[9]));
 }
 
 function delete_dokter(id, page) {
@@ -177,6 +186,7 @@ function delete_dokter(id, page) {
 <h1 class="margin-t-0">Data dokter</h1>
 <hr>
 <button id="button">Tambah Data</button>
+<button id="reset">Reset</button>
 <div id="result-dokter">
     
 </div>

@@ -52,6 +52,26 @@ function load_data_pabrik($param) {
     return $result;
 }
 
+function load_data_jadwal_praktek($param) {
+    $q = null;
+    if ($param['id'] !== '') {
+        $q = " and id = '".$param['id']."'";
+    }
+    $limit = " limit ".$param['start'].", ".$param['limit']."";
+    $sql = "select j.*, d.nama from jadwal_dokter j join
+         dokter d on (d.id = j.id_dokter)";
+    
+    $query = mysql_query($sql.$limit);
+    $data = array();
+    while ($row = mysql_fetch_object($query)) {
+        $data[] = $row;
+    }
+    $total = mysql_num_rows(mysql_query($sql));
+    $result['data'] = $data;
+    $result['total']= $total;
+    return $result;
+}
+
 function load_data_instansi($param) {
     $q = null;
     if ($param['id'] !== '') {
@@ -397,6 +417,10 @@ function tarif_load_data() {
         $data[] = $row;
     }
     return $data;
+}
+
+function get_data_day() {
+    return array('Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu');
 }
 
 ?>

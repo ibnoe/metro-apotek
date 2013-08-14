@@ -10,6 +10,8 @@ table.data-input input[type=text], table.data-input textarea { margin: 0.5px; ma
 .data-input { border: 1px solid #999; background: #f4f4f4; padding: 10px 5px; font-size: 11px; }
 .data-input .small-input { min-width: 92px; }
 .data-input label { margin-left: 0; margin-right: 10px; }
+.data-input input[type=text]:focus, .data-input textarea:focus, .data-input input[type=radio] { border: 1px solid blue; }
+.data-input select:focus { border: 1px solid blue; padding: 1px 1px 1px 2px; }
 .data-input select { margin-left: 0.5px; margin-top: 1px; margin-bottom: 1px; min-width: 155px; }
 .data-input input[type=radio] { margin-left: 0; margin-right: 2px; }
 .data-input input[type=checkbox], .data-input input[type=file] { margin-left: 0; }
