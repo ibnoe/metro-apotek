@@ -222,7 +222,7 @@ function hitung_hja() {
 
 function form_add() {
 var str = '<div id=form_add>'+
-            '<form id="form_barang">'+
+            '<form id="form_barang" action="models/update-masterdata.php?method=save_barang" enctype="multipart/form-data">'+
                 '<div id="tabs">'+
                     '<ul>'+
                         '<li><a href="#tabs-1">Data Utama</a></li>'+
@@ -251,7 +251,7 @@ var str = '<div id=form_add>'+
                                     '<tr><td>HNA:</td><td><?= form_input('hna', NULL, 'id=hna onblur="FormNum(this)" onkeyup=hitung_hja() style="width: 70px;"') ?></td></tr>'+
                                     '<tr><td>Margin Non Resep:</td><td><?= form_input('margin_nr', NULL, 'id=margin_nr style="width: 70px;" onkeyup=hitung_hja()') ?> %, H. Jual <?= form_input('margin_nr_rp', NULL, 'id=margin_nr_rp style="width: 63px;"') ?></td></tr>'+
                                     '<tr><td>Margin Resep:</td><td><?= form_input('margin_r', NULL, 'id=margin_r style="width: 70px;" onkeyup=hitung_hja()') ?> %, H. Jual <?= form_input('margin_r_rp', NULL, 'id=margin_r_rp style="width: 63px;" onblur=FormNum(this)') ?></td></tr>'+
-                                    '<tr><td></td><td>&nbsp;</td></tr>'+
+                                    '<tr><td>Image:</td><td><?= form_upload('mFile',null,'id=mFile') ?></td></tr>'+
                                     '<tr><td></td><td><?= form_checkbox('aktifasi', '1', 'aktifasi', 'Aktifasi') ?></td></tr>'+
                                 '</table>'+
                             '</td></tr></table>'+
@@ -322,31 +322,6 @@ var str = '<div id=form_add>'+
         $('.mother:eq('+jml+')').attr('id', 'mother'+jml);
     });
     var lebar = $('#pabrik').width();
-    /*$('#nama').autocomplete("models/autocomplete.php?method=barang",
-    {
-        parse: function(data){
-            var parsed = [];
-            for (var i=0; i < data.length; i++) {
-                parsed[i] = {
-                    data: data[i],
-                    value: data[i].nama // nama field yang dicari
-                };
-            }
-            return parsed;
-        },
-        formatItem: function(data,i,max){
-            var str = '<div class=result>'+data.nama_barang+'</div>';
-            return str;
-        },
-        width: lebar, // panjang tampilan pencarian autocomplete yang akan muncul di bawah textbox pencarian
-        dataType: 'json', // tipe data yang diterima oleh library ini disetup sebagai JSON
-        cacheLength: 0
-    }).result(
-    function(event,data,formated){
-        $(this).val(data.nama_barang);
-        $('#hna').val(numberToCurrency(data.hna));
-        $('#id_barang').val(data.id);
-    });*/
     $('#pabrik').autocomplete("models/autocomplete.php?method=pabrik",
     {
         parse: function(data){
@@ -393,11 +368,6 @@ var str = '<div id=form_add>'+
         $(this).val(data.nama);
         $('#id_supplier').val(data.id);
     });
-    var wWidth = $(window).width();
-    var dWidth = wWidth * 0.8;
-    
-    var wHeight= $(window).height();
-    var dHeight= wHeight * 1;
     $('#form_add').dialog({
         title: 'Tambah Barang',
         autoOpen: true,
@@ -437,7 +407,9 @@ var str = '<div id=form_add>'+
     });
     
     
-    $('#form_barang').submit(function() {
+    $('#form_barang').on('submit', function(e)
+    {
+        e.preventDefault();
         if ($('#nama').val() === '') {
             alert('Nama produk tidak boleh kosong !');
             $('#nama').focus(); return false;
@@ -451,13 +423,10 @@ var str = '<div id=form_add>'+
             $('#h_pokok').focus(); return false;
         }
         var cek_id = $('#id_barang').val();
-        $.ajax({
-            url: 'models/update-masterdata.php?method=save_barang',
-            type: 'POST',
+        $(this).ajaxSubmit({
+            target: '#output',
             dataType: 'json',
-            data: $(this).serialize(),
-            cache: false,
-            success: function(data) {
+            success:  function(data) {
                 if (data.status === true) {
                     if (cek_id === '') {
                         alert_tambah('#barcode');
@@ -473,7 +442,7 @@ var str = '<div id=form_add>'+
                 }
             }
         });
-        return false;
+        //return false;
     });
 }
 function load_data_barang(page, search, id) {

@@ -55,11 +55,11 @@ function load_data_pabrik($param) {
 function load_data_jadwal_praktek($param) {
     $q = null;
     if ($param['id'] !== '') {
-        $q = " and id = '".$param['id']."'";
+        $q = " and j.id = '".$param['id']."'";
     }
     $limit = " limit ".$param['start'].", ".$param['limit']."";
     $sql = "select j.*, d.nama from jadwal_dokter j join
-         dokter d on (d.id = j.id_dokter)";
+         dokter d on (d.id = j.id_dokter) order by d.nama";
     
     $query = mysql_query($sql.$limit);
     $data = array();
@@ -67,8 +67,11 @@ function load_data_jadwal_praktek($param) {
         $data[] = $row;
     }
     $total = mysql_num_rows(mysql_query($sql));
+    $page  = mysql_num_rows(mysql_query("select j.*, d.nama from jadwal_dokter j join
+         dokter d on (d.id = j.id_dokter) group by d.id"));
     $result['data'] = $data;
     $result['total']= $total;
+    
     return $result;
 }
 
@@ -192,10 +195,11 @@ function load_data_layanan($param) {
 
 function load_data_asuransi($id = null) {
     $q = null;
-    if ($id !== '') {
+    if ($id !== NULL) {
         $q = "where id = '$id'";
     }
     $sql = "select * from asuransi $q order by nama asc";
+    //echo $sql;
     $query = mysql_query($sql);
     $data = array();
     while ($row = mysql_fetch_object($query)) {

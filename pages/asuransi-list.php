@@ -13,7 +13,7 @@ include_once '../inc/functions.php';
 </thead>
 <tbody>
     <?php 
-    $limit = 2;
+    $limit = 10;
     $page  = $_GET['page'];
     if ($_GET['page'] === '') {
         $page = 1;

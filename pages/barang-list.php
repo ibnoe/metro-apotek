@@ -60,7 +60,7 @@ $(function() {
         ?>
     <tr class="<?= ($key%2==0)?'even':'odd' ?>">
         <td align="center"><?= (++$key+$offset) ?></td>
-        <td><?= $data->nama.' '.$data->kekuatan.' '.$data->satuan ?></td>
+        <td><span title="<img src='img/barang/<?= $data->image ?>' />"><?= $data->nama.' '.$data->kekuatan.' '.$data->satuan ?></span></td>
         <td><?= $data->pabrik ?></td>
         <td align="center"><?= $data->kekuatan ?></td>
         <td align="center"><?= $data->satuan ?></td>

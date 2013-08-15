@@ -96,13 +96,21 @@ var str = '<div id=form_add>'+
     });
 }
 $mainNav.set("home");
-$('button').button({
+$('#button').button({
     icons: {
         primary: 'ui-icon-newwin'
     }
 });
 $('#button').click(function() {
     form_add();
+});
+$('#reset').button({
+    icons: {
+        primary: 'ui-icon-refresh'
+    }
+});
+$('#reset').click(function() {
+    load_data_asuransi();
 });
 $.plugin($afterSubPageShow,{ // <-- event is here
     showAlert:function(){ // <-- random function name is here (choose whatever you want)
@@ -166,6 +174,7 @@ function delete_asuransi(id, page) {
 <h1 class="margin-t-0">Data asuransi</h1>
 <hr>
 <button id="button">Tambah Data</button>
+<button id="reset">Reset</button>
 <div id="result-asuransi">
     
 </div>

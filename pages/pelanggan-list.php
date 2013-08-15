@@ -49,7 +49,7 @@ $(function() {
         ?>
     <tr class="<?= ($key%2==0)?'even':'odd' ?>">
         <td align="center"><?= (++$key+$offset) ?></td>
-        <td><span title="<img src='img/pabrik.jpg' />"><?= $data->nama ?></span></td>
+        <td><span title="<img src='img/pelanggan/<?= $data->foto ?>' />"><?= $data->nama ?></span></td>
         <td><?= $data->jenis ?></td>
         <td align="center"><?= $data->kelamin ?></td>
         <td><?= $data->alamat ?></td>

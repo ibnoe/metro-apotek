@@ -21,8 +21,8 @@ var str = '<div id=form_add>'+
             '<?= form_hidden('id_jadwal_praktek', NULL, 'id=id_jadwal_praktek') ?>'+
             '<table width=100% class=data-input>'+
                 '<tr><td width=30%>Nama:</td><td width=70%><?= form_input('dokter', NULL, 'id=dokter size=40 onBlur="javascript:this.value=this.value.toUpperCase();"') ?> <?= form_hidden('id_dokter', NULL, 'id=id_dokter') ?></td></tr>'+
-                '<tr><td>Hari:</td><td><select name=hari id=hari><option value="">Pilih ...</option><?php foreach ($hari as $data) { echo '<option value="'.$data.'">'.$data.'</option>'; } ?></select></td></tr>'+
-                '<tr><td>Jam:</td><td><?= form_input('jam', '', 'id=jam size=10 maxlength=5') ?> Ex: 07:00, 18:30</td></tr>'+
+                '<tr><td>Hari:</td><td><select name=hari id=hari style="min-width: 152px;"><option value="">Pilih ...</option><?php foreach ($hari as $data) { echo '<option value="'.$data.'">'.$data.'</option>'; } ?></select></td></tr>'+
+                '<tr><td>Jam:</td><td><?= form_input('jam', '', 'id=jam size=6 maxlength=5') ?> s . d <?= form_input('akhir', NULL, 'id=akhir size=6 maxlength=5') ?> Ex: 07:00, 18:30</td></tr>'+
             '</table>'+
             '</form>'+
             '</div>';
@@ -92,7 +92,7 @@ var str = '<div id=form_add>'+
             success: function(data) {
                 if (data.status === true) {
                     if (cek_id === '') {
-                        alert_tambah();
+                        alert_tambah('#nama');
                         $('input[type=text]').val('');
                         load_data_jadwal_praktek('1','',data.id_jadwal_praktek);
                     } else {
@@ -157,6 +157,7 @@ function edit_jadwal_praktek(str) {
     $('#id_dokter').val(arr[2]);
     $('#hari').val(arr[3]);
     $('#jam').val(arr[4]);
+    $('#akhir').val(arr[5]);
 }
 
 function delete_jadwal_praktek(id, page) {

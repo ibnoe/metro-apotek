@@ -36,6 +36,53 @@ if ($method === 'save_barang') {
     $fda_pregnan= $_POST['fda_pregnan'];
     $fda_lactacy= $_POST['fda_lactacy'];
     $id_barang  = $_POST['id_barang'];
+    $UploadDirectory	= '../img/barang/'; //Upload Directory, ends with slash & make sure folder exist
+    $NewFileName= NULL;
+        // replace with your mysql database details
+    if (!@file_exists($UploadDirectory)) {
+            //destination folder does not exist
+            die("Make sure Upload directory exist!");
+    }
+    if(isset($_FILES['mFile']['name'])) {
+
+            $FileName           = strtolower($_FILES['mFile']['name']); //uploaded file name
+            $FileTitle		= mysql_real_escape_string($_POST['nama']); // file title
+            $ImageExt		= substr($FileName, strrpos($FileName, '.')); //file extension
+            $FileType		= $_FILES['mFile']['type']; //file type
+            //$FileSize		= $_FILES['mFile']["size"]; //file size
+            $RandNumber   		= rand(0, 9999999999); //Random number to make each filename unique.
+            //$uploaded_date		= date("Y-m-d H:i:s");
+
+            switch(strtolower($FileType))
+            {
+                    //allowed file types
+                    case 'image/png': //png file
+                    case 'image/gif': //gif file 
+                    case 'image/jpeg': //jpeg file
+                    case 'application/pdf': //PDF file
+                    case 'application/msword': //ms word file
+                    case 'application/vnd.ms-excel': //ms excel file
+                    case 'application/x-zip-compressed': //zip file
+                    case 'text/plain': //text file
+                    case 'text/html': //html file
+                            break;
+                    default:
+                            die('Unsupported File!'); //output error
+            }
+
+
+            //File Title will be used as new File name
+            $NewFileName = preg_replace(array('/\s/', '/\.[\.]+/', '/[^\w_\.\-]/'), array('_', '.', ''), strtolower($FileTitle));
+            $NewFileName = $NewFileName.'_'.$RandNumber.$ImageExt;
+       //Rename and save uploded file to destination folder.
+       if(move_uploaded_file($_FILES['mFile']["tmp_name"], $UploadDirectory . $NewFileName ))
+       {
+                    //die('Success! File Uploaded.');
+
+       }else{
+                    //die('error uploading File!');
+       }
+    }
     if ($id_barang === '') {
         $sql = "insert into barang set
                 barcode = '$barcode',
@@ -65,7 +112,8 @@ if ($method === 'save_barang') {
                 margin_resep = '$margin_r',
                 plus_ppn = '$plus_ppn',
                 hna = '$hna',
-                aktif = '$aktif'";
+                aktif = '$aktif',
+                image = '$NewFileName'";
         mysql_query($sql);
         $id = mysql_insert_id();
         
@@ -117,7 +165,7 @@ if ($method === 'save_barang') {
             }
         }
     } else {
-        $sql = "update barang set
+        $sql= "update barang set
                 barcode = '$barcode',
                 nama = '$nama',
                 id_pabrik = $pabrik,
@@ -145,8 +193,12 @@ if ($method === 'save_barang') {
                 margin_resep = '$margin_r',
                 plus_ppn = '$plus_ppn',
                 hna = '$hna',
-                aktif = '$aktif'
-            where id = '$id_barang'";
+                aktif = '$aktif'";
+        
+        if (isset($_FILES['mFile']['name']) and $_FILES['mFile']['name'] !== '') {
+            $sql.= ",image = '$NewFileName'";
+        }
+        $sql.="where id = '$id_barang'";
         mysql_query($sql);
         $id = $id_barang;
         
@@ -380,6 +432,53 @@ if ($method === 'save_pelanggan') {
     $id_asuransi= ($_POST['asuransi'] !== '')?$_POST['asuransi']:'NULL';
     $nopolish   = $_POST['nopolish'];
     $id_cust    = $_POST['id_pelanggan'];
+    $UploadDirectory	= '../img/pelanggan/'; //Upload Directory, ends with slash & make sure folder exist
+    $NewFileName= NULL;
+        // replace with your mysql database details
+    if (!@file_exists($UploadDirectory)) {
+            //destination folder does not exist
+            die("Make sure Upload directory exist!");
+    }
+    if(isset($_FILES['mFile']['name'])) {
+
+            $FileName           = strtolower($_FILES['mFile']['name']); //uploaded file name
+            $FileTitle		= mysql_real_escape_string($_POST['nama']); // file title
+            $ImageExt		= substr($FileName, strrpos($FileName, '.')); //file extension
+            $FileType		= $_FILES['mFile']['type']; //file type
+            //$FileSize		= $_FILES['mFile']["size"]; //file size
+            $RandNumber   		= rand(0, 9999999999); //Random number to make each filename unique.
+            //$uploaded_date		= date("Y-m-d H:i:s");
+
+            switch(strtolower($FileType))
+            {
+                    //allowed file types
+                    case 'image/png': //png file
+                    case 'image/gif': //gif file 
+                    case 'image/jpeg': //jpeg file
+                    case 'application/pdf': //PDF file
+                    case 'application/msword': //ms word file
+                    case 'application/vnd.ms-excel': //ms excel file
+                    case 'application/x-zip-compressed': //zip file
+                    case 'text/plain': //text file
+                    case 'text/html': //html file
+                            break;
+                    default:
+                            die('Unsupported File!'); //output error
+            }
+
+
+            //File Title will be used as new File name
+            $NewFileName = preg_replace(array('/\s/', '/\.[\.]+/', '/[^\w_\.\-]/'), array('_', '.', ''), strtolower($FileTitle));
+            $NewFileName = $NewFileName.'_'.$RandNumber.$ImageExt;
+       //Rename and save uploded file to destination folder.
+       if(move_uploaded_file($_FILES['mFile']["tmp_name"], $UploadDirectory . $NewFileName ))
+       {
+                    //die('Success! File Uploaded.');
+
+       }else{
+                    //die('error uploading File!');
+       }
+    }
     
     if ($id_cust === '') {
         $sql = "
@@ -395,7 +494,8 @@ if ($method === 'save_pelanggan') {
                 diskon = '$diskon',
                 catatan = '$catatan',
                 id_asuransi = $id_asuransi,
-                nopolish = '$nopolish'
+                nopolish = '$nopolish',
+                foto = '$NewFileName'
         ";
         mysql_query($sql);
         $id_pelanggan = mysql_insert_id();
@@ -414,8 +514,11 @@ if ($method === 'save_pelanggan') {
                 diskon = '$diskon',
                 catatan = '$catatan',
                 id_asuransi = $id_asuransi,
-                nopolish = '$nopolish'
-            where id = '$id_cust'
+                nopolish = '$nopolish'";
+                if (isset($_FILES['mFile']['name']) and $_FILES['mFile']['name'] !== '') {
+                    $sql.=",foto = '$NewFileName'";
+                }
+            $sql.="where id = '$id_cust'
         ";
         mysql_query($sql);
         $id_pelanggan = $id_cust;
@@ -484,20 +587,23 @@ if ($method === 'save_jadwal_praktek') {
     $dokter = $_POST['id_dokter'];
     $hari   = $_POST['hari'];
     $jam    = $_POST['jam'];
+    $akhir  = $_POST['akhir'];
     $id_jp  = $_POST['id_jadwal_praktek'];
     
     if ($id_jp === '') {
         $sql = "insert into jadwal_dokter set
             id_dokter = '$dokter',
             hari = '$hari',
-            jam = '$jam'";
+            jam = '$jam',
+            akhir = '$akhir'";
         mysql_query($sql);
         $id = mysql_insert_id();
     } else {
         $sql = "update jadwal_dokter set
             id_dokter = '$dokter',
             hari = '$hari',
-            jam = '$jam'
+            jam = '$jam',
+            akhir = '$akhir'
             where id = '$id_jp'    
             ";
         mysql_query($sql);

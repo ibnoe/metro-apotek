@@ -78,13 +78,13 @@ var str = '<div id=form_add>'+
             success: function(data) {
                 if (data.status === true) {
                     if (cek_id === '') {
-                        alert_tambah();
+                        alert_tambah('#nama');
                         $('input').val('');
                         load_data_pabrik('1','',data.id_pabrik);
                     } else {
                         alert_edit();
                         $('#form_add').dialog().remove();
-                        load_data_pabrik('1','',data.id_pabrik);
+                        load_data_pabrik($('.noblock').html());
                     }
                     
                 }
@@ -94,13 +94,21 @@ var str = '<div id=form_add>'+
     });
 }
 $mainNav.set("home");
-$('button').button({
+$('#button').button({
     icons: {
         primary: 'ui-icon-newwin'
     }
 });
 $('#button').click(function() {
     form_add();
+});
+$('#reset').button({
+    icons: {
+        primary: 'ui-icon-refresh'
+    }
+});
+$('#button').click(function() {
+    load_data_pabrik();
 });
 $.plugin($afterSubPageShow,{ // <-- event is here
     showAlert:function(){ // <-- random function name is here (choose whatever you want)
@@ -164,6 +172,7 @@ function delete_pabrik(id, page) {
 <h1 class="margin-t-0">Data pabrik</h1>
 <hr>
 <button id="button">Tambah Data</button>
+<button id="reset">Reset</button>
 <div id="result-pabrik">
     
 </div>

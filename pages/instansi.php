@@ -94,13 +94,21 @@ var str = '<div id=form_add>'+
     });
 }
 $mainNav.set("home");
-$('button').button({
+$('#button').button({
     icons: {
         primary: 'ui-icon-newwin'
     }
 });
 $('#button').click(function() {
     form_add();
+});
+$('#reset').button({
+    icons: {
+        primary: 'ui-icon-refresh'
+    }
+});
+$('#button').click(function() {
+    load_data_instansi();
 });
 $.plugin($afterSubPageShow,{ // <-- event is here
     showAlert:function(){ // <-- random function name is here (choose whatever you want)
@@ -164,6 +172,7 @@ function delete_instansi(id, page) {
 <h1 class="margin-t-0">Data instansi</h1>
 <hr>
 <button id="button">Tambah Data</button>
+<button id="reset">Reset</button>
 <div id="result-instansi">
     
 </div>

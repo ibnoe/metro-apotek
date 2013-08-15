@@ -15,7 +15,7 @@ $asuransi = load_data_asuransi();
 load_data_pelanggan();
 function form_add() {
 var str = '<div id=form_add>'+
-            '<form action="" method=post id="save_barang">'+
+            '<form action="models/update-masterdata.php?method=save_pelanggan" enctype=multipart/form-data method=post id="save_barang">'+
             '<?= form_hidden('id_pelanggan', NULL, 'id=id_pelanggan enctype="multipart/form-data"') ?>'+
             '<table width=100% class=data-input>'+
                 '<tr><td width=30%>Nama:</td><td width=70%><?= form_input('nama', NULL, 'id=nama size=40 onBlur="javascript:this.value=this.value.toUpperCase();"') ?></td></tr>'+
@@ -29,7 +29,7 @@ var str = '<div id=form_add>'+
                 '<tr><td>Catatan:</td><td><?= form_input('catatan', '', 'id=catatan size=40') ?></td></tr>'+
                 '<tr><td>Asuransi:</td><td><select name="asuransi" id="asuransi"><option value="">Pilih asuransi ...</option><?php foreach ($asuransi as $data) { echo '<option value="'.$data->id.'">'.$data->nama.'</option>'; } ?></select></td></tr>'+
                 '<tr><td>No. Polish:</td><td><?= form_input('nopolish', '', 'id=nopolish size=40') ?></td></tr>'+
-                '<tr><td>Foto:</td><td><?= form_upload('image', '', 'id=image') ?></td></tr>'+
+                '<tr><td>Foto:</td><td><?= form_upload('mFile',null,'id=mFile') ?></td></tr>'+
             '</table>'+
             '</form>'+
             '</div>';
@@ -76,34 +76,23 @@ var str = '<div id=form_add>'+
     
     $('#save_barang').submit(function() {
         if ($('#nama').val() === '') {
-            alert('Nama barang tidak boleh kosong !');
+            alert('Nama pelanggan tidak boleh kosong !');
             $('#nama').focus(); return false;
         }
-        if ($('#kemasan').val() === '') {
-            alert('Kemasan barang tidak boleh kosong !');
-            $('#kemasan').focus(); return false;
-        }
-        if ($('#h_pokok').val() === '') {
-            alert('Harga pokok tidak boleh kosong !');
-            $('#h_pokok').focus(); return false;
-        }
         var cek_id = $('#id_pelanggan').val();
-        $.ajax({
-            url: 'models/update-masterdata.php?method=save_pelanggan',
-            type: 'POST',
+        $(this).ajaxSubmit({
+            target: '#output',
             dataType: 'json',
-            data: $(this).serialize(),
-            cache: false,
-            success: function(data) {
+            success:  function(data) {
                 if (data.status === true) {
                     if (cek_id === '') {
-                        alert_tambah();
+                        alert_tambah('#nama');
                         $('input[type=text]').val('');
-                        load_data_pelanggan('1','',data.id_pabrik);
+                        load_data_pelanggan('1','',data.id_pelanggan);
                     } else {
                         alert_edit();
                         $('#form_add').dialog().remove();
-                        load_data_pelanggan('1','',data.id_pabrik);
+                        load_data_pelanggan($('.noblock').html());
                     }
                     
                 }
