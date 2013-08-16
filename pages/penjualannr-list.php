@@ -16,8 +16,8 @@ $(function() {
         <th width="10%">Diskon Rp.</th>
         <th width="10%">Diskon %</th>
         <th width="10%">PPN %</th>
-        <th width="10%">Tuslah</th>
-        <th width="10%">Embalage</th>
+        <th width="10%">Tuslah RP.</th>
+        <th width="10%">Embalage RP.</th>
         <th width="10%">Total</th>
         <!--<th width="5%">#</th>-->
     </tr>
@@ -50,9 +50,9 @@ $(function() {
             <td align="right"><?= $data->diskon_rupiah ?></td>
             <td align="center"><?= $data->diskon_persen ?></td>
             <td align="center"><?= $data->ppn ?></td>
-            <td align="center"><?= $data->tuslah ?></td>
-            <td align="center"><?= $data->embalage ?></td>
-            <td align="center"><?= $data->total ?></td>
+            <td align="right"><?= $data->tuslah ?></td>
+            <td align="right"><?= $data->embalage ?></td>
+            <td align="right"><?= rupiah($data->total) ?></td>
 <!--            <td class='aksi' align='center'>
                 <a class='edition' onclick="edit_penjualan_nr('<?= $str ?>');" title="Klik untuk edit penjualan_nr">&nbsp;</a>
                 <a class='deletion' onclick="delete_penjualan_nr('<?= $data->id ?>','<?= $page ?>');" title="Klik untuk hapus penjualan_nr">&nbsp;</a>

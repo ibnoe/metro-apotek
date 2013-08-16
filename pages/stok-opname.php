@@ -9,6 +9,10 @@ include_once("pages/message.php");
 <script type="text/javascript">
 $(document).tooltip();
 load_data_stokopname();
+function removeMe(el) {
+    var parent = el.parentNode.parentNode;
+    parent.parentNode.removeChild(parent);
+}
 function add_new_rows(id_brg, nama_brg) {
     var jml = $('.tr_rows').length+1;
     
@@ -20,7 +24,7 @@ function add_new_rows(id_brg, nama_brg) {
                 '<td align=center id=sisa'+jml+'></td>'+
                 '<td><input type=text name=masuk[] id=masuk'+jml+' /></td>'+
                 '<td><input type=text name=keluar[] id=keluar'+jml+' /></td>'+
-                '<td align=center><img onclick=removeMe('+jml+'); title="Klik untuk hapus" src="img/icons/delete.png" class=add_kemasan align=left /></td>'+
+                '<td align=center><img onclick=removeMe(this); title="Klik untuk hapus" src="img/icons/delete.png" class=add_kemasan align=left /></td>'+
               '</tr>';
     $('#pesanan-list tbody').append(str);
     $('#ed'+jml).datepicker({

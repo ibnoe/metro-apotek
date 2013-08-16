@@ -9,7 +9,10 @@ include_once("pages/message.php");
 ?>
 <script type="text/javascript">
 load_data_penerimaan();
-
+function removeMe(el) {
+    var parent = el.parentNode.parentNode;
+    parent.parentNode.removeChild(parent);
+}
 function load_list_data(id_barang, nama_barang, id_satuan_beli, jumlah) {
     var no   = $('.tr_rows').length+1;
     var list = '<tr class=tr_rows>'+
@@ -64,14 +67,17 @@ function hitung_sub_total(i) {
     $('#subtotal'+i).val(numberToCurrency(subtotal));
     var jml_baris   = $('.tr_rows').length;
     var total       = 0;
+    
     for (j = 1; j <= jml_baris; j++) {
-        total = total + subtotal;
+        var subttl      = parseInt(currencyToNumber($('#subtotal'+j).val()));
+        total = total + subttl;
     }
     
     var ppn         = $('#ppn').val()/100;
     var materai     = parseInt(currencyToNumber($('#materai').val()));
     
     var ppn_total   = total+(total*ppn); // total PPN faktur setelah ditambah dengan total barang
+    
     var disc_percent= $('#disc_pr').val()/100; // persentase diskon per faktur
     var dp_total    = ppn_total*disc_percent;
                       $('#disc_rp').val(numberToCurrency(parseInt(Math.ceil(dp_total))));

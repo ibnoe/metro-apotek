@@ -6,7 +6,7 @@ include_once("models/masterdata.php");
 include_once("pages/message.php");
 //$golongan = golongan_load_data();
 //$satuan_kekuatan = satuan_load_data('1');
-//$kemasan  = satuan_load_data('0');
+$kemasan  = satuan_load_data('0');
 //$sediaan  = sediaan_load_data();
 //$admr     = admr_load_data();
 //$perundangan = perundangan_load_data();
@@ -14,26 +14,33 @@ include_once("pages/message.php");
 //$fda      = fda_load_data();
 ?>
 <script type="text/javascript">
+$(function() {
+    $(document).keydown(function(e) {
+        if (e.keyCode === 120) {
+            form_add();
+        }
+    });
+});
 load_data_pemesanan();
-
-function add_new_rows(id_brg, nama_brg, jumlah) {
-    var jml = $('.tr_rows').length+1;
-    
+function removeMe(el) {
+    var parent = el.parentNode.parentNode;
+    parent.parentNode.removeChild(parent);
+}
+function add_new_rows(id_brg, nama_brg, jumlah, id_kemasan) {
+    if (id_kemasan === null) {
+        alert('Kemasan tidak boleh kosong !');
+        return false;
+    }
+    var jml     = $('.tr_rows').length+1;
+    var kemasan = $('select option:selected').text();
     var str = '<tr class="tr_rows">'+
                 '<td align=center>'+jml+'</td>'+
                 '<td>&nbsp;'+nama_brg+' <input type=hidden name=id_barang[] value="'+id_brg+'" class=id_barang id=id_barang'+jml+' /></td>'+
-                '<td><select name=kemasan[] id=kemasan'+jml+'><option value="">Pilih ...</option></select></td>'+
-                '<td><input type=text name=jumlah[] id=jumlah'+jml+' value="'+jumlah+'" size=10 /></td>'+
-                '<td align=center><img onclick=removeMe('+jml+'); title="Klik untuk hapus" src="img/icons/delete.png" class=add_kemasan align=left /></td>'+
+                '<td align=center>'+kemasan+'<input type=hidden name=kemasan[] id=kemasan'+jml+' value="'+id_kemasan+'" /></td>'+
+                '<td><input type=text name=jumlah[] id=jumlah'+jml+' value="'+jumlah+'" size=10 style="text-align: center;" /></td>'+
+                '<td align=center><img onclick=removeMe(this); title="Klik untuk hapus" src="img/icons/delete.png" class=add_kemasan align=left /></td>'+
               '</tr>';
     $('#pesanan-list tbody').append(str);
-    
-    $.getJSON('models/autocomplete.php?method=get_kemasan_barang&id='+id_brg, function(data){
-        $('#kls_terapi').html('');
-        $.each(data, function (index, value) {
-            $('#kemasan'+jml).append("<option value='"+value.id+"'>"+value.nama+"</option>");
-        });
-    });
 }
 
 function form_add() {
@@ -45,6 +52,7 @@ function form_add() {
                 '<tr><td>Supplier:</td><td width=20%><?= form_input('supplier', NULL, 'id=supplier size=40') ?><?= form_hidden('id_supplier', NULL, 'id=id_supplier') ?></td></tr>'+
             '</table></td><td width=50%>'+
                 '<table><tr><td width=20%>Nama Barang:</td><td width=50%><?= form_input('barang', NULL, 'id=barang size=40') ?><?= form_hidden('id_barang', NULL, 'id=id_barang') ?></td></tr>'+
+                '<tr><td>Kemasan:</td><td><select name=id_kemasan id=kemasan style="min-width: 86px;"><option value="">Pilih ...</option><?php foreach ($kemasan as $data) { echo '<option value="'.$data->id.'">'.$data->nama.'</option>'; } ?></select></td></tr>'+
                 '<tr><td>Jumlah:</td><td><?= form_input('jumlah', NULL, 'id=jumlah size=10') ?></td></tr></table>'+
             '</td></tr></table>'+
             '<table width=100% cellspacing="0" class="list-data-input" id="pesanan-list"><thead>'+
@@ -56,14 +64,22 @@ function form_add() {
     var lebar = $('#pabrik').width();
     $('#jumlah').keydown(function(e) {
         if (e.keyCode === 13) {
-            add_new_rows($('#id_barang').val(), $('#barang').val(), $('#jumlah').val());
+            add_new_rows($('#id_barang').val(), $('#barang').val(), $('#jumlah').val(), $('#kemasan').val());
             $('#id_barang').val('');
             $('#jumlah').val('');
+            $('#kemasan').html('').append('<option value="">Pilih ...</option>');
             $('#barang').val('').focus();
         }
     });
     $('#barang').keydown(function(e) {
         if (e.keyCode === 13) {
+            $('#kemasan').focus();
+            //$('#jumlah').val('1').focus().select();
+        }
+    });
+    $('#kemasan').keydown(function(e) {
+        if (e.keyCode === 13) {
+            //$('#kemasan').focus();
             $('#jumlah').val('1').focus().select();
         }
     });
@@ -90,6 +106,16 @@ function form_add() {
     function(event,data,formated){
         $(this).val(data.nama_barang);
         $('#id_barang').val(data.id);
+        $('#kemasan').html('');
+        $.getJSON('models/autocomplete.php?method=get_kemasan_barang&id='+data.id, function(data){
+            if (data === null) {
+                    alert('Kemasan tidak barang tidak tersedia !');
+                } else {
+                    $.each(data, function (index, value) {
+                        $('#kemasan').append("<option value='"+value.id_kemasan+"'>"+value.nama+"</option>");
+                    });
+            }
+        });
     });
     $('#supplier').autocomplete("models/autocomplete.php?method=supplier",
     {
@@ -154,14 +180,6 @@ function form_add() {
             alert('Pilih salah satu barang!');
             $('#barang').focus(); return false;
         }
-        if (jumlah > 0) {
-            for (i = 1; i <= jumlah; i++) {
-                if ($('#kemasan'+i).val() === '') {
-                    alert('Kemasan belum dipilih !');
-                    $('#kemasan'+i).focus(); return false;
-                }
-            }
-        }
         $.ajax({
             url: 'models/update-transaksi.php?method=save_pemesanan',
             data: $(this).serialize(),
@@ -169,9 +187,11 @@ function form_add() {
             type: 'POST',
             success: function(data) {
                 if (data.status === true) {
-                    alert_tambah();
+                    alert_tambah('#supplier');
                     $('#supplier, #id_supplier').val('');
                     $('#no_sp').val(data.id_pemesanan);
+                    $('#pesanan-list tbody').html('');
+                    load_data_pemesanan();
                 } else {
                     alert_edit();
                 }
@@ -247,7 +267,7 @@ function delete_pemesanan(id, page) {
 </script>
 <h1 class="margin-t-0">Surat Pemesanan</h1>
 <hr>
-<button id="button">SP Baru</button>
+<button id="button">SP Baru (F9)</button>
 <button id="reset">Reset</button>
 <div id="result-pemesanan">
     

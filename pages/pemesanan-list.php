@@ -15,7 +15,6 @@ $(function() {
         <th width="10%">Tanggal</th>
         <th width="20%">Nama Supplier</th>
         <th width="15%">Karyawan</th>
-        <th width="10%">Perkiraan <br/>Harga</th>
         <th width="5%">#</th>
     </tr>
 </thead>
@@ -43,12 +42,11 @@ $(function() {
         <tr class="<?= ($key%2==0)?'even':'odd' ?>">
             <td align="center"><?= (++$key+$offset) ?></td>
             <td><?= $data->id ?></td>
-            <td><?= datefmysql($data->tanggal) ?></td>
+            <td align="center"><?= datefmysql($data->tanggal) ?></td>
             <td><?= ($data->supplier !== NULL)?$data->supplier:'-' ?></td>
             <td><?= ($data->karyawan !== NULL)?$data->karyawan:'-' ?></td>
-            <td></td>
             <td class='aksi' align='center'>
-                <a class='edition' onclick="edit_pemesanan('<?= $str ?>');" title="Klik untuk edit pemesanan">&nbsp;</a>
+                <!--<a class='edition' onclick="edit_pemesanan('<?= $str ?>');" title="Klik untuk edit pemesanan">&nbsp;</a>-->
                 <a class='deletion' onclick="delete_pemesanan('<?= $data->id ?>','<?= $page ?>');" title="Klik untuk hapus pemesanan">&nbsp;</a>
             </td>
         </tr>

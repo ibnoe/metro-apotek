@@ -30,6 +30,7 @@ table.data-input input[type=text], table.data-input textarea { margin: 0.5px; ma
 .custom-combobox-input { margin: 0; }
 
 /*paging*/
+.titik { float: left; }
 .noblock { float: left; text-align: center; min-width: 15px; padding:2px 5px 2px 5px; background: #04a4f2; border:1px solid #ccc; text-decoration: none; color: #fff; margin-right: 0;}
 .block { float: left; text-align: center; min-width: 15px; padding:2px 5px 2px 5px; background-color:#175e88; border:1px solid #175e88; color:#fff; cursor: pointer; margin: 0 2px; }
 .block:hover { float: left; padding:2px 5px 2px 5px; background: #04a4f2; color: #fff; }

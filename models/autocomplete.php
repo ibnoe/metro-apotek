@@ -22,7 +22,9 @@ if ($method === 'dokter') {
 }
 
 if ($method === 'pasien') {
-    $sql = mysql_query("select * from pelanggan where nama like ('%$q%') order by locate('$q', nama)");
+    $sql = mysql_query("select p.*, a.nama as asuransi, a.diskon as reimburse from pelanggan p
+        left join asuransi a on (p.id_asuransi = a.id) 
+        where p.nama like ('%$q%') order by locate('$q', p.nama)");
     $rows = array();
     while ($data = mysql_fetch_object($sql)) {
         $rows[] = $data;
@@ -67,6 +69,19 @@ if ($method === 'barang') {
     die(json_encode($rows));
 }
 
+if ($method === 'get_barang') {
+    $barcode = $_GET['barcode'];
+    $sql = mysql_query("select b.*, p.nama as pabrik, g.nama as golongan, st.nama as satuan, sd.nama as sediaan,
+        concat_ws(' ', b.nama, b.kekuatan, st.nama) as nama_barang
+        from barang b 
+        left join pabrik p on (b.id_pabrik = p.id)
+        left join golongan g on (b.id_golongan = g.id)
+        left join satuan st on (b.satuan_kekuatan = st.id)
+        left join sediaan sd on (b.id_sediaan = sd.id) where b.barcode = '$barcode'");
+    $data = mysql_fetch_object($sql);
+    die(json_encode($data));
+}
+
 if ($method === 'farmakoterapi') {
     $rows = array();
     $id   = $_GET['id'];
@@ -86,7 +101,8 @@ if ($method === 'golongan_load_data') {
 
 if ($method === 'get_kemasan_barang') {
     $id = $_GET['id'];
-    $sql = mysql_query("select k.id, s.nama from kemasan k join satuan s on (k.id_kemasan = s.id) where k.id_barang = '$id' order by k.id desc");
+    $rows = NULL;
+    $sql = mysql_query("select k.id, k.id_kemasan, s.nama from kemasan k join satuan s on (k.id_kemasan = s.id) where k.id_barang = '$id' order by k.id desc");
     while ($data = mysql_fetch_object($sql)) {
         $rows[] = $data;
     }

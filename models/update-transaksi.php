@@ -17,11 +17,13 @@ if ($method === 'save_pemesanan') {
     $id_pemesanan = mysql_insert_id();
     
     foreach ($id_barang as $key => $data) {
-        $id_packing = mysql_query("select id from kemasan where id_barang = '$data' and id_kemasan = '$id_kemasan'");
+        $id_packing = mysql_fetch_object(mysql_query("select id from kemasan where id_barang = '$data' and id_kemasan = '".$id_kemasan[$key]."'"));
         $sql = "insert into detail_pemesanan set
             id_pemesanan = '$id_pemesanan',
-            id_kemasan = '$id_packing',
+            id_kemasan = '".$id_packing->id."',
             jumlah = '$jumlah[$key]'";
+        //echo "select id from kemasan where id_barang = '$data' and id_kemasan = '".$id_kemasan[$key]."'<br/>";
+        //echo $sql;
         mysql_query($sql);
     }
     
@@ -196,6 +198,10 @@ if ($method === 'save_penjualannr') {
     $ppn        = $_POST['ppn'];
     $total      = $_POST['total_penjualan'];
     $tuslah     = currencyToNumber($_POST['tuslah']);
+    $asuransi   = ($_POST['asuransi'] !== '')?$_POST['asuransi']:'NULL';
+    $embalage   = currencyToNumber($_POST['embalage']);
+    $reimburse  = isset($_POST['reimburse'])?$_POST['reimburse']:'0';
+    $pembayaran = $_POST['pembulatan']; // yang dientrikan pembulatan pembayarannya
     $sql = "insert into penjualan set
         waktu = '$tanggal',
         id_pelanggan = $customer,
@@ -203,7 +209,11 @@ if ($method === 'save_penjualannr') {
         diskon_rupiah = '$diskon_rp',
         ppn = '$ppn',
         total = '$total',
-        tuslah = '$tuslah'";
+        tuslah = '$tuslah',
+        embalage = '$embalage',
+        id_asuransi = $asuransi,
+        reimburse = '$reimburse',
+        jumlah_pembayaran = '$pembayaran'";
     
     mysql_query($sql);
     $id_penjualan = mysql_insert_id();

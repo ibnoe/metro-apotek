@@ -197,40 +197,125 @@ function eliminatechild(el,x,y) {
     }
 }
 
-function addnoresep(i) {
-    
-    var str = ' <div style="display: inline-block; width: 100%" class=tr_row>'+
-                '<div class="masterresep" style="display: inline-block; width: 100%; margin-top:3px; border-bottom: #333;"><table width=100% class=data-input>'+
-                    '<tr><td width=25%>No. R/:</td><td><input style="border: none; background: #f4f4f4" type=text name=nr[] id=nr'+i+' value='+(i+1)+' class=nr size=20 onkeyup=Angka(this) readonly maxlength=2 /></td></tr>'+
-                    '<tr><td>Permintaan:</td><td><input type=text name=jr[] id=jr'+i+' class=jr size=20 onkeyup=Angka(this) /></td></tr>'+
-                    '<tr><td>Jumlah Tebus:</td><td><input type=text name=jt[] id=jt'+i+' class=jt onkeyup=Angka(this) size=20 /></td></tr>'+
-                    '<tr><td>Aturan Pakai:</td><td><input type=text name=ap[] id=ap'+i+' class=ap size=20 /></td></tr>'+
-                    '<tr><td>Iterasi:</td><td><input type=text name=it[] id=it'+i+' class=it size=10 value="0" onkeyup=Angka(this) /></td></tr>'+
-                    '<tr><td>Jasa Apoteker:</td><td><select onchange="subTotal()" name=ja[] id=ja'+i+'><option value="0-0">Pilih biaya ..</option><?php foreach ($biaya_apoteker as $value) { echo '<option value="'.$value->id.'-'.$value->nominal.'">'.$value->nama.' Rp. '.$value->nominal.'</option>'; } ?></select></td></tr>'+
-                    '<tr><td></td><td><img src="img/icons/add.png" style="margin-right: 2px;" title="Tambah Barang" align=left onclick=add('+i+') id="addition'+i+'" />&nbsp;'+
-                    '<img src="img/icons/delete.png" style="margin-right: 2px;" align=left id="deletion'+i+'" title="Hapus R/" onclick=eliminate(this) /> <input type=button value="Etiket" id="etiket'+i+'" style="display: none" class="etiket" onclick=cetak_etiket('+(i+1)+') /></td></tr></table>'+
-                '</div>'+
-                '<div id=resepno'+i+' style="display: inline-block;width: 100%"></div>'+
-            '</div>';
-    
-    $('#psdg-middle').append(str);
-    $('input[type=button]').button();
+function addnoresep() {
+    var jasa_apt    = $('#ja').val().split('-');
+    var i           = $('.tr_rows').length+1;
+    var barang      = $('#pb').val();
+    var id_barang   = $('#id_pb').val();
+    var no_r        = $('#nr').val();
+    var permintaan  = $('#jr').val();
+    var tebus       = $('#jt').val();
+    var aturan_pakai= $('#ap').val();
+    var iterasi     = $('#it').val();
+    var jasa        = jasa_apt[1];
+    var kekuatan    = $('#kekuatan').html();
+    var dosis_racik = $('#dr').val();
+    var jml_pakai   = $('#jmlpakai').val();
+    var str = '<tr class="tr_rows">'+
+                '<td align=center>'+i+'</td>'+
+                '<td><input type=text name=no_r[] id=no_r'+i+' value="'+no_r+'" style="text-align: center;" /></td>'+
+                '<td>'+barang+' <input type=hidden name=id_barang[] id=id_barang'+i+' value="'+id_barang+'" style="text-align: center;" /></td>'+
+                '<td><input type=text name=jp[] id=jp'+i+' value="'+permintaan+'" style="text-align: center;" /></td>'+
+                '<td><input type=text name=jt[] id=jt'+i+' value="'+tebus+'" style="text-align: center;" /></td>'+
+                '<td><input type=text name=ap[] id=ap'+i+' value="'+aturan_pakai+'" style="text-align: center;" /></td>'+
+                '<td><input type=text name=it[] id=it'+i+' value="'+iterasi+'" style="text-align: center;" /></td>'+
+                '<td><input type=text name=kekuatan[] id=kekuatan'+i+' value="'+kekuatan+'" style="text-align: center;" /></td>'+
+                '<td><input type=text name=dr[] id=dr'+i+' value="'+dosis_racik+'" style="text-align: center;" /></td>'+
+                '<td><input type=text name=jp[] id=jp'+i+' value="'+jml_pakai+'" style="text-align: center;" /></td>'+
+                '<td><input type=text name=jasa[] id=jasa'+i+' onkeyup=FormNum(this) value="'+numberToCurrency(jasa)+'" style="text-align: right;" /></td>'+
+                '<td class=aksi><img onclick=removeMe(this); title="Klik untuk hapus" src="img/icons/delete.png" class=add_kemasan align=left /></td>'+
+              '</tr>';
+      $('#resep-list tbody').append(str);
 }
 
 function form_add() {
     var str = '<div id=form_resep>'+
                 '<form id=resep_save>'+
-                    '<table width=100% class=data-input>'+
-                    '<tr><td width=25%>Waktu:</td><td><?= form_input('waktu', date("d/m/Y"), 'id=waktu size=10') ?></td></tr>'+
-                    '<tr><td>Dokter:</td><td><?= form_input('dokter', NULL, 'id=dokter size=40') ?><?= form_hidden('id_dokter', NULL, 'id=id_dokter') ?></td></tr>'+
-                    '<tr><td>Pasien:</td><td><?= form_input('pasien', NULL, 'id=pasien size=40') ?><?= form_hidden('id_pasien', NULL, 'id=id_pasien') ?></td></tr>'+
-                    '<tr><td>Keterangan:</td><td><?= form_textarea('keterangan', NULL, 'cols=37 rows=3') ?></td></tr>'+
+                '<table width=100% class=data-input><tr valign=top><td width=33% style="border-right: 1px solid #ccc;">'+
+                    '<table width=100%>'+
+                        '<tr><td width=25%>Waktu:</td><td><?= form_input('waktu', date("d/m/Y"), 'id=waktu size=10') ?></td></tr>'+
+                        '<tr><td>Dokter:</td><td><?= form_input('dokter', NULL, 'id=dokter style="width: 90%"') ?><?= form_hidden('id_dokter', NULL, 'id=id_dokter') ?></td></tr>'+
+                        '<tr><td>Pasien:</td><td><?= form_input('pasien', NULL, 'id=pasien style="width: 90%"') ?><?= form_hidden('id_pasien', NULL, 'id=id_pasien') ?></td></tr>'+
+                        '<tr><td>Keterangan:</td><td><?= form_input('keterangan', NULL, ' style="width: 90%"') ?></td></tr>'+
+                    '</table></td><td width=33% style="padding-left: 10px; border-right: 1px solid #ccc;">'+
+                    '<table width=100%>'+
+                        '<tr><td width=25%>No. R/:</td><td><input type=text name=nr id=nr value="1" class=nr size=20 onkeyup=Angka(this) maxlength=2 /></td></tr>'+
+                        '<tr><td>Permintaan:</td><td><input type=text name=jr id=jr class=jr size=20 onkeyup=Angka(this) /></td></tr>'+
+                        '<tr><td>Jumlah Tebus:</td><td><input type=text name=jt id=jt class=jt onkeyup=Angka(this) size=20 /></td></tr>'+
+                        '<tr><td>Aturan Pakai:</td><td><input type=text name=ap id=ap class=ap size=20 /></td></tr>'+
+                        '<tr><td>Iterasi:</td><td><input type=text name=it id=it class=it size=10 value="0" onkeyup=Angka(this) /></td></tr>'+
+                        '<tr><td>Jasa Apoteker:</td><td><select style="max-width: 100px;" onchange="subTotal()" name=ja id=ja><option value="0-0">Pilih biaya ..</option><?php foreach ($biaya_apoteker as $value) { echo '<option value="'.$value->id.'-'.$value->nominal.'"> Rp. '.$value->nominal.' '.$value->nama.'</option>'; } ?></select></td></tr>'+
                     '</table>'+
+                    '</td><td width=33% style="padding-left: 10px;">'+
+                    '<table align=right width=100%>'+
+                        '<tr><td width=25%>Nama Produk:</td><td>  <input type=text name=pb id=pb class=pb style="width: 90%" />'+
+                            '<input type=hidden name=id_pb id=id_pb class=id_pb /></td></tr>'+
+                        '<tr><td>Kekuatan:</td><td><span class=label id=kekuatan>-</span></td></tr>'+
+                        '<tr><td>Dosis Racik:</td><td> <input type=text name=dr id=dr class=dr size=10 /></td></tr>'+
+                        '<tr><td>Jumlah Pakai:</td><td><?= form_input('jmlpakai', NULL, 'id=jmlpakai size=10') ?></td></tr>'+
+                    '</table>'+
+                    '</td></tr></table>'+
                 '</form>'+
-                '<div id=psdg-middle></div>'+
+                '<table width=100% cellspacing="0" class="list-data-input" id="resep-list"><thead>'+
+                    '<tr><th width=5%>No.</th>'+
+                        '<th width=5%>No. R</th>'+
+                        '<th width=25%>Nama Barang</th>'+
+                        '<th width=10%>Jumlah<br/>Permintaan</th>'+
+                        '<th width=10%>Jumlah<br/>Tebus</th>'+
+                        '<th width=10%>Aturan Pakai</th>'+
+                        '<th width=5%>Iterasi</th>'+
+                        '<th width=5%>Kekuatan</th>'+
+                        '<th width=8%>Dosis Racik</th>'+
+                        '<th width=8%>Jumlah Pakai</th>'+
+                        '<th width=10%>Jasa Apoteker</th>'+
+                        '<th width=2%>#</th>'+
+                    '</tr></thead>'+
+                    '<tbody></tbody>'+
+                '</table>'+
               '</div>';
     $('body').append(str);
     var lebar = $('#dokter').width();
+    $('#jmlpakai').keydown(function(e) {
+        if (e.keyCode === 13) {
+            addnoresep();
+            $('#pb,#id_pb,#dr,#jmlpakai').val('');
+            $('#kekuatan').html('-');
+            $('#pb').focus();
+        }
+    });
+    $('#dr').keydown(function(e) {
+        if (e.keyCode === 13) {
+            $('#jmlpakai').focus();
+        }
+    });
+    $('#pb').autocomplete("models/autocomplete.php?method=barang",
+    {
+        parse: function(data){
+            var parsed = [];
+            for (var i=0; i < data.length; i++) {
+                parsed[i] = {
+                    data: data[i],
+                    value: data[i].nama // nama field yang dicari
+                };
+            }
+            return parsed;
+        },
+        formatItem: function(data,i,max){
+            var str = '<div class=result>'+data.nama_barang+'</div>';
+            return str;
+        },
+        width: lebar, // panjang tampilan pencarian autocomplete yang akan muncul di bawah textbox pencarian
+        dataType: 'json', // tipe data yang diterima oleh library ini disetup sebagai JSON
+        cacheLength: 0
+    }).result(
+    function(event,data,formated){
+        $(this).val(data.nama_barang);
+        $('#id_pb').val(data.id);
+        $('#kekuatan').html(data.kekuatan);
+        $('#dr').val(data.kekuatan);
+        $('#jmlpakai').val($('#jr').val());
+        $('#dr').focus();
+    });
     $('#dokter').autocomplete("models/autocomplete.php?method=dokter",
     {
         parse: function(data){
@@ -277,24 +362,21 @@ function form_add() {
         $(this).val(data.nama);
         $('#id_pasien').val(data.id);
     });
+    
     var wWidth = $(window).width();
-    var dWidth = wWidth * 0.6;
+    var dWidth = wWidth * 1;
     
     var wHeight= $(window).height();
     var dHeight= wHeight * 1;
     $('#form_resep').dialog({
-        title: 'Tambah resep Barang',
+        title: 'Tambah Resep',
         autoOpen: true,
         modal: true,
-        width: 400,
+        width: dWidth,
         height: dHeight,
         hide: 'clip',
         show: 'blind',
         buttons: {
-            "Tambah R/": function() {
-                var row = $('.masterresep').length;
-                addnoresep(row);
-            },
             "Simpan": function() {
                 $('#save_resep').submit();
             }, 
@@ -304,8 +386,7 @@ function form_add() {
         }, close: function() {
             $(this).dialog().remove();
         }, open: function() {
-            addnoresep(0);
-            add(0);
+            $('#dokter').focus();
         }
     });
 }
