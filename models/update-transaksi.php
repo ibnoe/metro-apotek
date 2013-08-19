@@ -247,4 +247,51 @@ if ($method === 'save_penjualannr') {
         }
     die(json_encode(array('status' => TRUE)));
 }
+
+if ($method === 'save_retur_penerimaan') {
+    $tanggal        = date2mysql($_POST['tanggal']);
+    $id_supplier    = $_POST['id_supplier'];
+    $id_barang      = $_POST['id_barang'];
+    $id_kemasan     = $_POST['id_kemasan'];
+    $ed             = $_POST['ed'];
+    $jumlah         = $_POST['jumlah'];
+    $id_retur       = $_POST['id_retur_penerimaan'];
+    
+    if ($id_retur === '') {
+        $sql = "insert into retur_penerimaan set
+            tanggal = '$tanggal',
+            id_supplier = '$id_supplier'";
+        mysql_query($sql);
+        $id         = mysql_insert_id();
+        foreach ($id_barang as $key => $data) {
+            $kemasan = mysql_fetch_object(mysql_query("select id from kemasan where id_barang = '$data' and id_kemasan = '$id_kemasan[$key]'"));
+            $query = "insert into detail_retur_penerimaan set
+                id_retur_penerimaan = '$id',
+                id_kemasan = '".$kemasan->id."',
+                expired = '".date2mysql($ed[$key])."',
+                jumlah = '$jumlah[$key]'
+                ";
+            //echo $query;
+            mysql_query($query);
+            $query1 = mysql_query("select dp.* from kemasan k
+                join barang b on (k.id_barang = b.id) 
+                join detail_penerimaan dp on (k.id = dp.id_kemasan)
+                where b.id = '$data' and k.id = '$id_kemasan[$key]' and dp.expired = '".date2mysql($ed[$key])."'");
+            $row = mysql_fetch_object($query1);
+           $query2 = "insert into stok set
+                waktu = '$tanggal ".date("H:i:s")."',
+                id_transaksi = '$id',
+                transaksi = 'Retur Penerimaan',
+                nobatch = '".(isset($row->nobatch)?$row->nobatch:'')."',
+                id_barang = '$data',
+                ed = '".date2mysql($ed[$key])."',
+                keluar = '$jumlah[$key]'";
+           //echo $query2;
+           mysql_query($query2);
+        }
+    }
+    $result['status'] = TRUE;
+    $result['action'] = 'add';
+    die(json_encode($result));
+}
 ?>

@@ -1,4 +1,9 @@
 <?php
+$subNav = array(
+	"Penjualan Bebas ; penjualan-nr.php ; #509601;",
+        "Entri Resep ; resep.php ; #509601;",
+        "Penjualan Resep ; penjualan.php ; #509601;"
+);
 set_include_path("../");
 include_once("inc/essentials.php");
 include_once("inc/functions.php");
@@ -9,6 +14,9 @@ $biaya_apoteker = tarif_load_data();
 <script type="text/javascript">
 $(function() {
     $(document).tooltip();
+    $(document).keydown(function(e) {
+        if (e.keyCode === 120) { form_add(); }
+    });
     load_data_resep();
     $('#button').button({
         icons: {
@@ -223,9 +231,35 @@ function addnoresep() {
                 '<td><input type=text name=dr[] id=dr'+i+' value="'+dosis_racik+'" style="text-align: center;" /></td>'+
                 '<td><input type=text name=jp[] id=jp'+i+' value="'+jml_pakai+'" style="text-align: center;" /></td>'+
                 '<td><input type=text name=jasa[] id=jasa'+i+' onkeyup=FormNum(this) value="'+numberToCurrency(jasa)+'" style="text-align: right;" /></td>'+
+                '<td><input type=text name=hrg_barang[] id=hrg_barang'+i+' value="" style="text-align: right;" /></td>'+
                 '<td class=aksi><img onclick=removeMe(this); title="Klik untuk hapus" src="img/icons/delete.png" class=add_kemasan align=left /></td>'+
               '</tr>';
-      $('#resep-list tbody').append(str);
+        $('#resep-list tbody').append(str);
+        $.ajax({
+            url: 'models/autocomplete.php?method=get_detail_harga_barang&id='+id_barang+'&jumlah='+jml_pakai,
+            dataType: 'json',
+            cache: false,
+            success: function(data) {
+                //hitung_detail_total(jml, jum, data.diskon_rupiah, data.diskon_persen, data.harga_jual);
+                $('#hrg_barang'+i).val(numberToCurrency(parseInt(data.harga_jual)));
+                total_perkiraan_resep();
+            }
+        });
+}
+
+function removeMe(el) {
+    var parent = el.parentNode.parentNode;
+    parent.parentNode.removeChild(parent);
+}
+
+function total_perkiraan_resep() {
+    var jumlah  = $('.tr_rows').length;
+    var total   = 0;
+    for (i = 1; i <= jumlah; i++) {
+        var subtotal = parseInt(currencyToNumber($('#hrg_barang'+i).val()));
+        total   = total + subtotal;
+    }
+    $('#total').html(numberToCurrency(parseInt(total)));
 }
 
 function form_add() {
@@ -236,7 +270,7 @@ function form_add() {
                         '<tr><td width=25%>Waktu:</td><td><?= form_input('waktu', date("d/m/Y"), 'id=waktu size=10') ?></td></tr>'+
                         '<tr><td>Dokter:</td><td><?= form_input('dokter', NULL, 'id=dokter style="width: 90%"') ?><?= form_hidden('id_dokter', NULL, 'id=id_dokter') ?></td></tr>'+
                         '<tr><td>Pasien:</td><td><?= form_input('pasien', NULL, 'id=pasien style="width: 90%"') ?><?= form_hidden('id_pasien', NULL, 'id=id_pasien') ?></td></tr>'+
-                        '<tr><td>Keterangan:</td><td><?= form_input('keterangan', NULL, ' style="width: 90%"') ?></td></tr>'+
+                        '<tr><td>Keterangan:</td><td><?= form_input('keterangan', NULL, ' style="width: 90%" id=keterangan') ?></td></tr>'+
                     '</table></td><td width=33% style="padding-left: 10px; border-right: 1px solid #ccc;">'+
                     '<table width=100%>'+
                         '<tr><td width=25%>No. R/:</td><td><input type=text name=nr id=nr value="1" class=nr size=20 onkeyup=Angka(this) maxlength=2 /></td></tr>'+
@@ -244,7 +278,7 @@ function form_add() {
                         '<tr><td>Jumlah Tebus:</td><td><input type=text name=jt id=jt class=jt onkeyup=Angka(this) size=20 /></td></tr>'+
                         '<tr><td>Aturan Pakai:</td><td><input type=text name=ap id=ap class=ap size=20 /></td></tr>'+
                         '<tr><td>Iterasi:</td><td><input type=text name=it id=it class=it size=10 value="0" onkeyup=Angka(this) /></td></tr>'+
-                        '<tr><td>Jasa Apoteker:</td><td><select style="max-width: 100px;" onchange="subTotal()" name=ja id=ja><option value="0-0">Pilih biaya ..</option><?php foreach ($biaya_apoteker as $value) { echo '<option value="'.$value->id.'-'.$value->nominal.'"> Rp. '.$value->nominal.' '.$value->nama.'</option>'; } ?></select></td></tr>'+
+                        '<tr><td>Jasa Apoteker:</td><td><select style="max-width: 100px;" onchange="subTotal()" name=ja id=ja><option value="0-0">Pilih biaya ..</option><?php foreach ($biaya_apoteker as $value) { echo '<option value="'.$value->id.'-'.$value->nominal.'"> Rp. '.$value->nominal.' '.$value->nama.'</option>'; } ?></select> F8 = No. R/ selanjutnya</td></tr>'+
                     '</table>'+
                     '</td><td width=33% style="padding-left: 10px;">'+
                     '<table align=right width=100%>'+
@@ -253,6 +287,7 @@ function form_add() {
                         '<tr><td>Kekuatan:</td><td><span class=label id=kekuatan>-</span></td></tr>'+
                         '<tr><td>Dosis Racik:</td><td> <input type=text name=dr id=dr class=dr size=10 /></td></tr>'+
                         '<tr><td>Jumlah Pakai:</td><td><?= form_input('jmlpakai', NULL, 'id=jmlpakai size=10') ?></td></tr>'+
+                        '<tr><td>TOTAL:</td><td id=total style="font-size: 30px;"></td></tr>'+
                     '</table>'+
                     '</td></tr></table>'+
                 '</form>'+
@@ -268,6 +303,7 @@ function form_add() {
                         '<th width=8%>Dosis Racik</th>'+
                         '<th width=8%>Jumlah Pakai</th>'+
                         '<th width=10%>Jasa Apoteker</th>'+
+                        '<th width=10%>Harga Barang</th>'+
                         '<th width=2%>#</th>'+
                     '</tr></thead>'+
                     '<tbody></tbody>'+
@@ -283,10 +319,37 @@ function form_add() {
             $('#pb').focus();
         }
     });
-    $('#dr').keydown(function(e) {
-        if (e.keyCode === 13) {
-            $('#jmlpakai').focus();
+    $(document).keydown(function(e) {
+        if (e.keyCode === 119) {
+            var next = (isNaN($('#nr').val())?'0':$('#nr').val())+1;
+            $('#nr').val(next);
+            $('#jr,#jt,#ap,#it,#ja').val('');
+            $('#jr').focus();
         }
+    });
+    $('#keterangan').keydown(function(e) {
+        if (e.keyCode === 13) { $('#nr').focus().select(); }
+    });
+    $('#nr').keydown(function(e) {
+        if (e.keyCode === 13) { $('#jr').focus().select(); }
+    });
+    $('#jr').keydown(function(e) {
+        if (e.keyCode === 13) { $('#jt').focus().select(); }
+    });
+    $('#jt').keydown(function(e) {
+        if (e.keyCode === 13) { $('#ap').focus().select(); }
+    });
+    $('#ap').keydown(function(e) {
+        if (e.keyCode === 13) { $('#it').focus().select(); }
+    });
+    $('#it').keydown(function(e) {
+        if (e.keyCode === 13) { $('#ja').focus().select(); }
+    });
+    $('#ja').keydown(function(e) {
+        if (e.keyCode === 13) { $('#pb').focus().select(); }
+    });
+    $('#dr').keydown(function(e) {
+        if (e.keyCode === 13) { $('#jmlpakai').focus().select(); }
     });
     $('#pb').autocomplete("models/autocomplete.php?method=barang",
     {
@@ -314,7 +377,7 @@ function form_add() {
         $('#kekuatan').html(data.kekuatan);
         $('#dr').val(data.kekuatan);
         $('#jmlpakai').val($('#jr').val());
-        $('#dr').focus();
+        $('#dr').focus().select();
     });
     $('#dokter').autocomplete("models/autocomplete.php?method=dokter",
     {
@@ -338,6 +401,7 @@ function form_add() {
     function(event,data,formated){
         $(this).val(data.nama);
         $('#id_dokter').val(data.id);
+        $('#pasien').focus().select();
     });
     $('#pasien').autocomplete("models/autocomplete.php?method=pasien",
     {
@@ -361,6 +425,7 @@ function form_add() {
     function(event,data,formated){
         $(this).val(data.nama);
         $('#id_pasien').val(data.id);
+        $('#keterangan').focus().select();
     });
     
     var wWidth = $(window).width();
@@ -412,7 +477,7 @@ function paging(page, tab, search) {
 </script>
 <h1 class="margin-t-0">Resep</h1>
 <hr>
-<button id="button">Resep Baru</button>
+<button id="button">Resep Baru (F9)</button>
 <button id="reset">Reset</button>
 <div id="result-resep">
     

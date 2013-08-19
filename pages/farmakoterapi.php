@@ -13,6 +13,10 @@ include_once("pages/message.php");
 <script type="text/javascript">
 $(function() {
     load_data_farmakoterapi();
+    $('#search').keyup(function() {
+        var value = $(this).val();
+        load_data_farmakoterapi('',value,'');
+    });
 });
 function form_add() {
 var str = '<div id=form_add>'+
@@ -98,6 +102,7 @@ $('#reset').button({
     }
 }).click(function() {
     load_data_farmakoterapi();
+    $('#search').val('');
 });
 $('#button').click(function() {
     form_add();
@@ -157,11 +162,17 @@ function delete_farmakoterapi(id, page) {
         }
     });
 }
+$.plugin($afterSubPageShow,{ // <-- event is here
+    showAlert:function(){ // <-- random function name is here (choose whatever you want)
+        $('#search').focus();
+    }
+});
 </script>
 <h1 class="margin-t-0">Data farmakoterapi</h1>
 <hr>
 <button id="button">Tambah Data</button>
 <button id="reset">Reset</button>
+<?= form_input('search', NULL, 'id=search placeholder="Search ..." class=search') ?>
 <div id="result-farmakoterapi">
     
 </div>

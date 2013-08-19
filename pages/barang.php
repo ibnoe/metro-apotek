@@ -23,6 +23,10 @@ $fda      = fda_load_data();
 <script type="text/javascript">
 $(function() {
     load_data_barang();
+    $('#search').keyup(function() {
+        var value = $(this).val();
+        load_data_barang('',value,'');
+    });
 });
 
 function create_new_packing(i) {
@@ -252,6 +256,7 @@ var str = '<div id=form_add>'+
                                     '<tr><td>Margin Non Resep:</td><td><?= form_input('margin_nr', NULL, 'id=margin_nr style="width: 70px;" onkeyup=hitung_hja()') ?> %, H. Jual <?= form_input('margin_nr_rp', NULL, 'id=margin_nr_rp style="width: 63px;"') ?></td></tr>'+
                                     '<tr><td>Margin Resep:</td><td><?= form_input('margin_r', NULL, 'id=margin_r style="width: 70px;" onkeyup=hitung_hja()') ?> %, H. Jual <?= form_input('margin_r_rp', NULL, 'id=margin_r_rp style="width: 63px;" onblur=FormNum(this)') ?></td></tr>'+
                                     '<tr><td>Image:</td><td><?= form_upload('mFile',null,'id=mFile') ?></td></tr>'+
+                                    '<tr><td></td><td><img id=image src="" /></td></tr>'+
                                     '<tr><td></td><td><?= form_checkbox('aktifasi', '1', 'aktifasi', 'Aktifasi') ?></td></tr>'+
                                 '</table>'+
                             '</td></tr></table>'+
@@ -468,6 +473,8 @@ function edit_barang(str) {
     var arr = str.split('#');
     form_add();
     $('#barcode').val(arr[30]);
+    $('#image').attr('src','img/barang/'+arr[31]);
+    $('#image').attr('width','100px');
     $('#id_barang').val(arr[0]);
     $('#nama').val(arr[1]);
     $('#kekuatan').val(arr[2]);
@@ -554,10 +561,11 @@ $('#reset').button({
     }
 }).click(function() {
     load_data_barang();
+    $('#search').val('');
 });
 $.plugin($afterSubPageShow,{ // <-- event is here
     showAlert:function(){ // <-- random function name is here (choose whatever you want)
-    
+        $('#search').focus();
     }
 });
 </script>
@@ -565,6 +573,7 @@ $.plugin($afterSubPageShow,{ // <-- event is here
 <hr>
 <button id="button">Tambah Data</button>
 <button id="reset">Reset</button>
+<?= form_input('search', NULL, 'id=search placeholder="Search ..." class=search') ?>
 <div id="result-barang">
     
 </div>

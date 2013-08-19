@@ -32,7 +32,7 @@ if ($method === 'save_barang') {
     $plus_ppn   = isset($_POST['ppn'])?$_POST['ppn']:'0';
     $aktif      = isset($_POST['aktifasi'])?$_POST['aktifasi']:'0';
     $aturan_pki = $_POST['aturan_pakai'];
-    $kls_terapi = ($_POST['kls_terapi'] !== '')?$_POST['kls_terapi']:'NULL';
+    $kls_terapi = (isset($_POST['kls_terapi']) and ($_POST['kls_terapi'] !== ''))?$_POST['kls_terapi']:'NULL';
     $fda_pregnan= $_POST['fda_pregnan'];
     $fda_lactacy= $_POST['fda_lactacy'];
     $id_barang  = $_POST['id_barang'];

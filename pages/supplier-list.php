@@ -44,7 +44,7 @@ include_once '../inc/functions.php';
         <td><?= $data->telp ?></td>
         <td class='aksi' align='center'>
             <a class='edition' onclick="edit_supplier('<?= $str ?>');" title="Klik untuk edit supplier">&nbsp;</a>
-            <a class='deletion' onclick="delete_pabrik('<?= $data->id ?>','<?= $page ?>');" title="Klik untuk hapus supplier">&nbsp;</a>
+            <a class='deletion' onclick="delete_supplier('<?= $data->id ?>','<?= $page ?>');" title="Klik untuk hapus supplier">&nbsp;</a>
         </td>
     </tr>
     <?php } ?>

@@ -32,7 +32,7 @@ function add_new_rows(id_brg, nama_brg, jumlah, id_kemasan) {
         return false;
     }
     var jml     = $('.tr_rows').length+1;
-    var kemasan = $('select option:selected').text();
+    var kemasan = $('#kemasan option:selected').text();
     var str = '<tr class="tr_rows">'+
                 '<td align=center>'+jml+'</td>'+
                 '<td>&nbsp;'+nama_brg+' <input type=hidden name=id_barang[] value="'+id_brg+'" class=id_barang id=id_barang'+jml+' /></td>'+

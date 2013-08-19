@@ -309,7 +309,7 @@ hr.light{border-color:#AAA;}
 /*LIST DATA*/
 
 .list-data { text-transform: uppercase; border-top: 1px solid #6eb7ff; border-left: 1px solid #6eb7ff; margin: 10px 0; background: #fff; color: #000; font-size: 11px; }
-.list-data th { border-right: 1px solid #6eb7ff; height: 20px; border-bottom: 1px solid #ccc; background: #3399ff; border-bottom: #dfdfdf; height: 40px; color: #fff; cursor: pointer; }
+.list-data th { font-weight: bold; border-right: 1px solid #6eb7ff; height: 20px; border-bottom: 1px solid #ccc; background: #3399ff; border-bottom: #dfdfdf; height: 40px; color: #fff; cursor: pointer; }
 .list-data td { border-right: 1px solid #ccc; height: 20px; border-bottom: 1px solid #ccc; height: 20px; padding: 2px; }
 .list-data .even { background: #fff; cursor: pointer; }
 .list-data .odd { background: #f4f4f4; cursor: pointer; }

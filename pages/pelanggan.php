@@ -12,7 +12,14 @@ $asuransi = load_data_asuransi();
 ?>
 
 <script type="text/javascript">
-load_data_pelanggan();
+$(function() {
+    load_data_pelanggan();
+    $('#search').keyup(function() {
+        var value = $(this).val();
+        load_data_pelanggan('',value,'');
+    });
+});
+
 function form_add() {
 var str = '<div id=form_add>'+
             '<form action="models/update-masterdata.php?method=save_pelanggan" enctype=multipart/form-data method=post id="save_barang">'+
@@ -102,13 +109,22 @@ var str = '<div id=form_add>'+
     });
 }
 $mainNav.set("home");
-$('button').button({
+$('#button').button({
     icons: {
         primary: 'ui-icon-newwin'
     }
 });
 $('#button').click(function() {
     form_add();
+});
+$('#reset').button({
+    icons: {
+        primary: 'ui-icon-refresh'
+    }
+});
+$('#reset').click(function() {
+    load_data_pelanggan();
+    $('#search').val('');
 });
 $.plugin($afterSubPageShow,{ // <-- event is here
     showAlert:function(){ // <-- random function name is here (choose whatever you want)
@@ -183,10 +199,17 @@ function delete_pelanggan(id, page) {
         }
     });
 }
+$.plugin($afterSubPageShow,{ // <-- event is here
+    showAlert:function(){ // <-- random function name is here (choose whatever you want)
+        $('#search').focus();
+    }
+});
 </script>
 <h1 class="margin-t-0">Data Customer</h1>
 <hr>
 <button id="button">Tambah Data</button>
+<button id="reset">Reset</button>
+<?= form_input('search', NULL, 'id=search placeholder="Search ..." class=search') ?>
 <div id="result-pelanggan">
     
 </div>

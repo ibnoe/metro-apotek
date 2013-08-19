@@ -8,7 +8,19 @@ function load_data_barang($param) {
         $q.= "and b.id = '".$param['id']."'";
     }
     if ($param['search'] !== '') {
-        $q.="and b.nama like ('%".$param['search']."%')";
+        $q.="and (
+            b.nama like ('%".$param['search']."%') or 
+            p.nama like ('%".$param['search']."%') or 
+            g.nama like ('%".$param['search']."%') or 
+            b.rak like ('%".$param['search']."%') or 
+            b.indikasi like ('%".$param['search']."%') or 
+            b.dosis like ('%".$param['search']."%') or 
+            b.kandungan like ('%".$param['search']."%') or 
+            b.perhatian like ('%".$param['search']."%') or 
+            b.kontra_indikasi like ('%".$param['search']."%') or 
+            b.efek_samping like ('%".$param['search']."%') or 
+            b.aturan_pakai like ('%".$param['search']."%') or 
+            k.nama like ('%".$param['search']."%'))";
     }
     $limit = " limit ".$param['start'].", ".$param['limit']."";
     $sql = "select b.*, p.nama as pabrik, g.nama as golongan, f.id as id_farmakoterapi, st.nama as satuan, sd.nama as sediaan 
@@ -37,6 +49,9 @@ function load_data_pabrik($param) {
     $q = null;
     if ($param['id'] !== '') {
         $q = " and id = '".$param['id']."'";
+    }
+    if ($param['search'] !== '') {
+        $q = " and nama like '%".$param['search']."%'";
     }
     $limit = " limit ".$param['start'].", ".$param['limit']."";
     $sql = "select * from pabrik where id is not NULL $q order by nama";
@@ -67,8 +82,8 @@ function load_data_jadwal_praktek($param) {
         $data[] = $row;
     }
     $total = mysql_num_rows(mysql_query($sql));
-    $page  = mysql_num_rows(mysql_query("select j.*, d.nama from jadwal_dokter j join
-         dokter d on (d.id = j.id_dokter) group by d.id"));
+//    $page  = mysql_num_rows(mysql_query("select j.*, d.nama from jadwal_dokter j join
+//         dokter d on (d.id = j.id_dokter) group by d.id"));
     $result['data'] = $data;
     $result['total']= $total;
     
@@ -79,6 +94,9 @@ function load_data_instansi($param) {
     $q = null;
     if ($param['id'] !== '') {
         $q = " and id = '".$param['id']."'";
+    }
+    if ($param['search'] !== '') {
+        $q = " and nama like '%".$param['search']."%'";
     }
     $limit = " limit ".$param['start'].", ".$param['limit']."";
     $sql = "select * from instansi where id is not NULL $q order by nama";
@@ -99,6 +117,9 @@ function load_data_supplier($param) {
     if ($param['id'] !== '') {
         $q = "and id = '".$param['id']."'";
     }
+    if ($param['search'] !== '') {
+        $q = " and nama like '%".$param['search']."%'";
+    }
     $limit = " limit ".$param['start'].", ".$param['limit']."";
     $sql = "select * from supplier where id is not NULL $q order by nama";
     
@@ -117,6 +138,9 @@ function load_data_bank($param = null) {
     $q = null;
     if ($param['id'] !== '') {
         $q = "and id = '".$param['id']."'";
+    }
+    if ($param['search'] !== '') {
+        $q = " and nama like '%".$param['search']."%'";
     }
     $limit = " limit ".$param['start'].", ".$param['limit']."";
     $sql = "select * from bank where id is not NULL $q order by nama";
@@ -137,11 +161,14 @@ function load_data_customer($param) {
     if ($param['id'] !== '') {
         $q = "and id = '".$param['id']."'";
     }
+    if ($param['search'] !== '') {
+        $q = "and p.nama like '%".$param['search']."%'";
+    }
     $limit = " limit ".$param['start'].", ".$param['limit']."";
     $sql = "select p.*, a.nama as asuransi from pelanggan p
-        left join asuransi a on (p.id_asuransi = a.id) $q 
+        left join asuransi a on (p.id_asuransi = a.id) where p.id is not NULL $q 
         order by p.nama";
-    
+    //echo $sql;
     $query = mysql_query($sql.$limit);
     $data = array();
     while ($row = mysql_fetch_object($query)) {
@@ -158,10 +185,12 @@ function load_data_karyawan($param) {
     if ($param['id'] !== '') {
         $q = "and id = '".$param['id']."'";
     }
+    if ($param['search'] !== '') {
+        $q = "and nama like '%".$param['search']."%'";
+    }
     $limit = " limit ".$param['start'].", ".$param['limit']."";
     $sql = "select * from karyawan where id is not NULL $q 
         order by nama";
-    
     $query = mysql_query($sql.$limit);
     $data = array();
     while ($row = mysql_fetch_object($query)) {
@@ -177,6 +206,9 @@ function load_data_layanan($param) {
     $q = null;
     if ($param['id'] !== '') {
         $q = "and id = '".$param['id']."'";
+    }
+    if ($param['search'] !== '') {
+        $q = "and nama like '%".$param['search']."%'";
     }
     $limit = " limit ".$param['start'].", ".$param['limit']."";
     $sql = "select * from tarif where id is not NULL $q 
@@ -198,6 +230,7 @@ function load_data_asuransi($id = null) {
     if ($id !== NULL) {
         $q = "where id = '$id'";
     }
+    
     $sql = "select * from asuransi $q order by nama asc";
     //echo $sql;
     $query = mysql_query($sql);
@@ -212,6 +245,9 @@ function load_data_asuransi_list($param) {
     $q = null;
     if ($param['id'] !== '') {
         $q = "and id = '".$param['id']."'";
+    }
+    if ($param['search'] !== '') {
+        $q = "and nama like '%".$param['search']."%'";
     }
     $limit = " limit ".$param['start'].", ".$param['limit']."";
     $sql = "select * from asuransi where id is not NULL $q order by nama asc";
@@ -283,6 +319,9 @@ function load_data_dokter($param) {
     $q = null;
     if ($param['id'] !== '') {
         $q = "and id = '".$param['id']."'";
+    }
+    if ($param['search'] !== '') {
+        $q = "and nama like '%".$param['search']."%'";
     }
     $limit = " limit ".$param['start'].", ".$param['limit']."";
     $sql = "select * from dokter where id is not NULL $q 
@@ -360,6 +399,9 @@ function load_data_farmakoterapi($param) {
     if ($param['id'] !== '') {
         $q = " and id = '".$param['id']."'";
     }
+    if ($param['search'] !== '') {
+        $q = " and nama like '%".$param['search']."%'";
+    }
     $limit = " limit ".$param['start'].", ".$param['limit']."";
     $sql = "select * from farmako_terapi where id is not NULL $q order by nama";
     
@@ -378,6 +420,9 @@ function load_data_kelasterapi($param) {
     $q = null;
     if ($param['id'] !== '') {
         $q = " and k.id = '".$param['id']."'";
+    }
+    if ($param['search'] !== '') {
+        $q = " and (k.nama like '%".$param['search']."%' or f.nama like '%".$param['search']."%')";
     }
     $limit = " limit ".$param['start'].", ".$param['limit']."";
     $sql = "select k.*, f.nama as farmakoterapi from kelas_terapi k 
@@ -400,9 +445,12 @@ function penyakit_load_data($param) {
     if ($param['id'] !== '') {
         $q = " and id = '".$param['id']."'";
     }
+    if ($param['search'] !== '') {
+        $q = " and (topik like '%".$param['search']."%' or sub_kode like '%".$param['search']."%')";
+    }
     $limit = " limit ".$param['start'].", ".$param['limit']."";
     $sql = "select * from penyakit where id is not NULL $q order by topik";
-    
+    //echo $sql;
     $query = mysql_query($sql.$limit);
     $data = array();
     while ($row = mysql_fetch_object($query)) {

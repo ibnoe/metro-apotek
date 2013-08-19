@@ -1,6 +1,7 @@
 <?php
 $subNav = array(
 	"Penjualan Bebas ; penjualan-nr.php ; #509601;",
+        "Entri Resep ; resep.php ; #509601;",
         "Penjualan Resep ; penjualan.php ; #509601;"
 );
 set_include_path("../");
@@ -78,6 +79,11 @@ function hitung_total_penjualan() {
     }
     $('#total-penjualan').html(numberToCurrency(parseInt(total)));
     $('#total_penjualan').val(parseInt(total_tambah_tuslah));
+}
+
+function removeMe(el) {
+    var parent = el.parentNode.parentNode;
+    parent.parentNode.removeChild(parent);
 }
 
 function add_new_rows(id_brg, nama_brg, jumlah) {

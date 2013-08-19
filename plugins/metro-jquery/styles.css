@@ -5,6 +5,7 @@
     Description:
         Purpose of the stylesheet follows.
 */
+input.search { float: right; font-family: inherit; margin-right: 0; }
 .aksi { white-space: nowrap; }
 table.data-input input[type=text], table.data-input textarea { margin: 0.5px; max-width: 300px; text-transform: uppercase; }
 .data-input { border: 1px solid #999; background: #f4f4f4; padding: 10px 5px; font-size: 11px; }

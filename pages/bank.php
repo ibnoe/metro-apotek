@@ -18,6 +18,10 @@ $akun = load_data_akun();
 <script type="text/javascript">
 $(function() {
     load_data_bank();
+    $('#search').keyup(function() {
+        var value = $(this).val();
+        load_data_bank('',value,'');
+    });
 });
 function form_add() {
 var str = '<div id=form_add>'+
@@ -110,9 +114,9 @@ $('#reset').button({
     icons: {
         primary: 'ui-icon-refresh'
     }
-});
-$('#button').click(function() {
+}).click(function() {
     load_data_bank();
+    $('#search').val('');
 });
 $.plugin($afterSubPageShow,{ // <-- event is here
     showAlert:function(){ // <-- random function name is here (choose whatever you want)
@@ -173,11 +177,17 @@ function delete_bank(id, page) {
         }
     });
 }
+$.plugin($afterSubPageShow,{ // <-- event is here
+    showAlert:function(){ // <-- random function name is here (choose whatever you want)
+        $('#search').focus();
+    }
+});
 </script>
 <h1 class="margin-t-0">Data Bank</h1>
 <hr>
 <button id="button">Tambah Data</button>
 <button id="reset">Reset</button>
+<?= form_input('search', NULL, 'id=search placeholder="Search ..." class=search') ?>
 <div id="result-bank">
     
 </div>

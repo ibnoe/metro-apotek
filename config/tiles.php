@@ -18,28 +18,20 @@ $tile[] = array("type"=>"slideshow","group"=>0,"x"=>0,"y"=>1,"width"=>1,"height"
 	"labelText"=>"Slideshow","labelColor"=>"#11528f","labelPosition"=>"bottom",
 	"classes"=>"noClick");*/
 
-$tile[] = array("type"=>"img","group"=>0,"x"=>2,"y"=>0,'width'=>1,'height'=>1,"background"=>"#614040","url"=>"penerimaan.php",
+$tile[] = array("type"=>"img","group"=>0,"x"=>1,"y"=>2,'width'=>1,'height'=>1,"background"=>"#614040","url"=>"penerimaan.php",
 	"img"=>"img/icons/penerimaan.png","desc"=>"Penerimaan Produk","showDescAlways"=>true,"imgWidth"=>1,"imgHeight"=>1,
 	"labelText"=>"","labelColor"=>"#000","labelPosition"=>"","classes"=>"");
 
-$tile[] = array("type"=>"img","group"=>0,"x"=>2,"y"=>1,'width'=>1,'height'=>1,"background"=>"#6b6b6b","url"=>"resep.php",
-	"img"=>"img/icons/resep.png","desc"=>"Resep","showDescAlways"=>true,"imgWidth"=>1,"imgHeight"=>1,
+$tile[] = array("type"=>"img","group"=>0,"x"=>0,"y"=>2,'width'=>1,'height'=>1,"background"=>"#6b6b6b","url"=>"stok-opname.php",
+	"img"=>"img/icons/resep.png","desc"=>"Stok Opname","showDescAlways"=>true,"imgWidth"=>1,"imgHeight"=>1,
 	"labelText"=>"","labelColor"=>"#000","labelPosition"=>"","classes"=>"");
-
-
-$tile[] = array("type"=>"simple","group"=>0,"x"=>0,"y"=>2,'width'=>2,'height'=>1,"background"=>"#b13a3a","url"=>"stok-opname.php",
-	"title"=>"<span style='font-size:24px;'>Stock Opname</span>",
-	"text"=>"Proses mencocokkan persediaan Produk",
-	"img"=>"img/icons/box_warning.png","imgSize"=>"50","imgToTop"=>"5","imgToLeft"=>"5",
-	"labelText"=>"Metro Apotek","labelColor"=>"#453B5E","labelPosition"=>"bottom");
-
 
 
 $tile[] = array("type"=>"img","group"=>0,"x"=>0,"y"=>1,'width'=>1,'height'=>1,"background"=>"#009aff","url"=>"",
 	"img"=>"img/icons/retur-penjualan.png","desc"=>"Retur Penjualan","showDescAlways"=>true,"imgWidth"=>1,"imgHeight"=>1,
 	"labelText"=>"","labelColor"=>"#000","labelPosition"=>"","classes"=>"");
 
-$tile[] = array("type"=>"img","group"=>0,"x"=>1,"y"=>1,'width'=>1,'height'=>1,"background"=>"#ea882b","url"=>"",
+$tile[] = array("type"=>"img","group"=>0,"x"=>1,"y"=>1,'width'=>1,'height'=>1,"background"=>"#ea882b","url"=>"retur-penerimaan.php",
 	"img"=>"img/icons/retur-penerimaan.png","desc"=>"Retur Penerimaan","showDescAlways"=>true,"imgWidth"=>1,"imgHeight"=>1,
 	"labelText"=>"","labelColor"=>"#000","labelPosition"=>"","classes"=>"");
 

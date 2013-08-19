@@ -99,6 +99,22 @@ if ($method === 'golongan_load_data') {
     die(json_encode($data));
 }
 
+if ($method === 'nofaktur') {
+    $sql = mysql_query("select * from penerimaan p join supplier");
+}
+
+if ($method === 'get_detail_barang_by_ed') {
+    $id_barang  = $_GET['id'];
+    $ed         = date2mysql($_GET['ed']);
+    $kemasan    = $_GET['kemasan'];
+    $sql = mysql_query("select dp.* from kemasan k
+        join barang b on (k.id_barang = b.id) 
+        join detail_penerimaan dp on (k.id = dp.id_kemasan)
+        where b.id = '$id_barang' and k.id = '$kemasan' and dp.expired = '$ed'");
+    $row = mysql_fetch_object($sql);
+    die(json_encode($row));
+}
+
 if ($method === 'get_kemasan_barang') {
     $id = $_GET['id'];
     $rows = NULL;

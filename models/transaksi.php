@@ -48,6 +48,33 @@ function penerimaan_load_data($param) {
     return $result;
 }
 
+function retur_penerimaan_load_data($param) {
+    $q = NULL;
+    if ($param['id'] !== '') {
+        $q.="and rp.id = '".$param['id']."' ";
+    }
+    $limit = " limit ".$param['start'].", ".$param['limit']."";
+    $sql = "select rp.tanggal, rp.id_supplier, st.nama as kemasan, b.nama as barang, b.kekuatan, 
+        stn.nama as satuan, dp.*, s.nama as supplier from retur_penerimaan rp
+        join detail_retur_penerimaan dp on (rp.id = dp.id_retur_penerimaan)
+        join supplier s on (rp.id_supplier = s.id)
+        join kemasan k on (k.id = dp.id_kemasan)
+        join barang b on (b.id = k.id_barang)
+        join satuan st on (st.id = k.id_kemasan)
+        left join satuan stn on (stn.id = b.satuan_kekuatan)
+        where rp.id is not NULL $q order by rp.id";
+    //echo $sql;
+    $query = mysql_query($sql.$limit);
+    $data = array();
+    while ($row = mysql_fetch_object($query)) {
+        $data[] = $row;
+    }
+    $total = mysql_num_rows(mysql_query($sql));
+    $result['data'] = $data;
+    $result['total']= $total;
+    return $result;
+}
+
 function load_data_stok_opname($param) {
     $q = NULL;
     if ($param['id'] !== '') {

@@ -40,4 +40,5 @@ $pageTitles['penjualan-nr.php'] = "Penjualan Non Resep";
 $pageTitles['penerimaan.php'] = "Penerimaan";
 $pageTitles['stok-opname.php'] = "Stok Opname";
 $pageTitles['resep.php'] = "Resep";
+$pageTitles['retur-penerimaan.php'] = "Retur Penerimaan";
 ?>

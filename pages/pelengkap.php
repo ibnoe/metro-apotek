@@ -21,6 +21,10 @@ $perundangan = perundangan_load_data();
 <script type="text/javascript">
 $(function() {
     load_data_barang();
+    $('#search').keyup(function() {
+        var value = $(this).val();
+        load_data_barang('',value,'');
+    });
 });
 function form_add() {
 var str = '<div id=form_add>'+
@@ -268,6 +272,8 @@ $.plugin($afterSubPageShow,{ // <-- event is here
 </script>
 <h1 class="margin-t-0">Data Pelengkap</h1>
 <hr>
-<div id="result-barang">
+<?= form_input('search', NULL, 'id=search placeholder="Search ..." class=search') ?>
+
+<div id="result-barang" style="margin-top: 50px;">
     
 </div>

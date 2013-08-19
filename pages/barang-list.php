@@ -21,8 +21,8 @@ $(function() {
     <th width="5%">Adm R</th>
     <th width="7%">Formularium</th>
     <th width="7%">Perundangan</th>
-    <th width="5%">Lokasi<br/>Rak</th>
-    <th width="5%">Stok<br/>Min</th>
+    <th width="7%">Lokasi<br/>Rak</th>
+    <th width="3%">Stok<br/>Min</th>
     <th width="10%">Hna</th>
     <th width="4%">#</th>
 </tr>
@@ -56,7 +56,7 @@ $(function() {
             $data->efek_samping.'#'.
             $data->stok_minimal.'#'.$data->margin_non_resep.'#'.$data->margin_resep.'#'.$data->plus_ppn.'#'.$data->hna.'#'.$data->aktif.'#'.
             $data->aturan_pakai.'#'.$data->id_farmakoterapi.'#'.$data->id_kelas_terapi.'#'.$data->fda_pregnancy.'#'.$data->fda_lactacy.'#'.$data->perundangan.'#'.
-            $data->barcode;
+            $data->barcode.'#'.$data->image;
         ?>
     <tr class="<?= ($key%2==0)?'even':'odd' ?>">
         <td align="center"><?= (++$key+$offset) ?></td>
